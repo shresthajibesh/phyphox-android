@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 
 class ResourceStringUIModel(
     @StringRes val resId: Int,
-    vararg val formatArgs: Any
+    vararg val formatArgs: Any,
 ) : StringUIModel() {
     override fun resolve(context: Context): String {
         return if (formatArgs.isEmpty()) {
