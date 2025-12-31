@@ -6,8 +6,10 @@ data class SettingsUiState(
     val currentLanguage: ResourceState<StringUIModel> = ResourceState.Loading,
     val graphSize: ResourceState<SeekBarConfig> = ResourceState.Loading,
     val uiMode: ResourceState<StringUIModel> = ResourceState.Loading,
+//    val dynamicTheme: ResourceState<Boolean> = ResourceState.Loading,
     val accessPort: ResourceState<StringUIModel> = ResourceState.Loading,
     val proximityLockEnabled: ResourceState<Boolean> = ResourceState.Loading,
+
 )
 
 sealed interface ResourceState<out T> {
