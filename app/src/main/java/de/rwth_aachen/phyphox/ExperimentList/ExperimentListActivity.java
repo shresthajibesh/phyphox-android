@@ -99,8 +99,8 @@ import de.rwth_aachen.phyphox.Helper.WindowInsetHelper;
 import de.rwth_aachen.phyphox.PhyphoxFile;
 import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.SensorInput;
-import de.rwth_aachen.phyphox.features.settings.presentation.composeable.SettingsActivity;
-import de.rwth_aachen.phyphox.features.settings.presentation.composeable.SettingsFragment;
+import de.rwth_aachen.phyphox.features.settings.presentation.SettingsActivity;
+import de.rwth_aachen.phyphox.features.settings.presentation.SettingsFragment;
 import de.rwth_aachen.phyphox.camera.depth.DepthInput;
 import de.rwth_aachen.phyphox.camera.helper.CameraHelper;
 
