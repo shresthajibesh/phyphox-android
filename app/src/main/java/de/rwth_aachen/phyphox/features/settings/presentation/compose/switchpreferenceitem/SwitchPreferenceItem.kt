@@ -68,7 +68,7 @@ fun SwitchPreferenceItem(
                 )
             }
         }
-        Spacer(Modifier.size(8.dp))
+        Spacer(Modifier.size(4.dp))
         when (checked) {
             ResourceState.Loading -> Box(
                 modifier = Modifier
