@@ -48,7 +48,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -57,9 +56,6 @@ import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -103,8 +99,8 @@ import de.rwth_aachen.phyphox.Helper.WindowInsetHelper;
 import de.rwth_aachen.phyphox.PhyphoxFile;
 import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.SensorInput;
-import de.rwth_aachen.phyphox.SettingsActivity.SettingsActivity;
-import de.rwth_aachen.phyphox.SettingsActivity.SettingsFragment;
+import de.rwth_aachen.phyphox.features.settings.presentation.composeable.SettingsActivity;
+import de.rwth_aachen.phyphox.features.settings.presentation.composeable.SettingsFragment;
 import de.rwth_aachen.phyphox.camera.depth.DepthInput;
 import de.rwth_aachen.phyphox.camera.helper.CameraHelper;
 

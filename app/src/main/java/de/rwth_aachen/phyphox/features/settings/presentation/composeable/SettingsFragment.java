@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.SettingsActivity;
+package de.rwth_aachen.phyphox.features.settings.presentation.composeable;
 
 
 import android.os.Build;
