@@ -6,20 +6,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencecategoryheader.PreferenceCategoryHeader
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem.SwitchPreferenceItem
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.GraphSizeUiModel
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SeekBarConfig
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
@@ -29,7 +24,7 @@ import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 fun SettingsContent(
     modifier: Modifier = Modifier,
     currentLanguage: ResourceState<StringUIModel>,
-    graphSize: ResourceState<GraphSizeUiModel>,
+    seekbarConfig: ResourceState<SeekBarConfig>,
     uiMode: ResourceState<StringUIModel>,
     accessPort: ResourceState<StringUIModel>,
     proximityLockEnabled: ResourceState<Boolean>,
@@ -41,19 +36,19 @@ fun SettingsContent(
         // Language Category
         item {
             PreferenceCategoryHeader(
-                title = stringResource(id = R.string.settingsHeadLanguage),
+                title = ResourceStringUIModel(resId = R.string.settingsHeadLanguage),
             )
         }
         item {
             PreferenceItem(
-                title = stringResource(id = R.string.settingsLanguage),
+                title = ResourceStringUIModel(resId = R.string.settingsLanguage),
                 summary = currentLanguage,
                 iconRes = R.drawable.setting_language,
             )
         }
         item {
             PreferenceItem(
-                title = stringResource(id = R.string.settingsTranslation),
+                title = ResourceStringUIModel(resId = R.string.settingsTranslation),
                 summary = ResourceState.Success(ResourceStringUIModel(R.string.settingsTranslationMore)),
                 iconRes = R.drawable.setting_translate,
             )
@@ -61,20 +56,20 @@ fun SettingsContent(
 
         // Graph View Category
         item {
-            PreferenceCategoryHeader(title = stringResource(id = R.string.settingGraphViewEdit))
+            PreferenceCategoryHeader(
+                title = ResourceStringUIModel(resId = R.string.settingGraphViewEdit),
+            )
         }
         item {
-            var graphSize by remember { mutableFloatStateOf(1f) }
             SeekBarPreferenceItem(
-                title = stringResource(R.string.settingGraphSize),
-                value = graphSize,
-                valueRange = 0f..3f,
-                onValueChange = { graphSize = it },
+                title = ResourceStringUIModel(R.string.settingGraphSize),
+                seekBarConfig = seekbarConfig,
+                onValueChange = { },
             )
         }
         item {
             PreferenceItem(
-                title = stringResource(id = R.string.settings_theme_title),
+                title = ResourceStringUIModel(resId = R.string.settings_theme_title),
                 summary = uiMode,
                 iconRes = R.drawable.ic_dark_mode,
             )
@@ -82,11 +77,11 @@ fun SettingsContent(
 
         // Advanced Category
         item {
-            PreferenceCategoryHeader(title = stringResource(id = R.string.settingsHeadAdvanced))
+            PreferenceCategoryHeader(title = ResourceStringUIModel(resId = R.string.settingsHeadAdvanced))
         }
         item {
             PreferenceItem(
-                title = stringResource(id = R.string.settingsPort),
+                title = ResourceStringUIModel(resId = R.string.settingsPort),
                 summary = accessPort,
                 iconRes = R.drawable.setting_http,
             )
@@ -119,7 +114,7 @@ fun SettingsContentPreview() {
         Surface {
             SettingsContent(
                 currentLanguage = ResourceState.Loading,
-                graphSize = ResourceState.Loading,
+                seekbarConfig = ResourceState.Loading,
                 uiMode = ResourceState.Loading,
                 accessPort = ResourceState.Loading,
                 proximityLockEnabled = ResourceState.Loading,

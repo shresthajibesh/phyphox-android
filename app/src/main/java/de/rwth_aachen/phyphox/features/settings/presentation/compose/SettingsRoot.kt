@@ -31,7 +31,7 @@ fun SettingsRoot(
         SettingsContent(
             modifier = modifier.padding(innerPadding),
             currentLanguage = uiState.currentLanguage,
-            graphSize = uiState.graphSize,
+            seekbarConfig = uiState.graphSize,
             uiMode = uiState.uiMode,
             accessPort = uiState.accessPort,
             proximityLockEnabled = uiState.proximityLockEnabled,

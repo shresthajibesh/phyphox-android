@@ -12,20 +12,25 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
 import de.rwth_aachen.phyphox.ui.skeleton
+import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.resolve
+import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 
 @Composable
 fun PreferenceItem(
-    title: String,
+    title: StringUIModel,
     summary: ResourceState<StringUIModel>,
     iconRes: Int? = null,
     onClick: () -> Unit = {},
@@ -47,13 +52,13 @@ fun PreferenceItem(
             Spacer(modifier = Modifier.width(16.dp))
         }
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = title, style = MaterialTheme.typography.bodyLarge)
+            Text(text = title.resolve(), style = MaterialTheme.typography.bodyLarge)
 
             when (summary) {
                 ResourceState.Loading -> Box(
                     modifier = Modifier
                         .padding(top = 4.dp)
-                        .width(120.dp)
+                        .fillMaxWidth()
                         .height(16.dp)
                         .skeleton(),
                 )
@@ -64,6 +69,21 @@ fun PreferenceItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+internal fun SeekBarPreferenceItemPreview(
+    @PreviewParameter(PreferenceItemPreviewProvider::class) preview: ResourceState<StringUIModel>,
+) {
+    PhyphoxTheme {
+        Surface {
+            PreferenceItem(
+                title = LoremIpsumStringUIModel(2),
+                summary = preview,
+            )
         }
     }
 }

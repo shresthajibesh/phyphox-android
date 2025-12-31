@@ -2,10 +2,12 @@ package de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpref
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -19,10 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.isChecked
+import de.rwth_aachen.phyphox.ui.skeleton
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.resolve
@@ -36,13 +40,10 @@ fun SwitchPreferenceItem(
     checked: ResourceState<Boolean>,
     onCheckedChange: (Boolean) -> Unit,
 ) {
-    val isClickable = checked is ResourceState.Success
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(isClickable) {
-
+            .clickable(checked is ResourceState.Success) {
                 onCheckedChange(checked.isChecked())
             }
             .padding(16.dp),
@@ -59,7 +60,7 @@ fun SwitchPreferenceItem(
         }
         Column(modifier = Modifier.weight(1f)) {
             Text(text = title.resolve(), style = MaterialTheme.typography.bodyLarge)
-            if (summary != null) {
+            summary?.let {
                 Text(
                     text = summary.resolve(),
                     style = MaterialTheme.typography.bodyMedium,
@@ -67,7 +68,23 @@ fun SwitchPreferenceItem(
                 )
             }
         }
-        Switch(checked = checked.isChecked(), onCheckedChange = onCheckedChange)
+        Spacer(Modifier.size(4.dp))
+        when (checked) {
+            ResourceState.Loading -> Box(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .width(48.dp)
+                    .height(32.dp)
+                    .skeleton(),
+            )
+
+            is ResourceState.Success<Boolean> ->
+                Switch(
+                    checked = checked.isChecked(),
+                    onCheckedChange = onCheckedChange,
+                )
+        }
+
     }
 }
 
@@ -80,14 +97,16 @@ fun SwitchPreferenceItem(
     uiMode = Configuration.UI_MODE_NIGHT_NO,
 )
 @Composable
-internal fun SwitchPreferenceItemPreview(){
+internal fun SwitchPreferenceItemPreview(
+    @PreviewParameter(SwitchPreferenceItemPreviewProvider::class) value: ResourceState<Boolean>,
+) {
     PhyphoxTheme {
         Surface {
             SwitchPreferenceItem(
                 title = LoremIpsumStringUIModel(2),
-                summary= LoremIpsumStringUIModel(15),
+                summary = LoremIpsumStringUIModel(15),
                 iconRes = R.drawable.ic_dark_mode,
-                checked = ResourceState.Success(true),
+                checked = value,
                 onCheckedChange = {},
             )
         }

@@ -4,7 +4,7 @@ import de.rwth_aachen.phyphox.ui.string.StringUIModel
 
 data class SettingsUiState(
     val currentLanguage: ResourceState<StringUIModel> = ResourceState.Loading,
-    val graphSize: ResourceState<GraphSizeUiModel> = ResourceState.Loading,
+    val graphSize: ResourceState<SeekBarConfig> = ResourceState.Loading,
     val uiMode: ResourceState<StringUIModel> = ResourceState.Loading,
     val accessPort: ResourceState<StringUIModel> = ResourceState.Loading,
     val proximityLockEnabled: ResourceState<Boolean> = ResourceState.Loading,
@@ -19,8 +19,16 @@ fun ResourceState<Boolean>.isChecked(): Boolean {
     return this is ResourceState.Success && this.data
 }
 
-data class GraphSizeUiModel(
+data class SeekBarConfig(
     val currentSize: Float,
-    val minSize: Float,
-    val maxSize: Float,
-)
+    val range: ClosedFloatingPointRange<Float>,
+) {
+    constructor(
+        currentSize: Float,
+        minSize: Float,
+        maxSize: Float,
+    ): this(
+        currentSize = currentSize,
+        range = minSize..maxSize,
+    )
+}
