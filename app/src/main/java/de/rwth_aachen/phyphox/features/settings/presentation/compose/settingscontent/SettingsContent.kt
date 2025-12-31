@@ -47,7 +47,8 @@ fun SettingsContent(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        // Language Category
+        //TODO: Once the experiment list has been migrated to compose
+        // move the logo from top bar in experiment list to here
         item {
             PreferenceCategoryHeader(
                 title = ResourceStringUIModel(resId = R.string.settingsHeadLanguage),
