@@ -9,11 +9,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.rwth_aachen.phyphox.Helper.WindowInsetHelper
 import de.rwth_aachen.phyphox.R
 
-
 @AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
-    private lateinit var settingsFrame:View
+    private lateinit var settingsFrame: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +44,8 @@ class SettingsActivity : AppCompatActivity() {
             .replace(R.id.settingsFrame, SettingsFragment())
             .commit()
     }
-    private fun setFrameInsets(){
+
+    private fun setFrameInsets() {
         WindowInsetHelper.setInsets(
             settingsFrame,
             WindowInsetHelper.ApplyTo.PADDING,
