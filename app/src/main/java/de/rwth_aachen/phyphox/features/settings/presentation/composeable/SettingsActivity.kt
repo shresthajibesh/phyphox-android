@@ -1,39 +1,67 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.composeable;
+package de.rwth_aachen.phyphox.features.settings.presentation.composeable
 
+import android.os.Bundle
+import android.view.View
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import dagger.hilt.android.AndroidEntryPoint
+import de.rwth_aachen.phyphox.Helper.WindowInsetHelper
+import de.rwth_aachen.phyphox.R
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.os.Bundle;
-
-
-import dagger.hilt.android.AndroidEntryPoint;
-import de.rwth_aachen.phyphox.Helper.WindowInsetHelper;
-import de.rwth_aachen.phyphox.R;
 
 @AndroidEntryPoint
-public class SettingsActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_settings);
+class SettingsActivity : AppCompatActivity() {
+    private lateinit var toolbar: Toolbar
+    private lateinit var settingsFrame:View
 
-        SettingsFragment settingsFragment = new SettingsFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.settingsFrame, settingsFragment).commit();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.enableEdgeToEdge()
+        setContentView(R.layout.activity_settings)
+        inflateViews()
+        setSupportActionBar(toolbar)
+        updateActionBar()
+        setFrameInsets()
+        setToolBarInsets()
+        showSettings()
+    }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.settingsToolbar);
-        setSupportActionBar(toolbar);
+    private fun inflateViews() {
+        toolbar = findViewById(R.id.settingsToolbar)
+        settingsFrame = findViewById(R.id.settingsFrame)
+    }
 
-        ActionBar ab = getSupportActionBar();
-        if (ab != null) {
-            ab.setDisplayHomeAsUpEnabled(true);
-            ab.setDisplayShowTitleEnabled(true);
+    private fun updateActionBar() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowTitleEnabled(true)
         }
-        WindowInsetHelper.setInsets(findViewById(R.id.settingsFrame), WindowInsetHelper.ApplyTo.PADDING, WindowInsetHelper.ApplyTo.IGNORE, WindowInsetHelper.ApplyTo.PADDING, WindowInsetHelper.ApplyTo.MARGIN);
-        WindowInsetHelper.setInsets(findViewById(R.id.settingsToolbar), WindowInsetHelper.ApplyTo.PADDING, WindowInsetHelper.ApplyTo.PADDING, WindowInsetHelper.ApplyTo.PADDING, WindowInsetHelper.ApplyTo.IGNORE);
+    }
 
+    private fun showSettings() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.settingsFrame, SettingsFragment())
+            .commit()
+    }
+    private fun setFrameInsets(){
+        WindowInsetHelper.setInsets(
+            settingsFrame,
+            WindowInsetHelper.ApplyTo.PADDING,
+            WindowInsetHelper.ApplyTo.IGNORE,
+            WindowInsetHelper.ApplyTo.PADDING,
+            WindowInsetHelper.ApplyTo.MARGIN,
+        )
+    }
+
+    private fun setToolBarInsets() {
+        WindowInsetHelper.setInsets(
+            toolbar,
+            WindowInsetHelper.ApplyTo.PADDING,
+            WindowInsetHelper.ApplyTo.PADDING,
+            WindowInsetHelper.ApplyTo.PADDING,
+            WindowInsetHelper.ApplyTo.IGNORE,
+        )
     }
 }
