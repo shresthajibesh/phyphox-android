@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.composeable
+package de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

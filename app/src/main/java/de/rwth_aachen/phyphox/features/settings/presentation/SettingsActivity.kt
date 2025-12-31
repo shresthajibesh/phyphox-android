@@ -5,11 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import de.rwth_aachen.phyphox.features.settings.presentation.composeable.SettingsRoot
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.SettingsRoot
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsViewModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 
@@ -23,9 +23,12 @@ class SettingsActivity : ComponentActivity() {
         setContent {
             PhyphoxTheme {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-                SettingsRoot(
-                    uiState = uiState
-                )
+                Surface {
+                    SettingsRoot(
+                        uiState = uiState,
+                    )
+                }
+
             }
         }
 //        setContentView(R.layout.activity_settings)

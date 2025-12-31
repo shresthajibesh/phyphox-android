@@ -1,6 +1,5 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.composeable
+package de.rwth_aachen.phyphox.features.settings.presentation.compose
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -10,12 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import de.rwth_aachen.phyphox.R
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.settingscontent.SettingsContent
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsUiState
-import de.rwth_aachen.phyphox.ui.string.StringUIModel
-import de.rwth_aachen.phyphox.ui.string.resolve
-import de.rwth_aachen.phyphox.ui.string.toStringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,13 +23,18 @@ fun SettingsRoot(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(id = R.string.action_settings)) }
+                title = { Text(stringResource(id = R.string.action_settings)) },
             )
         },
-        modifier = modifier
+        modifier = modifier,
     ) { innerPadding ->
         SettingsContent(
             modifier = modifier.padding(innerPadding),
+            currentLanguage = uiState.currentLanguage,
+            graphSize = uiState.graphSize,
+            uiMode = uiState.uiMode,
+            accessPort = uiState.accessPort,
+            proximityLockEnabled = uiState.proximityLockEnabled,
         )
     }
 }
@@ -43,26 +44,5 @@ fun SettingsRoot(
 internal fun SettingsRootPreview() {
     PhyphoxTheme {
         SettingsRoot(uiState = SettingsUiState())
-    }
-}
-
-
-
-@Composable
-fun ListHeaderItem(
-    modifier: Modifier = Modifier,
-    text: StringUIModel,
-) {
-    Text(
-        modifier = modifier,
-        text = text.resolve(),
-    )
-}
-
-@PreviewLightDark
-@Composable
-private fun ListHeaderItemPreview() {
-    PhyphoxTheme {
-        ListHeaderItem(text = LoremIpsum(2).values.first().toStringUIModel())
     }
 }

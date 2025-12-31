@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.composeable
+package de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencecategoryheader
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PreferenceCategory(title: String) {
+fun PreferenceCategoryHeader(title: String) {
     Text(
         text = title,
         style = MaterialTheme.typography.labelLarge,

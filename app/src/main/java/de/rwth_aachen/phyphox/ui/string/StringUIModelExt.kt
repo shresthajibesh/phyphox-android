@@ -3,7 +3,6 @@ package de.rwth_aachen.phyphox.ui.string
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import shresthajibesh.cookiejar.lib.text.TextStringUIModel
 
 val emptyStringUiModel = "".toStringUIModel()
 
