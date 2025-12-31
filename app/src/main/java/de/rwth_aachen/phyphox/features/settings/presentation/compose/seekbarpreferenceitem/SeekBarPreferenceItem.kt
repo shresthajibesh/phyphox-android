@@ -32,7 +32,6 @@ fun SeekBarPreferenceItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
     ) {
         Text(text = title.resolve(), style = MaterialTheme.typography.bodyLarge)
 

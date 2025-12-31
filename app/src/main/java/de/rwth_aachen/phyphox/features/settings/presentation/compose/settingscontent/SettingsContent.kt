@@ -1,13 +1,18 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.compose.settingscontent
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencecategoryheader.PreferenceCategoryHeader
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
@@ -32,6 +37,9 @@ fun SettingsContent(
     LazyColumn(
         modifier = modifier
             .fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Language Category
         item {
@@ -54,6 +62,9 @@ fun SettingsContent(
             )
         }
 
+        item {
+            HorizontalDivider()
+        }
         // Graph View Category
         item {
             PreferenceCategoryHeader(
@@ -74,7 +85,9 @@ fun SettingsContent(
                 iconRes = R.drawable.ic_dark_mode,
             )
         }
-
+        item {
+            HorizontalDivider()
+        }
         // Advanced Category
         item {
             PreferenceCategoryHeader(title = ResourceStringUIModel(resId = R.string.settingsHeadAdvanced))

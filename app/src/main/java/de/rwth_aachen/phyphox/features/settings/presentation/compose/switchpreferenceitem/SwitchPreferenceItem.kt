@@ -45,8 +45,7 @@ fun SwitchPreferenceItem(
             .fillMaxWidth()
             .clickable(checked is ResourceState.Success) {
                 onCheckedChange(checked.isChecked())
-            }
-            .padding(16.dp),
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         iconRes?.let {
