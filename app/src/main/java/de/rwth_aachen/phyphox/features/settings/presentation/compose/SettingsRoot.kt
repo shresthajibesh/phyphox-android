@@ -1,7 +1,11 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.compose
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -19,11 +23,20 @@ import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 fun SettingsRoot(
     modifier: Modifier = Modifier,
     uiState: SettingsUiState,
+    onBackClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(id = R.string.action_settings)) },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(id = R.string.back),
+                        )
+                    }
+                },
             )
         },
         modifier = modifier,

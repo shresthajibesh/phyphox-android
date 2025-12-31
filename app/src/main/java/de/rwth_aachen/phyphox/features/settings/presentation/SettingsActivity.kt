@@ -2,6 +2,7 @@ package de.rwth_aachen.phyphox.features.settings.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -22,60 +23,16 @@ class SettingsActivity : ComponentActivity() {
         this.enableEdgeToEdge()
         setContent {
             PhyphoxTheme {
-                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 Surface {
+                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
                     SettingsRoot(
                         uiState = uiState,
+                        onBackClick = { onBackPressedDispatcher?.onBackPressed() },
                     )
                 }
 
             }
         }
-//        setContentView(R.layout.activity_settings)
-//        inflateViews()
-//        setSupportActionBar(toolbar)
-//        updateActionBar()
-//        setFrameInsets()
-//        setToolBarInsets()
-//        showSettings()
     }
-
-//    private fun inflateViews() {
-//        toolbar = findViewById(R.id.settingsToolbar)
-//        settingsFrame = findViewById(R.id.settingsFrame)
-//    }
-//
-//    private fun updateActionBar() {
-//        supportActionBar?.apply {
-//            setDisplayHomeAsUpEnabled(true)
-//            setDisplayShowTitleEnabled(true)
-//        }
-//    }
-//
-//    private fun showSettings() {
-//        supportFragmentManager
-//            .beginTransaction()
-//            .replace(R.id.settingsFrame, SettingsFragment())
-//            .commit()
-//    }
-//
-//    private fun setFrameInsets() {
-//        WindowInsetHelper.setInsets(
-//            settingsFrame,
-//            WindowInsetHelper.ApplyTo.PADDING,
-//            WindowInsetHelper.ApplyTo.IGNORE,
-//            WindowInsetHelper.ApplyTo.PADDING,
-//            WindowInsetHelper.ApplyTo.MARGIN,
-//        )
-//    }
-//
-//    private fun setToolBarInsets() {
-//        WindowInsetHelper.setInsets(
-//            toolbar,
-//            WindowInsetHelper.ApplyTo.PADDING,
-//            WindowInsetHelper.ApplyTo.PADDING,
-//            WindowInsetHelper.ApplyTo.PADDING,
-//            WindowInsetHelper.ApplyTo.IGNORE,
-//        )
-//    }
 }
