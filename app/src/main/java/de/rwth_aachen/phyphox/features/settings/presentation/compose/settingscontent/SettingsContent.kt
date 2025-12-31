@@ -103,6 +103,7 @@ fun SettingsContent(
             PreferenceCategoryHeader(title = ResourceStringUIModel(resId = R.string.settingsHeadAdvanced))
         }
         item {
+            //replace this with SingleChoiceSegmentedButtonRow
             PreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settingsPort),
                 summary = accessPort,

@@ -24,6 +24,12 @@ fun SettingsRoot(
     modifier: Modifier = Modifier,
     uiState: SettingsUiState,
     onBackClick: () -> Unit = {},
+    onAppLanguageClicked: () -> Unit,
+    onLearnMoreAboutTranslationClicked: () -> Unit,
+    onGraphSizeChanged: (Float) -> Unit,
+    onUiModeClicked: () -> Unit,
+    onAccessPortClicked: () -> Unit,
+    onProximityLockChanged: (Boolean) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -48,6 +54,12 @@ fun SettingsRoot(
             uiMode = uiState.uiMode,
             accessPort = uiState.accessPort,
             proximityLockEnabled = uiState.proximityLockEnabled,
+            onAppLanguageClicked = onAppLanguageClicked,
+            onLearnMoreAboutTranslationClicked = onLearnMoreAboutTranslationClicked,
+            onGraphSizeChanged = onGraphSizeChanged,
+            onUiModeClicked = onUiModeClicked,
+            onAccessPortClicked = onAccessPortClicked,
+            onProximityLockChanged = onProximityLockChanged,
         )
     }
 }
@@ -56,6 +68,14 @@ fun SettingsRoot(
 @PreviewLightDark
 internal fun SettingsRootPreview() {
     PhyphoxTheme {
-        SettingsRoot(uiState = SettingsUiState())
+        SettingsRoot(
+            uiState = SettingsUiState(),
+            onAppLanguageClicked = {},
+            onLearnMoreAboutTranslationClicked = {},
+            onGraphSizeChanged = {},
+            onUiModeClicked = {},
+            onAccessPortClicked = {},
+            onProximityLockChanged = {},
+        )
     }
 }

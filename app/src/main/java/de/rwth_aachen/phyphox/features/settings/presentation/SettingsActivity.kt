@@ -29,6 +29,12 @@ class SettingsActivity : ComponentActivity() {
                     SettingsRoot(
                         uiState = uiState,
                         onBackClick = { onBackPressedDispatcher?.onBackPressed() },
+                        onAppLanguageClicked = {},
+                        onLearnMoreAboutTranslationClicked = {},
+                        onGraphSizeChanged = {},
+                        onUiModeClicked = {},
+                        onAccessPortClicked = {},
+                        onProximityLockChanged = {},
                     )
                 }
 
