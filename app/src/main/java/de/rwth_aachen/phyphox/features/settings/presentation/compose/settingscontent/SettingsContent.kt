@@ -33,13 +33,19 @@ fun SettingsContent(
     uiMode: ResourceState<StringUIModel>,
     accessPort: ResourceState<StringUIModel>,
     proximityLockEnabled: ResourceState<Boolean>,
+    onAppLanguageClicked: () -> Unit,
+    onLearnMoreAboutTranslationClicked: () -> Unit,
+    onGraphSizeChanged: (Float) -> Unit,
+    onUiModeClicked: () -> Unit,
+    onAccessPortClicked: () -> Unit,
+    onProximityLockChanged: (Boolean) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         // Language Category
         item {
@@ -52,6 +58,7 @@ fun SettingsContent(
                 title = ResourceStringUIModel(resId = R.string.settingsLanguage),
                 summary = currentLanguage,
                 iconRes = R.drawable.setting_language,
+                onClick = onAppLanguageClicked,
             )
         }
         item {
@@ -59,6 +66,7 @@ fun SettingsContent(
                 title = ResourceStringUIModel(resId = R.string.settingsTranslation),
                 summary = ResourceState.Success(ResourceStringUIModel(R.string.settingsTranslationMore)),
                 iconRes = R.drawable.setting_translate,
+                onClick = onLearnMoreAboutTranslationClicked,
             )
         }
 
@@ -75,7 +83,7 @@ fun SettingsContent(
             SeekBarPreferenceItem(
                 title = ResourceStringUIModel(R.string.settingGraphSize),
                 seekBarConfig = seekbarConfig,
-                onValueChange = { },
+                onValueChange = onGraphSizeChanged,
             )
         }
         item {
@@ -83,6 +91,7 @@ fun SettingsContent(
                 title = ResourceStringUIModel(resId = R.string.settings_theme_title),
                 summary = uiMode,
                 iconRes = R.drawable.ic_dark_mode,
+                onClick = onUiModeClicked
             )
         }
         item {
@@ -97,6 +106,7 @@ fun SettingsContent(
                 title = ResourceStringUIModel(resId = R.string.settingsPort),
                 summary = accessPort,
                 iconRes = R.drawable.setting_http,
+                onClick = onAccessPortClicked,
             )
         }
         item {
@@ -105,7 +115,7 @@ fun SettingsContent(
                 summary = ResourceStringUIModel(resId = R.string.settingsProximityLockDetail),
                 iconRes = R.drawable.setting_lock,
                 checked = proximityLockEnabled,
-                onCheckedChange = { },
+                onCheckedChange = onProximityLockChanged,
             )
         }
     }
@@ -131,6 +141,12 @@ fun SettingsContentPreview() {
                 uiMode = ResourceState.Loading,
                 accessPort = ResourceState.Loading,
                 proximityLockEnabled = ResourceState.Loading,
+                onAppLanguageClicked = {},
+                onLearnMoreAboutTranslationClicked = {},
+                onGraphSizeChanged = {},
+                onUiModeClicked = {},
+                onAccessPortClicked = {},
+                onProximityLockChanged = {},
             )
         }
     }
