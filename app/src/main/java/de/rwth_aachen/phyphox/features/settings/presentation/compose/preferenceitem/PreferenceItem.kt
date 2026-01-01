@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.isChecked
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.resolve
