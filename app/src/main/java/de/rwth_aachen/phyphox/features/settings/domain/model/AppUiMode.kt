@@ -1,9 +1,11 @@
 package de.rwth_aachen.phyphox.features.settings.domain.model
 
 enum class AppUiMode(val identifier: String) {
-    SYSTEM("system"),
+    DARK("dark"),
     LIGHT("light"),
-    DARK("dark");
+    SYSTEM("system");
+
+
 
     companion object {
         fun fromString(identifier: String): AppUiMode? {

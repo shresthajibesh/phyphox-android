@@ -13,9 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
+import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem.PreferenceSummaryItem
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiBuilder
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiModeUiModel
 import de.rwth_aachen.phyphox.ui.skeleton
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
@@ -83,14 +85,17 @@ internal fun SegmentedButtonPreferenceItemPreview() {
             options = ResourceState.Success(
                 listOf(
                     UiModeUiModel(
+                        appUiMode = AppUiMode.DARK,
                         text = LoremIpsumStringUIModel(2),
                         isSelected = true,
                     ),
                     UiModeUiModel(
+                        appUiMode = AppUiMode.SYSTEM,
                         text = LoremIpsumStringUIModel(1),
                         isSelected = false,
                     ),
                     UiModeUiModel(
+                        appUiMode = AppUiMode.LIGHT,
                         text = LoremIpsumStringUIModel(1),
                         isSelected = false,
                     ),

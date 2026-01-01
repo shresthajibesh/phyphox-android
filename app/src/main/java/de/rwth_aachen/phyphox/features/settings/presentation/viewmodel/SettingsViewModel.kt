@@ -1,11 +1,17 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
+import de.rwth_aachen.phyphox.ui.string.TextStringUIModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,5 +69,43 @@ internal class SettingsViewModel @Inject constructor(
             accessPort = accessPort,
             proximityLockEnabled = proximityLockEnabled,
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = SettingsUiState(),
+    )
+
+    init {
+        loadDummyData()
+    }
+
+    private fun loadDummyData() = viewModelScope.launch {
+        delay(800)
+        currentLanguageFlow.value = ResourceState.Success(TextStringUIModel("English"))
+        delay(1200)
+        currentGraphSizeFlow.value = ResourceState.Success(
+            data = 1.0f,
+        )
+        delay(200)
+        graphSizeRangeFlow.value = ResourceState.Success(
+            data = 0.0f..3.0f,
+        )
+        delay(800)
+        currentUiModeUiModelFlow.value = ResourceState.Success(
+            data = AppUiMode.DARK,
+        )
+        supportedUiModesFlowUiModel.value = ResourceState.Success(
+            AppUiMode.entries,
+        )
+        delay(600)
+        currentAccessPortFlow.value = ResourceState.Success(
+            data = TextStringUIModel("8080"),
+        )
+        delay(2000)
+        proximityLockEnabledFlow.value = ResourceState.Success(
+            data = true,
+        )
+
+
     }
 }
