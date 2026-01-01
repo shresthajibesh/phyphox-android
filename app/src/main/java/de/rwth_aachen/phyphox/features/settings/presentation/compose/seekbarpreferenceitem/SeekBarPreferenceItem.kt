@@ -22,6 +22,7 @@ import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 
 @Composable
 fun SeekBarPreferenceItem(
+    modifier: Modifier = Modifier,
     title: StringUIModel,
     iconRes: Int? = null,
     summary: StringUIModel? = null,
@@ -29,6 +30,7 @@ fun SeekBarPreferenceItem(
     onValueChange: (Float) -> Unit,
 ) {
     PreferenceItem(
+        modifier = modifier,
         title = title,
         iconRes = iconRes,
         content = {
