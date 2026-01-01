@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencecategoryheader.PreferenceCategoryHeader
-import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.clickablepreferenceitem.ClickablePreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem.SwitchPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
@@ -55,7 +55,7 @@ fun SettingsContent(
             )
         }
         item {
-            PreferenceItem(
+            ClickablePreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settingsLanguage),
                 summary = currentLanguage,
                 iconRes = R.drawable.setting_language,
@@ -63,7 +63,7 @@ fun SettingsContent(
             )
         }
         item {
-            PreferenceItem(
+            ClickablePreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settingsTranslation),
                 summary = ResourceState.Success(ResourceStringUIModel(R.string.settingsTranslationMore)),
                 iconRes = R.drawable.setting_translate,
@@ -83,12 +83,14 @@ fun SettingsContent(
         item {
             SeekBarPreferenceItem(
                 title = ResourceStringUIModel(R.string.settingGraphSize),
+                summary = ResourceStringUIModel(R.string.settingGraphSizeSubTitle),
+                iconRes = R.drawable.ic_line_width,
                 seekBarConfig = seekbarConfig,
                 onValueChange = onGraphSizeChanged,
             )
         }
         item {
-            PreferenceItem(
+            ClickablePreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settings_theme_title),
                 summary = uiMode,
                 iconRes = R.drawable.ic_dark_mode,
@@ -104,7 +106,7 @@ fun SettingsContent(
         }
         item {
             //replace this with SingleChoiceSegmentedButtonRow
-            PreferenceItem(
+            ClickablePreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settingsPort),
                 summary = accessPort,
                 iconRes = R.drawable.setting_http,
