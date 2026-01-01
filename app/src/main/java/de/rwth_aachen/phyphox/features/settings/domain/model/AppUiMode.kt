@@ -8,6 +8,7 @@ enum class AppUiMode(val identifier: String) {
 
 
     companion object {
+        @Suppress("unused")
         fun fromString(identifier: String): AppUiMode? {
             return entries.find { it.identifier == identifier }
         }

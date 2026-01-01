@@ -17,7 +17,6 @@ import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem.PreferenceSummaryItem
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiBuilder
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiModeUiModel
 import de.rwth_aachen.phyphox.ui.skeleton
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
