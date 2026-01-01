@@ -16,7 +16,7 @@ import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem.PreferenceSummaryItem
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiMode
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiModeUiModel
 import de.rwth_aachen.phyphox.ui.skeleton
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
@@ -29,8 +29,8 @@ fun SegmentedButtonPreferenceItem(
     title: StringUIModel,
     summary: StringUIModel? = null,
     iconRes: Int? = null,
-    options: ResourceState<List<UiMode>>,
-    onOptionSelected: (UiMode) -> Unit,
+    options: ResourceState<List<UiModeUiModel>>,
+    onOptionSelected: (UiModeUiModel) -> Unit,
 ) {
     PreferenceItem(
         modifier = modifier,
@@ -49,7 +49,7 @@ fun SegmentedButtonPreferenceItem(
                         .skeleton(),
                 )
 
-                is ResourceState.Success<List<UiMode>> -> SingleChoiceSegmentedButtonRow(
+                is ResourceState.Success<List<UiModeUiModel>> -> SingleChoiceSegmentedButtonRow(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     options.data.forEachIndexed { index, option ->
@@ -82,15 +82,15 @@ internal fun SegmentedButtonPreferenceItemPreview() {
             iconRes = R.drawable.ic_dark_mode,
             options = ResourceState.Success(
                 listOf(
-                    UiMode(
+                    UiModeUiModel(
                         text = LoremIpsumStringUIModel(2),
                         isSelected = true,
                     ),
-                    UiMode(
+                    UiModeUiModel(
                         text = LoremIpsumStringUIModel(1),
                         isSelected = false,
                     ),
-                    UiMode(
+                    UiModeUiModel(
                         text = LoremIpsumStringUIModel(1),
                         isSelected = false,
                     ),

@@ -21,7 +21,7 @@ import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbu
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem.SwitchPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SeekBarConfig
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiMode
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiModeUiModel
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
@@ -32,13 +32,13 @@ fun SettingsContent(
     modifier: Modifier = Modifier,
     currentLanguage: ResourceState<StringUIModel>,
     seekbarConfig: ResourceState<SeekBarConfig>,
-    uiMode: ResourceState<List<UiMode>>,
+    uiModeUiModel: ResourceState<List<UiModeUiModel>>,
     accessPort: ResourceState<StringUIModel>,
     proximityLockEnabled: ResourceState<Boolean>,
     onAppLanguageClicked: () -> Unit,
     onLearnMoreAboutTranslationClicked: () -> Unit,
     onGraphSizeChanged: (Float) -> Unit,
-    onOptionSelected: (UiMode) -> Unit,
+    onOptionSelected: (UiModeUiModel) -> Unit,
     onAccessPortClicked: () -> Unit,
     onProximityLockChanged: (Boolean) -> Unit,
 ) {
@@ -94,7 +94,7 @@ fun SettingsContent(
         item {
             SegmentedButtonPreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settings_theme_title),
-                options = uiMode,
+                options = uiModeUiModel,
                 iconRes = R.drawable.ic_dark_mode,
                 onOptionSelected = onOptionSelected,
             )
@@ -145,7 +145,7 @@ fun SettingsContentPreview() {
             SettingsContent(
                 currentLanguage = ResourceState.Loading,
                 seekbarConfig = ResourceState.Loading,
-                uiMode = ResourceState.Loading,
+                uiModeUiModel = ResourceState.Loading,
                 accessPort = ResourceState.Loading,
                 proximityLockEnabled = ResourceState.Loading,
                 onAppLanguageClicked = {},

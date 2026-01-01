@@ -1,11 +1,12 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel
 
+import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 
 data class SettingsUiState(
     val currentLanguage: ResourceState<StringUIModel> = ResourceState.Loading,
     val graphSize: ResourceState<SeekBarConfig> = ResourceState.Loading,
-    val uiMode: ResourceState<List<UiMode>> = ResourceState.Loading,
+    val uiModeUiModel: ResourceState<List<UiModeUiModel>> = ResourceState.Loading,
 //    val dynamicTheme: ResourceState<Boolean> = ResourceState.Loading,
     val accessPort: ResourceState<StringUIModel> = ResourceState.Loading,
     val proximityLockEnabled: ResourceState<Boolean> = ResourceState.Loading,
@@ -35,7 +36,8 @@ data class SeekBarConfig(
     )
 }
 
-data class UiMode(
+data class UiModeUiModel(
+    val appUiMode: AppUiMode,
     val text: StringUIModel,
     val isSelected: Boolean,
 )
