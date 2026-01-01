@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem
+package de.rwth_aachen.phyphox.features.settings.presentation.compose.clickablepreferenceitem
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
