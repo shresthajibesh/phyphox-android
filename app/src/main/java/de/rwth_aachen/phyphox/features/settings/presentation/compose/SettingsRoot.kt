@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.settingscontent.SettingsContent
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsUiState
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiMode
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,7 +28,7 @@ fun SettingsRoot(
     onAppLanguageClicked: () -> Unit,
     onLearnMoreAboutTranslationClicked: () -> Unit,
     onGraphSizeChanged: (Float) -> Unit,
-    onUiModeClicked: () -> Unit,
+    onOptionSelected: (UiMode) -> Unit,
     onAccessPortClicked: () -> Unit,
     onProximityLockChanged: (Boolean) -> Unit,
 ) {
@@ -57,7 +58,7 @@ fun SettingsRoot(
             onAppLanguageClicked = onAppLanguageClicked,
             onLearnMoreAboutTranslationClicked = onLearnMoreAboutTranslationClicked,
             onGraphSizeChanged = onGraphSizeChanged,
-            onUiModeClicked = onUiModeClicked,
+            onOptionSelected = onOptionSelected,
             onAccessPortClicked = onAccessPortClicked,
             onProximityLockChanged = onProximityLockChanged,
         )
@@ -73,7 +74,7 @@ internal fun SettingsRootPreview() {
             onAppLanguageClicked = {},
             onLearnMoreAboutTranslationClicked = {},
             onGraphSizeChanged = {},
-            onUiModeClicked = {},
+            onOptionSelected = {},
             onAccessPortClicked = {},
             onProximityLockChanged = {},
         )
