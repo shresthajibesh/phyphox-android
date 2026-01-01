@@ -29,9 +29,9 @@ import de.rwth_aachen.phyphox.ui.string.resolve
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 
 @Composable
-fun PreferenceItem(
+fun ClickablePreferenceItem(
     title: StringUIModel,
-    summary: ResourceState<StringUIModel>,
+    summary: ResourceState<StringUIModel>?,
     iconRes: Int? = null,
     onClick: () -> Unit = {},
 ) {
@@ -67,6 +67,8 @@ fun PreferenceItem(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+
+                else -> Unit
             }
         }
     }
@@ -74,12 +76,12 @@ fun PreferenceItem(
 
 @Preview(showBackground = true)
 @Composable
-internal fun SeekBarPreferenceItemPreview(
-    @PreviewParameter(PreferenceItemPreviewProvider::class) preview: ResourceState<StringUIModel>,
+internal fun SeekBarClickablePreferenceItemPreview(
+    @PreviewParameter(ClickablePreferenceItemPreviewProvider::class) preview: ResourceState<StringUIModel>,
 ) {
     PhyphoxTheme {
         Surface {
-            PreferenceItem(
+            ClickablePreferenceItem(
                 title = LoremIpsumStringUIModel(2),
                 summary = preview,
             )

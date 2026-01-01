@@ -5,7 +5,7 @@ import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceS
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 
-class PreferenceItemPreviewProvider : PreviewParameterProvider<ResourceState<StringUIModel>> {
+class ClickablePreferenceItemPreviewProvider : PreviewParameterProvider<ResourceState<StringUIModel>> {
     override val values: Sequence<ResourceState<StringUIModel>>
         get() = sequenceOf(
             ResourceState.Loading,
