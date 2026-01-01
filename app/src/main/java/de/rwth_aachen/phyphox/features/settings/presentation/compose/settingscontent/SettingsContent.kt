@@ -14,12 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
-import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencecategoryheader.PreferenceCategoryHeader
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.clickablepreferenceitem.ClickablePreferenceItem
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencecategoryheader.PreferenceCategoryHeader
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarPreferenceItem
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem.SwitchPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SeekBarConfig
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiMode
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
@@ -30,13 +32,13 @@ fun SettingsContent(
     modifier: Modifier = Modifier,
     currentLanguage: ResourceState<StringUIModel>,
     seekbarConfig: ResourceState<SeekBarConfig>,
-    uiMode: ResourceState<StringUIModel>,
+    uiMode: ResourceState<List<UiMode>>,
     accessPort: ResourceState<StringUIModel>,
     proximityLockEnabled: ResourceState<Boolean>,
     onAppLanguageClicked: () -> Unit,
     onLearnMoreAboutTranslationClicked: () -> Unit,
     onGraphSizeChanged: (Float) -> Unit,
-    onUiModeClicked: () -> Unit,
+    onOptionSelected: (UiMode) -> Unit,
     onAccessPortClicked: () -> Unit,
     onProximityLockChanged: (Boolean) -> Unit,
 ) {
@@ -90,11 +92,11 @@ fun SettingsContent(
             )
         }
         item {
-            ClickablePreferenceItem(
+            SegmentedButtonPreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settings_theme_title),
-                summary = uiMode,
+                options = uiMode,
                 iconRes = R.drawable.ic_dark_mode,
-                onClick = onUiModeClicked
+                onOptionSelected = onOptionSelected,
             )
         }
         item {
@@ -102,10 +104,11 @@ fun SettingsContent(
         }
         // Advanced Category
         item {
-            PreferenceCategoryHeader(title = ResourceStringUIModel(resId = R.string.settingsHeadAdvanced))
+            PreferenceCategoryHeader(
+                title = ResourceStringUIModel(resId = R.string.settingsHeadAdvanced),
+            )
         }
         item {
-            //replace this with SingleChoiceSegmentedButtonRow
             ClickablePreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settingsPort),
                 summary = accessPort,
@@ -148,7 +151,7 @@ fun SettingsContentPreview() {
                 onAppLanguageClicked = {},
                 onLearnMoreAboutTranslationClicked = {},
                 onGraphSizeChanged = {},
-                onUiModeClicked = {},
+                onOptionSelected = {},
                 onAccessPortClicked = {},
                 onProximityLockChanged = {},
             )
