@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
@@ -23,7 +24,8 @@ import androidx.compose.ui.unit.dp
  */
 fun Modifier.skeleton(
     show: Boolean = true,
-    shape: Shape = RoundedCornerShape(4.dp),
+    radius: Dp = 16.dp,
+    shape: Shape = RoundedCornerShape(radius),
 ): Modifier = if (show) {
     composed {
         val transition = rememberInfiniteTransition(label = "skeleton")
