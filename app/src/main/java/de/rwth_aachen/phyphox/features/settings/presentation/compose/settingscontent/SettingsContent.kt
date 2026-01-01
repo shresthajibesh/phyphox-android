@@ -1,9 +1,14 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.compose.settingscontent
 
 import android.content.res.Configuration
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -11,6 +16,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
@@ -49,8 +56,21 @@ fun SettingsContent(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        //TODO: Once the experiment list has been migrated to compose
-        // move the logo from top bar in experiment list to here
+        item {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    modifier = Modifier
+                        .width(172.dp),
+                    contentScale = ContentScale.Fit,
+                    painter = painterResource(R.drawable.settings_logo),
+                    contentDescription = null,
+                )
+            }
+        }
+        item { HorizontalDivider() }
         item {
             PreferenceCategoryHeader(
                 title = ResourceStringUIModel(resId = R.string.settingsHeadLanguage),
@@ -73,9 +93,7 @@ fun SettingsContent(
             )
         }
 
-        item {
-            HorizontalDivider()
-        }
+        item { HorizontalDivider() }
         // Graph View Category
         item {
             PreferenceCategoryHeader(
