@@ -32,7 +32,7 @@ class SettingsActivity : ComponentActivity() {
                         onAppLanguageClicked = {},
                         onLearnMoreAboutTranslationClicked = {},
                         onGraphSizeChanged = {},
-                        onUiModeClicked = {},
+                        onOptionSelected = {},
                         onAccessPortClicked = {},
                         onProximityLockChanged = {},
                     )
