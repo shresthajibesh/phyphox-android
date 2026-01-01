@@ -5,12 +5,12 @@ import de.rwth_aachen.phyphox.ui.string.StringUIModel
 data class SettingsUiState(
     val currentLanguage: ResourceState<StringUIModel> = ResourceState.Loading,
     val graphSize: ResourceState<SeekBarConfig> = ResourceState.Loading,
-    val uiMode: ResourceState<StringUIModel> = ResourceState.Loading,
+    val uiMode: ResourceState<List<UiMode>> = ResourceState.Loading,
 //    val dynamicTheme: ResourceState<Boolean> = ResourceState.Loading,
     val accessPort: ResourceState<StringUIModel> = ResourceState.Loading,
     val proximityLockEnabled: ResourceState<Boolean> = ResourceState.Loading,
 
-)
+    )
 
 sealed interface ResourceState<out T> {
     data object Loading : ResourceState<Nothing>
@@ -29,8 +29,13 @@ data class SeekBarConfig(
         currentSize: Float,
         minSize: Float,
         maxSize: Float,
-    ): this(
+    ) : this(
         currentSize = currentSize,
         range = minSize..maxSize,
     )
 }
+
+data class UiMode(
+    val text: StringUIModel,
+    val isSelected: Boolean,
+)
