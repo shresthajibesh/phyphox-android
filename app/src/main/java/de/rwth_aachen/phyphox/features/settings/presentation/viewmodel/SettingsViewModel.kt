@@ -6,6 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.TextStringUIModel
+import de.rwth_aachen.phyphox.utils.UIEventFlow
+import de.rwth_aachen.phyphox.utils.asFlow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,6 +30,9 @@ internal class SettingsViewModel @Inject constructor(
     private val supportedUiModesFlowUiModel = MutableStateFlow<ResourceState<List<AppUiMode>>>(ResourceState.Loading)
     private val currentAccessPortFlow = MutableStateFlow<ResourceState<StringUIModel>>(ResourceState.Loading)
     private val proximityLockEnabledFlow = MutableStateFlow<ResourceState<Boolean>>(ResourceState.Loading)
+
+    private val _uiEvent = UIEventFlow<SettingsEvent>()
+    val uiEvent = _uiEvent.asFlow()
 
     private val graphSizeFlow = combine(currentGraphSizeFlow, graphSizeRangeFlow) { graphSize, range ->
         if (graphSize is ResourceState.Success && range is ResourceState.Success) {

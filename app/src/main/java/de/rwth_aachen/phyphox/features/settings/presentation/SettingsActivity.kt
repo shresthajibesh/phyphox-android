@@ -7,12 +7,20 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.SettingsRoot
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsEvent
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsViewModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SettingsActivity : ComponentActivity() {
@@ -25,14 +33,31 @@ class SettingsActivity : ComponentActivity() {
             PhyphoxTheme {
                 Surface {
                     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-                    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+                    ObserveSettingsEvents()
                     SettingsRoot(
                         uiState = uiState,
-                        onActionEvent = viewModel::onActionEvent
+                        onActionEvent = viewModel::onActionEvent,
                     )
                 }
 
             }
         }
     }
+
+
+    @Composable
+    private fun ObserveSettingsEvents(){
+        val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+        LaunchedEffect(Unit) {
+            viewModel.uiEvent.collect { event ->
+                when (event) {
+                    SettingsEvent.NavigateBack -> onBackPressedDispatcher?.onBackPressed()
+                    SettingsEvent.NavigateToLanguagePicker -> {}
+                    is SettingsEvent.OpenWebpage -> {}
+                }
+            }
+        }
+
+    }
+
 }

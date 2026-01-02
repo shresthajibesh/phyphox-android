@@ -10,8 +10,8 @@ data class SettingsUiState(
 //    val dynamicTheme: ResourceState<Boolean> = ResourceState.Loading,
     val accessPort: ResourceState<StringUIModel> = ResourceState.Loading,
     val proximityLockEnabled: ResourceState<Boolean> = ResourceState.Loading,
-
-    )
+    val modal: SettingsModal? = null,
+)
 
 sealed interface ResourceState<out T> {
     data object Loading : ResourceState<Nothing>
@@ -41,3 +41,12 @@ data class UiModeUiModel(
     val text: StringUIModel,
     val isSelected: Boolean,
 )
+
+sealed interface SettingsModal {
+    data class AccessPortModal(
+        val currentPort: StringUIModel,
+        val range: ClosedFloatingPointRange<Int>,
+        val error: StringUIModel? = null,
+    ) : SettingsModal
+
+}
