@@ -105,7 +105,12 @@ internal class SettingsViewModel @Inject constructor(
         proximityLockEnabledFlow.value = ResourceState.Success(
             data = true,
         )
-
-
     }
+
+    fun onAppLanguageClicked() {}
+    fun onLearnMoreAboutTranslationClicked() {}
+    fun onGraphSizeChanged(size: Float) {}
+    fun onOptionSelected(appUiMode: UiModeUiModel) {}
+    fun onAccessPortClicked() {}
+    fun onProximityLockChanged(enabled: Boolean) {}
 }

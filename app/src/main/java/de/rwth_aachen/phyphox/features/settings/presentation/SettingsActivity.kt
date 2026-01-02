@@ -29,12 +29,12 @@ class SettingsActivity : ComponentActivity() {
                     SettingsRoot(
                         uiState = uiState,
                         onBackClick = { onBackPressedDispatcher?.onBackPressed() },
-                        onAppLanguageClicked = {},
-                        onLearnMoreAboutTranslationClicked = {},
-                        onGraphSizeChanged = {},
-                        onOptionSelected = {},
-                        onAccessPortClicked = {},
-                        onProximityLockChanged = {},
+                        onAppLanguageClicked = viewModel::onAppLanguageClicked,
+                        onLearnMoreAboutTranslationClicked = viewModel::onLearnMoreAboutTranslationClicked,
+                        onGraphSizeChanged = viewModel::onGraphSizeChanged,
+                        onOptionSelected = viewModel::onOptionSelected,
+                        onAccessPortClicked = viewModel::onAccessPortClicked,
+                        onProximityLockChanged = viewModel::onProximityLockChanged,
                     )
                 }
 
