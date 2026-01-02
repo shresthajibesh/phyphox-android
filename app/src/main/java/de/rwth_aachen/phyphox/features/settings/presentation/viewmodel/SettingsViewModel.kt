@@ -35,7 +35,8 @@ internal class SettingsViewModel @Inject constructor(
     private val observeCurrentAccessPort: ObserveCurrentAccessPortUseCase,
     private val getAccessPortRange: GetAccessPortRangeUseCase,
     private val observeProximityLockEnabled: ObserveIsCurrentProximityLockEnabledUseCase,
-) : ViewModel() {
+
+) : ViewModel(){
 
     private val currentLanguageFlow = MutableStateFlow<ResourceState<StringUIModel>>(ResourceState.Loading)
     private val currentGraphSizeFlow = MutableStateFlow<ResourceState<Float>>(ResourceState.Loading)
