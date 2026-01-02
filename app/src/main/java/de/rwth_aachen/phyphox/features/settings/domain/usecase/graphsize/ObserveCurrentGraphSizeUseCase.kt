@@ -1,4 +1,4 @@
 package de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize
 
-class GetCurrentGraphSizeUseCase {
+class ObserveCurrentGraphSizeUseCase {
 }

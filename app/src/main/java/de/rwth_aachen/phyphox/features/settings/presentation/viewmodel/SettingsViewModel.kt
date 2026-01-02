@@ -4,6 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
+import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.GetAccessPortRangeUseCase
+import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.ObserveCurrentAccessPortUseCase
+import de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize.GetGraphSizeRangeUseCase
+import de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize.ObserveCurrentGraphSizeUseCase
+import de.rwth_aachen.phyphox.features.settings.domain.usecase.language.ObserveCurrentAppLanguageUseCase
+import de.rwth_aachen.phyphox.features.settings.domain.usecase.proximitylock.ObserveIsCurrentProximityLockEnabledUseCase
+import de.rwth_aachen.phyphox.features.settings.domain.usecase.uimode.GetSupportedAppUiModeUseCase
+import de.rwth_aachen.phyphox.features.settings.domain.usecase.uimode.ObserveCurrentAppUiModeUseCase
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.TextStringUIModel
 import de.rwth_aachen.phyphox.utils.UIEventFlow
@@ -19,10 +27,17 @@ import javax.inject.Inject
 @HiltViewModel
 internal class SettingsViewModel @Inject constructor(
     private val uiBuilder: UiBuilder,
+    private val observeCurrentAppLanguage: ObserveCurrentAppLanguageUseCase,
+    private val observeCurrentGraphSize: ObserveCurrentGraphSizeUseCase,
+    private val getGraphSizeRange: GetGraphSizeRangeUseCase,
+    private val observeCurrentUiMode: ObserveCurrentAppUiModeUseCase,
+    private val getSupportedUiModes: GetSupportedAppUiModeUseCase,
+    private val observeCurrentAccessPort: ObserveCurrentAccessPortUseCase,
+    private val getAccessPortRange: GetAccessPortRangeUseCase,
+    private val observeProximityLockEnabled: ObserveIsCurrentProximityLockEnabledUseCase,
 ) : ViewModel() {
 
     private val currentLanguageFlow = MutableStateFlow<ResourceState<StringUIModel>>(ResourceState.Loading)
-    private val supportedLanguagesFlow = MutableStateFlow<ResourceState<List<StringUIModel>>>(ResourceState.Loading)
     private val currentGraphSizeFlow = MutableStateFlow<ResourceState<Float>>(ResourceState.Loading)
     private val graphSizeRangeFlow =
         MutableStateFlow<ResourceState<ClosedFloatingPointRange<Float>>>(ResourceState.Loading)
@@ -112,7 +127,7 @@ internal class SettingsViewModel @Inject constructor(
         )
     }
 
-    fun onActionEvent(action: SettingsAction){
+    fun onActionEvent(action: SettingsAction) {
 
     }
 }
