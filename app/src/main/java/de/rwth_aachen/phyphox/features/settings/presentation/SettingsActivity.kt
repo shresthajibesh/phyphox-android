@@ -28,13 +28,7 @@ class SettingsActivity : ComponentActivity() {
                     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
                     SettingsRoot(
                         uiState = uiState,
-                        onBackClick = { onBackPressedDispatcher?.onBackPressed() },
-                        onAppLanguageClicked = viewModel::onAppLanguageClicked,
-                        onLearnMoreAboutTranslationClicked = viewModel::onLearnMoreAboutTranslationClicked,
-                        onGraphSizeChanged = viewModel::onGraphSizeChanged,
-                        onOptionSelected = viewModel::onOptionSelected,
-                        onAccessPortClicked = viewModel::onAccessPortClicked,
-                        onProximityLockChanged = viewModel::onProximityLockChanged,
+                        onActionEvent = viewModel::onActionEvent
                     )
                 }
 

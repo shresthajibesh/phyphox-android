@@ -15,8 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.settingscontent.SettingsContent
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsAction
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsUiState
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiModeUiModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,20 +24,18 @@ import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 fun SettingsRoot(
     modifier: Modifier = Modifier,
     uiState: SettingsUiState,
-    onBackClick: () -> Unit = {},
-    onAppLanguageClicked: () -> Unit,
-    onLearnMoreAboutTranslationClicked: () -> Unit,
-    onGraphSizeChanged: (Float) -> Unit,
-    onOptionSelected: (UiModeUiModel) -> Unit,
-    onAccessPortClicked: () -> Unit,
-    onProximityLockChanged: (Boolean) -> Unit,
+    onActionEvent: (SettingsAction) -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(id = R.string.action_settings)) },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(
+                        onClick = {
+                            onActionEvent(SettingsAction.OnBackPressed)
+                        },
+                    ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(id = R.string.back),
@@ -55,12 +53,8 @@ fun SettingsRoot(
             uiModeUiModel = uiState.uiModeUiModel,
             accessPort = uiState.accessPort,
             proximityLockEnabled = uiState.proximityLockEnabled,
-            onAppLanguageClicked = onAppLanguageClicked,
-            onLearnMoreAboutTranslationClicked = onLearnMoreAboutTranslationClicked,
-            onGraphSizeChanged = onGraphSizeChanged,
-            onOptionSelected = onOptionSelected,
-            onAccessPortClicked = onAccessPortClicked,
-            onProximityLockChanged = onProximityLockChanged,
+            onActionEvent = onActionEvent,
+
         )
     }
 }
@@ -71,12 +65,7 @@ internal fun SettingsRootPreview() {
     PhyphoxTheme {
         SettingsRoot(
             uiState = SettingsUiState(),
-            onAppLanguageClicked = {},
-            onLearnMoreAboutTranslationClicked = {},
-            onGraphSizeChanged = {},
-            onOptionSelected = {},
-            onAccessPortClicked = {},
-            onProximityLockChanged = {},
+            onActionEvent = {}
         )
     }
 }

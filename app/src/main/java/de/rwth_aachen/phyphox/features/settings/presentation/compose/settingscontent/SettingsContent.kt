@@ -27,6 +27,7 @@ import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbu
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem.SwitchPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SeekBarConfig
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsAction
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiModeUiModel
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
@@ -41,12 +42,7 @@ fun SettingsContent(
     uiModeUiModel: ResourceState<List<UiModeUiModel>>,
     accessPort: ResourceState<StringUIModel>,
     proximityLockEnabled: ResourceState<Boolean>,
-    onAppLanguageClicked: () -> Unit,
-    onLearnMoreAboutTranslationClicked: () -> Unit,
-    onGraphSizeChanged: (Float) -> Unit,
-    onOptionSelected: (UiModeUiModel) -> Unit,
-    onAccessPortClicked: () -> Unit,
-    onProximityLockChanged: (Boolean) -> Unit,
+    onActionEvent: (SettingsAction) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
@@ -80,7 +76,9 @@ fun SettingsContent(
                 title = ResourceStringUIModel(resId = R.string.settingsLanguage),
                 summary = currentLanguage,
                 iconRes = R.drawable.setting_language,
-                onClick = onAppLanguageClicked,
+                onClick = {
+                    onActionEvent(SettingsAction.OnAppLanguageClicked)
+                },
             )
         }
         item {
@@ -88,7 +86,9 @@ fun SettingsContent(
                 title = ResourceStringUIModel(resId = R.string.settingsTranslation),
                 summary = ResourceState.Success(ResourceStringUIModel(R.string.settingsTranslationMore)),
                 iconRes = R.drawable.setting_translate,
-                onClick = onLearnMoreAboutTranslationClicked,
+                onClick = {
+                    onActionEvent(SettingsAction.OnLearnMoreAboutTranslationClicked)
+                },
             )
         }
 
@@ -105,7 +105,9 @@ fun SettingsContent(
                 summary = ResourceStringUIModel(R.string.settingGraphSizeSubTitle),
                 iconRes = R.drawable.ic_line_width,
                 seekBarConfig = seekbarConfig,
-                onValueChange = onGraphSizeChanged,
+                onValueChange = {
+                    onActionEvent(SettingsAction.OnGraphSizeChanged(it))
+                },
             )
         }
         item {
@@ -113,7 +115,9 @@ fun SettingsContent(
                 title = ResourceStringUIModel(resId = R.string.settings_theme_title),
                 options = uiModeUiModel,
                 iconRes = R.drawable.ic_dark_mode,
-                onOptionSelected = onOptionSelected,
+                onOptionSelected = {
+                    onActionEvent(SettingsAction.OnUiModeItemSelected(it))
+                },
             )
         }
         item {
@@ -130,7 +134,9 @@ fun SettingsContent(
                 title = ResourceStringUIModel(resId = R.string.settingsPort),
                 summary = accessPort,
                 iconRes = R.drawable.setting_http,
-                onClick = onAccessPortClicked,
+                onClick = {
+                    onActionEvent(SettingsAction.OnAccessPortClicked)
+                },
             )
         }
         item {
@@ -139,7 +145,9 @@ fun SettingsContent(
                 summary = ResourceStringUIModel(resId = R.string.settingsProximityLockDetail),
                 iconRes = R.drawable.setting_lock,
                 checked = proximityLockEnabled,
-                onCheckedChange = onProximityLockChanged,
+                onCheckedChange = {
+                    onActionEvent(SettingsAction.OnProximityLockChanged(it))
+                },
             )
         }
     }
@@ -165,12 +173,7 @@ fun SettingsContentPreview() {
                 uiModeUiModel = ResourceState.Loading,
                 accessPort = ResourceState.Loading,
                 proximityLockEnabled = ResourceState.Loading,
-                onAppLanguageClicked = {},
-                onLearnMoreAboutTranslationClicked = {},
-                onGraphSizeChanged = {},
-                onOptionSelected = {},
-                onAccessPortClicked = {},
-                onProximityLockChanged = {},
+                onActionEvent = {},
             )
         }
     }

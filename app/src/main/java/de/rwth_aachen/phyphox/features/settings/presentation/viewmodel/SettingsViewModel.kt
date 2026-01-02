@@ -107,10 +107,7 @@ internal class SettingsViewModel @Inject constructor(
         )
     }
 
-    fun onAppLanguageClicked() {}
-    fun onLearnMoreAboutTranslationClicked() {}
-    fun onGraphSizeChanged(size: Float) {}
-    fun onOptionSelected(appUiMode: UiModeUiModel) {}
-    fun onAccessPortClicked() {}
-    fun onProximityLockChanged(enabled: Boolean) {}
+    fun onActionEvent(action: SettingsAction){
+
+    }
 }
