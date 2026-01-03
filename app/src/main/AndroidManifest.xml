@@ -114,7 +114,7 @@
                 android:value="de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity" />
         </activity>
         <activity
-            android:name="de.rwth_aachen.phyphox.SettingsActivity.OldSettingsActivity"
+            android:name="de.rwth_aachen.phyphox.SettingsActivity.SettingsActivity"
             android:label="@string/settings"
             android:parentActivityName="de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity">
             <meta-data
