@@ -13,31 +13,31 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem.PreferenceSummaryItem
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
 import de.rwth_aachen.phyphox.ui.skeleton
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
+import de.rwth_aachen.phyphox.utils.UiResourceState
 
 @Composable
 fun ClickablePreferenceItem(
     modifier: Modifier = Modifier,
     title: StringUIModel,
-    summary: ResourceState<StringUIModel>,
+    summary: UiResourceState<StringUIModel>,
     iconRes: Int? = null,
     onClick: () -> Unit = {},
 ) {
 
     PreferenceItem(
         modifier = modifier.clickable(
-            enabled = summary is ResourceState.Success,
+            enabled = summary is UiResourceState.Success,
             onClick = onClick,
         ),
         title = title,
         iconRes = iconRes,
         content = {
             when (summary) {
-                ResourceState.Loading -> Box(
+                UiResourceState.Loading -> Box(
                     modifier = Modifier
                         .padding(top = 4.dp)
                         .fillMaxWidth()
@@ -45,7 +45,7 @@ fun ClickablePreferenceItem(
                         .skeleton(),
                 )
 
-                is ResourceState.Success -> PreferenceSummaryItem(
+                is UiResourceState.Success -> PreferenceSummaryItem(
                     text = summary.data,
                 )
             }
@@ -56,7 +56,7 @@ fun ClickablePreferenceItem(
 @Preview(showBackground = true)
 @Composable
 internal fun ClickablePreferenceItemPreview(
-    @PreviewParameter(ClickablePreferenceItemPreviewProvider::class) preview: ResourceState<StringUIModel>,
+    @PreviewParameter(ClickablePreferenceItemPreviewProvider::class) preview: UiResourceState<StringUIModel>,
 ) {
     PhyphoxTheme {
         Surface {

@@ -1,14 +1,14 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.compose.clickablepreferenceitem
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
+import de.rwth_aachen.phyphox.utils.UiResourceState
 
-class ClickablePreferenceItemPreviewProvider : PreviewParameterProvider<ResourceState<StringUIModel>> {
-    override val values: Sequence<ResourceState<StringUIModel>>
+class ClickablePreferenceItemPreviewProvider : PreviewParameterProvider<UiResourceState<StringUIModel>> {
+    override val values: Sequence<UiResourceState<StringUIModel>>
         get() = sequenceOf(
-            ResourceState.Loading,
-            ResourceState.Success(LoremIpsumStringUIModel(8)),
+            UiResourceState.Loading,
+            UiResourceState.Success(LoremIpsumStringUIModel(8)),
         )
 }
