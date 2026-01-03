@@ -49,7 +49,6 @@ class NewSettingsActivity : ComponentActivity() {
                     SettingsEvent.NavigateBack -> onBackPressedDispatcher?.onBackPressed()
                     is SettingsEvent.OpenWebpage -> {}
                     is SettingsEvent.OpenWebpageFromResourceID -> {}
-                    SettingsEvent.ShowAccessPortModal -> {}
                 }
             }
         }
