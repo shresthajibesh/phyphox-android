@@ -7,6 +7,7 @@ import de.rwth_aachen.phyphox.features.settings.domain.usecase.uimode.UpdateCurr
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiBuilder
 import de.rwth_aachen.phyphox.utils.UiResourceState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -26,5 +27,9 @@ internal class DefaultAppUiModeDelegate @Inject constructor(
         combine(currentUiModeUiModelFlow, supportedUiModesFlowUiModel) { current, modes ->
             uiBuilder.buildAppUiModeResource(current, modes)
         }
+
+    override fun start(scope: CoroutineScope) {
+        TODO("Not yet implemented")
+    }
 }
 

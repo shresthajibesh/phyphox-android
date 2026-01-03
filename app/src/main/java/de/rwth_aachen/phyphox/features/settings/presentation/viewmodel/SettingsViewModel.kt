@@ -10,6 +10,7 @@ import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.ProximityLockDelegate
 import de.rwth_aachen.phyphox.utils.UIEventFlow
 import de.rwth_aachen.phyphox.utils.asFlow
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
@@ -33,6 +34,16 @@ internal class SettingsViewModel @Inject constructor(
     private val _uiEvent = UIEventFlow<SettingsEvent>()
     val uiEvent = _uiEvent.asFlow()
 
+    init {
+        start(viewModelScope)
+    }
+
+    override fun start(scope: CoroutineScope) {
+        accessPortDelegate.start(scope)
+        appLanguageDelegate.start(scope)
+        appUiModeDelegate.start(scope)
+        graphSizeDelegate.start(scope)
+    }
 
     val uiState = combine(
         accessPortDelegate.accessPortFlow,

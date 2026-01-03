@@ -5,6 +5,7 @@ import de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize.Observe
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize.UpdateGraphSizeUseCase
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
 import de.rwth_aachen.phyphox.utils.UiResourceState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -37,5 +38,13 @@ class DefaultGraphSizeDelegate @Inject constructor(
         } else {
             UiResourceState.Loading
         }
+    }
+
+    override fun start(scope: CoroutineScope) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateGraphSize(size: Float) {
+        TODO("Not yet implemented")
     }
 }
