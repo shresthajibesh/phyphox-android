@@ -8,5 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface AccessPortDelegate {
     val accessPortFlow: Flow<UiResourceState<StringUIModel>>
     fun start(scope: CoroutineScope)
+
+    suspend fun showAccessPortInputModal()
 }
 

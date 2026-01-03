@@ -9,4 +9,6 @@ import kotlinx.coroutines.flow.Flow
 interface AppUiModeDelegate {
     val appUiModeFlow: Flow<UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>>>
     fun start(scope: CoroutineScope)
+
+    suspend fun updateAppUiMode(appUiMode: SegmentedButtonUiModel<AppUiMode>)
 }

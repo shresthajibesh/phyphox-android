@@ -8,4 +8,6 @@ import kotlinx.coroutines.flow.Flow
 interface AppLanguageDelegate {
     val appLanguageFlow: Flow<UiResourceState<StringUIModel>>
     fun start(scope: CoroutineScope)
+
+    suspend fun showLanguagePickerModal()
 }

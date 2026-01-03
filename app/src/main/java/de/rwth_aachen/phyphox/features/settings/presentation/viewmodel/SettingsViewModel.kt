@@ -3,6 +3,7 @@ package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.AppUiModeDelegate
@@ -14,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,6 +70,22 @@ internal class SettingsViewModel @Inject constructor(
     )
 
     fun onActionEvent(action: SettingsAction) {
+        when (action) {
+            SettingsAction.OnAccessPortClicked -> accessPortDelegate::showAccessPortInputModal
+            SettingsAction.OnAppLanguageClicked -> appLanguageDelegate::showLanguagePickerModal
+            SettingsAction.OnBackPressed -> sendEvent(SettingsEvent.NavigateBack)
+            is SettingsAction.OnGraphSizeChanged -> graphSizeDelegate::updateGraphSize
+            SettingsAction.OnLearnMoreAboutTranslationClicked -> sendEvent(
+                SettingsEvent.OpenWebpageFromResourceID(
+                    R.string.settingsTranslation,
+                ),
+            )
+            is SettingsAction.OnProximityLockChanged -> proximityLockDelegate::updateProximityLockStatus
+            is SettingsAction.OnUiModeItemSelected -> appUiModeDelegate::updateAppUiMode
+        }
+    }
 
+    private fun sendEvent(event: SettingsEvent) = viewModelScope.launch {
+        _uiEvent.emit(event)
     }
 }

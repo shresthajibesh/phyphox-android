@@ -44,6 +44,10 @@ internal class DefaultGraphSizeDelegate @Inject constructor(
         }
     }
 
+    override suspend fun updateGraphSize(size: Float) {
+        TODO("Not yet implemented")
+    }
+
     private fun observeCurrentGraphConfig(scope: CoroutineScope) {
         observeCurrentGraphSize().onStart {
             currentGraphSizeFlow.value = UiResourceState.Loading
@@ -58,8 +62,4 @@ internal class DefaultGraphSizeDelegate @Inject constructor(
         )
     }
 
-
-    override suspend fun updateGraphSize(size: Int) {
-
-    }
 }

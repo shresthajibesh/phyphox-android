@@ -34,5 +34,9 @@ internal class DefaultAccessPortDelegate @Inject constructor(
         }.launchIn(scope)
     }
 
+    override suspend fun showAccessPortInputModal() {
+
+    }
+
 }
 

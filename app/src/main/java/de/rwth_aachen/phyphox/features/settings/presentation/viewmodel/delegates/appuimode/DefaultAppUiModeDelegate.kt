@@ -37,6 +37,10 @@ internal class DefaultAppUiModeDelegate @Inject constructor(
         fetchSupportedUiModes(scope)
     }
 
+    override suspend fun updateAppUiMode(appUiMode: SegmentedButtonUiModel<AppUiMode>) {
+
+    }
+
     private fun fetchSupportedUiModes(scope: CoroutineScope) {
         scope.launch {
             supportedUiModesFlowUiModel.value = UiResourceState.Success(

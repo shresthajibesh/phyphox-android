@@ -49,6 +49,8 @@ class NewSettingsActivity : ComponentActivity() {
                     SettingsEvent.NavigateBack -> onBackPressedDispatcher?.onBackPressed()
                     SettingsEvent.NavigateToLanguagePicker -> {}
                     is SettingsEvent.OpenWebpage -> {}
+                    is SettingsEvent.OpenWebpageFromResourceID -> {}
+                    SettingsEvent.ShowAccessPortModal -> {}
                 }
             }
         }

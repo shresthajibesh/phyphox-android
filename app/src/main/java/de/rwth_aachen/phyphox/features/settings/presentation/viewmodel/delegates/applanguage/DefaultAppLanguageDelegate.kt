@@ -34,4 +34,8 @@ internal class DefaultAppLanguageDelegate @Inject constructor(
             currentLanguageFlow.value = UiResourceState.Success(it)
         }.launchIn(scope)
     }
+
+    override suspend fun showLanguagePickerModal() {
+
+    }
 }
