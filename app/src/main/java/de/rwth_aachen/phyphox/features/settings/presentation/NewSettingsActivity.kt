@@ -47,7 +47,6 @@ class NewSettingsActivity : ComponentActivity() {
             viewModel.uiEvent.collect { event ->
                 when (event) {
                     SettingsEvent.NavigateBack -> onBackPressedDispatcher?.onBackPressed()
-                    SettingsEvent.NavigateToLanguagePicker -> {}
                     is SettingsEvent.OpenWebpage -> {}
                     is SettingsEvent.OpenWebpageFromResourceID -> {}
                     SettingsEvent.ShowAccessPortModal -> {}
