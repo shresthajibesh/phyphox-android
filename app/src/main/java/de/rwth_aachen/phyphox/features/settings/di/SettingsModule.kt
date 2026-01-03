@@ -67,13 +67,16 @@ abstract class SettingsModule {
         implementation: DefaultAppPreferencesRepository,
     ): AppPreferencesRepository
 
-    @Provides
-    @Singleton
-    @SettingsDataStore
-    fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
-            produceFile = { context.preferencesDataStoreFile("preferences") }
-        )
+
+    companion object {
+        @Provides
+        @Singleton
+        @SettingsDataStore
+        fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+            return PreferenceDataStoreFactory.create(
+                produceFile = { context.preferencesDataStoreFile("preferences") },
+            )
+        }
     }
 }
 
