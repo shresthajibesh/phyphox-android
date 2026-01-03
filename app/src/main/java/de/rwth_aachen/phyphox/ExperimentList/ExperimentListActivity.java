@@ -83,6 +83,7 @@ import java.util.zip.CRC32;
 
 import de.rwth_aachen.phyphox.Bluetooth.BluetoothExperimentLoader;
 import de.rwth_aachen.phyphox.Bluetooth.BluetoothScanDialog;
+import de.rwth_aachen.phyphox.BuildConfig;
 import de.rwth_aachen.phyphox.Experiment;
 import de.rwth_aachen.phyphox.ExperimentList.datasource.AssetExperimentLoader;
 import de.rwth_aachen.phyphox.ExperimentList.handler.BluetoothScanner;
@@ -103,6 +104,7 @@ import de.rwth_aachen.phyphox.SettingsActivity.OldSettingsActivity;
 import de.rwth_aachen.phyphox.SettingsActivity.SettingsFragment;
 import de.rwth_aachen.phyphox.camera.depth.DepthInput;
 import de.rwth_aachen.phyphox.camera.helper.CameraHelper;
+import de.rwth_aachen.phyphox.features.settings.presentation.NewSettingsActivity;
 
 public class ExperimentListActivity extends AppCompatActivity {
 
@@ -277,6 +279,13 @@ public class ExperimentListActivity extends AppCompatActivity {
                 editor.apply();
             }
         });
+
+        if(BuildConfig.DEBUG){
+            creditsV.setOnLongClickListener(v -> {
+                startActivity(new Intent(this, NewSettingsActivity.class));
+                return true;
+            });
+        }
 
     }
 
