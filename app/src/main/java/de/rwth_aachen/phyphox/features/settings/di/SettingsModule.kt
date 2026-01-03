@@ -1,8 +1,15 @@
 package de.rwth_aachen.phyphox.features.settings.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import de.rwth_aachen.phyphox.features.settings.data.DefaultAppPreferencesRepository
 import de.rwth_aachen.phyphox.features.settings.data.local.DefaultLocalAppPreferencesDataSource
@@ -18,6 +25,8 @@ import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.graphsize.GraphSizeDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.DefaultProximityLockDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.ProximityLockDelegate
+import javax.inject.Qualifier
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -58,5 +67,16 @@ abstract class SettingsModule {
         implementation: DefaultAppPreferencesRepository,
     ): AppPreferencesRepository
 
-
+    @Provides
+    @Singleton
+    @SettingsDataStore
+    fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            produceFile = { context.preferencesDataStoreFile("preferences") }
+        )
+    }
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class SettingsDataStore
