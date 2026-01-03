@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface AppPreferencesRepository {
     fun observeCurrentAccessPort(): Flow<Int?>
-    suspend fun updateAccessPort(port: Int): Result<Unit>
+    suspend fun updateAccessPort(port: Int)
 }

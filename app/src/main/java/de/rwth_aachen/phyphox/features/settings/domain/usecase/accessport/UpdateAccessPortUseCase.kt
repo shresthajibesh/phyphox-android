@@ -9,6 +9,7 @@ class UpdateAccessPortUseCase @Inject constructor(
     suspend operator fun invoke(port: Int): Result<Unit> {
         return try {
             repository.updateAccessPort(port)
+            Result.success(Unit)
         } catch (error: Throwable) {
             Result.failure(error)
         }
