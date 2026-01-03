@@ -99,8 +99,8 @@ import de.rwth_aachen.phyphox.Helper.WindowInsetHelper;
 import de.rwth_aachen.phyphox.PhyphoxFile;
 import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.SensorInput;
-import de.rwth_aachen.phyphox.features.settings.presentation.SettingsActivity;
-import de.rwth_aachen.phyphox.features.settings.presentation.SettingsFragment;
+import de.rwth_aachen.phyphox.SettingsActivity.OldSettingsActivity;
+import de.rwth_aachen.phyphox.SettingsActivity.SettingsFragment;
 import de.rwth_aachen.phyphox.camera.depth.DepthInput;
 import de.rwth_aachen.phyphox.camera.helper.CameraHelper;
 
@@ -305,7 +305,7 @@ public class ExperimentListActivity extends AppCompatActivity {
                 return true;
             }
             else if (item.getItemId() == R.id.action_settings) {
-                Intent intent = new Intent(this, SettingsActivity.class);
+                Intent intent = new Intent(this, OldSettingsActivity.class);
                 startActivity(intent);
                 return true;
             }

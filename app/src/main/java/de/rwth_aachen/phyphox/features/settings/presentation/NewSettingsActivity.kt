@@ -10,20 +10,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.SettingsRoot
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsEvent
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsViewModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SettingsActivity : ComponentActivity() {
+class NewSettingsActivity : ComponentActivity() {
     private val viewModel: SettingsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
