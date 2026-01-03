@@ -13,12 +13,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem.PreferenceSummaryItem
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SeekBarConfig
 import de.rwth_aachen.phyphox.ui.skeleton
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
+import de.rwth_aachen.phyphox.utils.UiResourceState
 
 @Composable
 fun SeekBarPreferenceItem(
@@ -26,7 +25,7 @@ fun SeekBarPreferenceItem(
     title: StringUIModel,
     iconRes: Int? = null,
     summary: StringUIModel? = null,
-    seekBarConfig: ResourceState<SeekBarConfig>,
+    seekBarConfig: UiResourceState<SeekBarConfig>,
     onValueChange: (Float) -> Unit,
 ) {
     PreferenceItem(
@@ -38,7 +37,7 @@ fun SeekBarPreferenceItem(
                 PreferenceSummaryItem(text = summary)
             }
             when (seekBarConfig) {
-                ResourceState.Loading -> Box(
+                UiResourceState.Loading -> Box(
                     modifier = Modifier
                         .padding(top = 4.dp)
                         .fillMaxWidth()
@@ -46,7 +45,7 @@ fun SeekBarPreferenceItem(
                         .skeleton(),
                 )
 
-                is ResourceState.Success<SeekBarConfig> -> Slider(
+                is UiResourceState.Success<SeekBarConfig> -> Slider(
                     value = seekBarConfig.data.currentSize,
                     onValueChange = onValueChange,
                     valueRange = seekBarConfig.data.range,
@@ -60,7 +59,7 @@ fun SeekBarPreferenceItem(
 @Preview(showBackground = true)
 @Composable
 internal fun SeekBarPreferenceItemPreview(
-    @PreviewParameter(SeekBarPreferenceItemPreviewProvider::class) graphSize: ResourceState<SeekBarConfig>,
+    @PreviewParameter(SeekBarPreferenceItemPreviewProvider::class) graphSize: UiResourceState<SeekBarConfig>,
 ) {
     PhyphoxTheme {
         Surface {

@@ -25,10 +25,10 @@ import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencec
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem.SwitchPreferenceItem
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiResourceState
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SeekBarConfig
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsAction
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiModeUiModel
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SegmentedButtonUiModel
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
@@ -37,11 +37,11 @@ import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 @Composable
 fun SettingsContent(
     modifier: Modifier = Modifier,
-    currentLanguage: ResourceState<StringUIModel>,
-    seekbarConfig: ResourceState<SeekBarConfig>,
-    uiModeUiModel: ResourceState<List<UiModeUiModel>>,
-    accessPort: ResourceState<StringUIModel>,
-    proximityLockEnabled: ResourceState<Boolean>,
+    currentLanguage: UiResourceState<StringUIModel>,
+    seekbarConfig: UiResourceState<SeekBarConfig>,
+    segmentedButtonUiModel: UiResourceState<List<SegmentedButtonUiModel>>,
+    accessPort: UiResourceState<StringUIModel>,
+    proximityLockEnabled: UiResourceState<Boolean>,
     onActionEvent: (SettingsAction) -> Unit,
 ) {
     LazyColumn(
@@ -84,7 +84,7 @@ fun SettingsContent(
         item {
             ClickablePreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settingsTranslation),
-                summary = ResourceState.Success(ResourceStringUIModel(R.string.settingsTranslationMore)),
+                summary = UiResourceState.Success(ResourceStringUIModel(R.string.settingsTranslationMore)),
                 iconRes = R.drawable.setting_translate,
                 onClick = {
                     onActionEvent(SettingsAction.OnLearnMoreAboutTranslationClicked)
@@ -113,7 +113,7 @@ fun SettingsContent(
         item {
             SegmentedButtonPreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settings_theme_title),
-                options = uiModeUiModel,
+                config = segmentedButtonUiModel,
                 iconRes = R.drawable.ic_dark_mode,
                 onOptionSelected = {
                     onActionEvent(SettingsAction.OnUiModeItemSelected(it))
@@ -168,11 +168,11 @@ fun SettingsContentPreview() {
     PhyphoxTheme {
         Surface {
             SettingsContent(
-                currentLanguage = ResourceState.Loading,
-                seekbarConfig = ResourceState.Loading,
-                uiModeUiModel = ResourceState.Loading,
-                accessPort = ResourceState.Loading,
-                proximityLockEnabled = ResourceState.Loading,
+                currentLanguage = UiResourceState.Loading,
+                seekbarConfig = UiResourceState.Loading,
+                segmentedButtonUiModel = UiResourceState.Loading,
+                accessPort = UiResourceState.Loading,
+                proximityLockEnabled = UiResourceState.Loading,
                 onActionEvent = {},
             )
         }

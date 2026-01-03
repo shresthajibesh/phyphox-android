@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem.PreferenceSummaryItem
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiResourceState
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.isChecked
 import de.rwth_aachen.phyphox.ui.skeleton
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
@@ -29,13 +29,13 @@ fun SwitchPreferenceItem(
     title: StringUIModel,
     summary: StringUIModel? = null,
     iconRes: Int? = null,
-    checked: ResourceState<Boolean>,
+    checked: UiResourceState<Boolean>,
     onCheckedChange: (Boolean) -> Unit,
 ) {
 
     PreferenceItem(
         modifier = modifier
-            .clickable(checked is ResourceState.Success) {
+            .clickable(checked is UiResourceState.Success) {
                 onCheckedChange(checked.isChecked())
             },
         title = title,
@@ -47,7 +47,7 @@ fun SwitchPreferenceItem(
         },
         trailingContent = {
             when (checked) {
-                ResourceState.Loading -> Box(
+                UiResourceState.Loading -> Box(
                     modifier = Modifier
                         .padding(top = 16.dp)
                         .width(48.dp)
@@ -55,7 +55,7 @@ fun SwitchPreferenceItem(
                         .skeleton(),
                 )
 
-                is ResourceState.Success<Boolean> ->
+                is UiResourceState.Success<Boolean> ->
                     Switch(
                         checked = checked.isChecked(),
                         onCheckedChange = onCheckedChange,
@@ -75,7 +75,7 @@ fun SwitchPreferenceItem(
 )
 @Composable
 internal fun SwitchPreferenceItemPreview(
-    @PreviewParameter(SwitchPreferenceItemPreviewProvider::class) value: ResourceState<Boolean>,
+    @PreviewParameter(SwitchPreferenceItemPreviewProvider::class) value: UiResourceState<Boolean>,
 ) {
     PhyphoxTheme {
         Surface {

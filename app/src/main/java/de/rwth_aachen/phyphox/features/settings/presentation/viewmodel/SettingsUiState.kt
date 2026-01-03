@@ -1,52 +1,17 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel
 
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
+import de.rwth_aachen.phyphox.utils.UiResourceState
 
 data class SettingsUiState(
-    val currentLanguage: ResourceState<StringUIModel> = ResourceState.Loading,
-    val graphSize: ResourceState<SeekBarConfig> = ResourceState.Loading,
-    val uiModeUiModel: ResourceState<List<UiModeUiModel>> = ResourceState.Loading,
+    val currentLanguage: UiResourceState<StringUIModel> = UiResourceState.Loading,
+    val graphSize: UiResourceState<SeekBarConfig> = UiResourceState.Loading,
+    val segmentedButtonUiModel: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>> = UiResourceState.Loading,
 //    val dynamicTheme: ResourceState<Boolean> = ResourceState.Loading,
-    val accessPort: ResourceState<StringUIModel> = ResourceState.Loading,
-    val proximityLockEnabled: ResourceState<Boolean> = ResourceState.Loading,
-    val modal: SettingsModal? = null,
+    val accessPort: UiResourceState<StringUIModel> = UiResourceState.Loading,
+    val proximityLockEnabled: UiResourceState<Boolean> = UiResourceState.Loading,
+    val modal: SettingsSheetUiModel? = null,
 )
-
-sealed interface ResourceState<out T> {
-    data object Loading : ResourceState<Nothing>
-    data class Success<T>(val data: T) : ResourceState<T>
-}
-
-fun ResourceState<Boolean>.isChecked(): Boolean {
-    return this is ResourceState.Success && this.data
-}
-
-data class SeekBarConfig(
-    val currentSize: Float,
-    val range: ClosedFloatingPointRange<Float>,
-) {
-    constructor(
-        currentSize: Float,
-        minSize: Float,
-        maxSize: Float,
-    ) : this(
-        currentSize = currentSize,
-        range = minSize..maxSize,
-    )
-}
-
-data class UiModeUiModel(
-    val appUiMode: AppUiMode,
-    val text: StringUIModel,
-    val isSelected: Boolean,
-)
-
-sealed interface SettingsModal {
-    data class AccessPortModal(
-        val currentPort: StringUIModel,
-        val range: ClosedFloatingPointRange<Int>,
-        val error: StringUIModel? = null,
-    ) : SettingsModal
-
-}

@@ -1,13 +1,13 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiResourceState
 
-class SwitchPreferenceItemPreviewProvider : PreviewParameterProvider<ResourceState<Boolean>> {
-    override val values: Sequence<ResourceState<Boolean>>
+class SwitchPreferenceItemPreviewProvider : PreviewParameterProvider<UiResourceState<Boolean>> {
+    override val values: Sequence<UiResourceState<Boolean>>
         get() = sequenceOf(
-            ResourceState.Loading,
-            ResourceState.Success(true),
-            ResourceState.Success(false),
+            UiResourceState.Loading,
+            UiResourceState.Success(true),
+            UiResourceState.Success(false),
         )
 }

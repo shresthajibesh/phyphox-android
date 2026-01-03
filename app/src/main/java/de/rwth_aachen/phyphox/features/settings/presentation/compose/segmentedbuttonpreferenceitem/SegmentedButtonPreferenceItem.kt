@@ -16,13 +16,12 @@ import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem.PreferenceSummaryItem
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.ResourceState
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiModeUiModel
 import de.rwth_aachen.phyphox.ui.skeleton
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.resolve
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
+import de.rwth_aachen.phyphox.utils.UiResourceState
 
 @Composable
 fun SegmentedButtonPreferenceItem(
@@ -30,8 +29,8 @@ fun SegmentedButtonPreferenceItem(
     title: StringUIModel,
     summary: StringUIModel? = null,
     iconRes: Int? = null,
-    options: ResourceState<List<UiModeUiModel>>,
-    onOptionSelected: (UiModeUiModel) -> Unit,
+    config: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>>,
+    onOptionSelected: (SegmentedButtonUiModel<AppUiMode>) -> Unit,
 ) {
     PreferenceItem(
         modifier = modifier,
@@ -41,8 +40,8 @@ fun SegmentedButtonPreferenceItem(
             summary?.let {
                 PreferenceSummaryItem(text = summary)
             }
-            when (options) {
-                ResourceState.Loading -> Box(
+            when (config) {
+                UiResourceState.Loading -> Box(
                     modifier = Modifier
                         .padding(top = 4.dp)
                         .fillMaxWidth()
@@ -50,14 +49,14 @@ fun SegmentedButtonPreferenceItem(
                         .skeleton(),
                 )
 
-                is ResourceState.Success<List<UiModeUiModel>> -> SingleChoiceSegmentedButtonRow(
+                is UiResourceState.Success<List<SegmentedButtonUiModel<AppUiMode>>> -> SingleChoiceSegmentedButtonRow(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    options.data.forEachIndexed { index, option ->
+                    config.data.forEachIndexed { index, option ->
                         SegmentedButton(
                             shape = SegmentedButtonDefaults.itemShape(
                                 index = index,
-                                count = options.data.size,
+                                count = config.data.size,
                             ),
                             onClick = {
                                 onOptionSelected(option)
@@ -81,20 +80,20 @@ internal fun SegmentedButtonPreferenceItemPreview() {
             title = LoremIpsumStringUIModel(4),
             summary = LoremIpsumStringUIModel(12),
             iconRes = R.drawable.ic_dark_mode,
-            options = ResourceState.Success(
-                listOf(
-                    UiModeUiModel(
-                        appUiMode = AppUiMode.DARK,
+            config = UiResourceState.Success(
+                data = listOf(
+                    SegmentedButtonUiModel<AppUiMode>(
+                        item = AppUiMode.DARK,
                         text = LoremIpsumStringUIModel(2),
                         isSelected = true,
                     ),
-                    UiModeUiModel(
-                        appUiMode = AppUiMode.SYSTEM,
+                    SegmentedButtonUiModel(
+                        item = AppUiMode.SYSTEM,
                         text = LoremIpsumStringUIModel(1),
                         isSelected = false,
                     ),
-                    UiModeUiModel(
-                        appUiMode = AppUiMode.LIGHT,
+                    SegmentedButtonUiModel(
+                        item = AppUiMode.LIGHT,
                         text = LoremIpsumStringUIModel(1),
                         isSelected = false,
                     ),
