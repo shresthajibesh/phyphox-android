@@ -52,6 +52,13 @@ internal class SettingsViewModel @Inject constructor(
         graphSizeDelegate.graphSizeFlow,
         proximityLockDelegate.proximityLockFlow,
     ) { accessPort, currentLanguage, uiMode, graphSize, proximityLockEnabled ->
+        SettingsUiState(
+            currentLanguage = currentLanguage,
+            graphSize = graphSize,
+            appUiMode = uiMode,
+            accessPort = accessPort,
+            proximityLockEnabled = proximityLockEnabled,
+        )
 
     }.stateIn(
         scope = viewModelScope,
