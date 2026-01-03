@@ -3,8 +3,11 @@ package de.rwth_aachen.phyphox.features.settings.di
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
+import de.rwth_aachen.phyphox.features.settings.data.DefaultAppPreferencesRepository
+import de.rwth_aachen.phyphox.features.settings.data.local.DefaultLocalAppPreferencesDataSource
+import de.rwth_aachen.phyphox.features.settings.domain.data.AppPreferencesRepository
+import de.rwth_aachen.phyphox.features.settings.domain.data.local.LocalAppPreferencesDataSource
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.DefaultAccessPortDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageDelegate
@@ -44,4 +47,16 @@ abstract class SettingsModule {
     internal abstract fun bindsProximityLockDelegate(
         implementation: DefaultProximityLockDelegate,
     ): ProximityLockDelegate
+
+    @Binds
+    internal abstract fun bindLocalDataSource(
+        implementation: DefaultLocalAppPreferencesDataSource,
+    ): LocalAppPreferencesDataSource
+
+    @Binds
+    internal abstract fun bndAppPreferencesRepository(
+        implementation: DefaultAppPreferencesRepository,
+    ): AppPreferencesRepository
+
+
 }
