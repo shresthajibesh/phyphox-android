@@ -4,17 +4,23 @@ import de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize.GetGrap
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize.ObserveCurrentGraphSizeUseCase
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize.UpdateGraphSizeUseCase
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiBuilder
 import de.rwth_aachen.phyphox.utils.UiResourceState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DefaultGraphSizeDelegate @Inject constructor(
+internal class DefaultGraphSizeDelegate @Inject constructor(
     private val observeCurrentGraphSize: ObserveCurrentGraphSizeUseCase,
     private val getGraphSizeRange: GetGraphSizeRangeUseCase,
     private val updateGraphSize: UpdateGraphSizeUseCase,
+    private val uiBuilder: UiBuilder,
 ) : GraphSizeDelegate {
     private val currentGraphSizeFlow = MutableStateFlow<UiResourceState<Float>>(
         UiResourceState.Loading,
@@ -28,23 +34,32 @@ class DefaultGraphSizeDelegate @Inject constructor(
         currentGraphSizeFlow,
         graphSizeRangeFlow,
     ) { graphSize, range ->
-        if (graphSize is UiResourceState.Success && range is UiResourceState.Success) {
-            UiResourceState.Success(
-                SeekBarConfig(
-                    currentSize = graphSize.data,
-                    range = range.data,
-                ),
-            )
-        } else {
-            UiResourceState.Loading
-        }
+        uiBuilder.buildGraphSizeUiModel(graphSize, range)
     }
 
     override fun start(scope: CoroutineScope) {
-        TODO("Not yet implemented")
+        observeCurrentGraphConfig(scope)
+        scope.launch {
+            fetchGraphSizeRange()
+        }
     }
 
-    override suspend fun updateGraphSize(size: Float) {
-        TODO("Not yet implemented")
+    private fun observeCurrentGraphConfig(scope: CoroutineScope) {
+        observeCurrentGraphSize().onStart {
+            currentGraphSizeFlow.value = UiResourceState.Loading
+        }.onEach {
+            currentGraphSizeFlow.value = UiResourceState.Success(it)
+        }.launchIn(scope)
+    }
+
+    private suspend fun fetchGraphSizeRange() {
+        graphSizeRangeFlow.value = UiResourceState.Success(
+            getGraphSizeRange(),
+        )
+    }
+
+
+    override suspend fun updateGraphSize(size: Int) {
+
     }
 }

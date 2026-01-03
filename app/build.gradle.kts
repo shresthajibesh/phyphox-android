@@ -131,9 +131,6 @@ android {
             "UnrememberedMutableState",
         )
     }
-    kotlinOptions {
-        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
-    }
     ktlint {
         android.set(true)
         ignoreFailures.set(true)

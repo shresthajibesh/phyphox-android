@@ -11,13 +11,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 internal class DefaultAppUiModeDelegate @Inject constructor(
     private val observeCurrentUiMode: ObserveCurrentAppUiModeUseCase,
     private val getSupportedUiModes: GetSupportedAppUiModeUseCase,
     private val updateCurrentAppUiMode: UpdateCurrentAppUiModeUseCase,
-    private val uiBuilder: UiBuilder
+    private val uiBuilder: UiBuilder,
 ) : AppUiModeDelegate {
     private val currentUiModeUiModelFlow = MutableStateFlow<UiResourceState<AppUiMode>>(UiResourceState.Loading)
     private val supportedUiModesFlowUiModel =
@@ -29,7 +33,24 @@ internal class DefaultAppUiModeDelegate @Inject constructor(
         }
 
     override fun start(scope: CoroutineScope) {
-        TODO("Not yet implemented")
+        observeAppUiMode(scope)
+        fetchSupportedUiModes(scope)
+    }
+
+    private fun fetchSupportedUiModes(scope: CoroutineScope) {
+        scope.launch {
+            supportedUiModesFlowUiModel.value = UiResourceState.Success(
+                getSupportedUiModes()
+            )
+        }
+    }
+
+    private fun observeAppUiMode(scope: CoroutineScope){
+        observeCurrentUiMode().onStart {
+            currentUiModeUiModelFlow.value = UiResourceState.Loading
+        }.onEach {
+            currentUiModeUiModelFlow.value = UiResourceState.Success(it)
+        }.launchIn(scope)
     }
 }
 

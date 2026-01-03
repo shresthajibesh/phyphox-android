@@ -40,7 +40,7 @@ fun SettingsContent(
     modifier: Modifier = Modifier,
     currentLanguage: UiResourceState<StringUIModel>,
     seekbarConfig: UiResourceState<SeekBarConfig>,
-    segmentedButtonUiModel: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>>,
+    appUiMode: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>>,
     accessPort: UiResourceState<StringUIModel>,
     proximityLockEnabled: UiResourceState<Boolean>,
     onActionEvent: (SettingsAction) -> Unit,
@@ -114,7 +114,7 @@ fun SettingsContent(
         item {
             SegmentedButtonPreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settings_theme_title),
-                config = segmentedButtonUiModel,
+                config = appUiMode,
                 iconRes = R.drawable.ic_dark_mode,
                 onOptionSelected = {
                     onActionEvent(SettingsAction.OnUiModeItemSelected(it))
@@ -171,7 +171,7 @@ fun SettingsContentPreview() {
             SettingsContent(
                 currentLanguage = UiResourceState.Loading,
                 seekbarConfig = UiResourceState.Loading,
-                segmentedButtonUiModel = UiResourceState.Loading,
+                appUiMode = UiResourceState.Loading,
                 accessPort = UiResourceState.Loading,
                 proximityLockEnabled = UiResourceState.Loading,
                 onActionEvent = {},

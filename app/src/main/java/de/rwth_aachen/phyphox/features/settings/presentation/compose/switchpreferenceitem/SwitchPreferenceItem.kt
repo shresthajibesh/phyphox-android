@@ -16,12 +16,12 @@ import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem.PreferenceSummaryItem
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiResourceState
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.isChecked
 import de.rwth_aachen.phyphox.ui.skeleton
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
+import de.rwth_aachen.phyphox.utils.UiResourceState
+import de.rwth_aachen.phyphox.utils.isChecked
 
 @Composable
 fun SwitchPreferenceItem(

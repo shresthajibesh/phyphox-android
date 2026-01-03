@@ -50,7 +50,7 @@ fun SettingsRoot(
             modifier = modifier.padding(innerPadding),
             currentLanguage = uiState.currentLanguage,
             seekbarConfig = uiState.graphSize,
-            segmentedButtonUiModel = uiState.segmentedButtonUiModel,
+            appUiMode = uiState.appUiMode,
             accessPort = uiState.accessPort,
             proximityLockEnabled = uiState.proximityLockEnabled,
             onActionEvent = onActionEvent,

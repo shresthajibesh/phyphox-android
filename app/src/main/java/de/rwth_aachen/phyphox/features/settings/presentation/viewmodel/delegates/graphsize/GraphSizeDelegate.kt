@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface GraphSizeDelegate {
     val graphSizeFlow: Flow<UiResourceState<SeekBarConfig>>
     fun start(scope: CoroutineScope)
-    suspend fun updateGraphSize(size: Float)
+    suspend fun updateGraphSize(size: Int)
 }

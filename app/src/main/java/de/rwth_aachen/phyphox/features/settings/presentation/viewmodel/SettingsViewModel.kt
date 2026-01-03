@@ -43,6 +43,7 @@ internal class SettingsViewModel @Inject constructor(
         appLanguageDelegate.start(scope)
         appUiModeDelegate.start(scope)
         graphSizeDelegate.start(scope)
+        proximityLockDelegate.start(scope)
     }
 
     val uiState = combine(

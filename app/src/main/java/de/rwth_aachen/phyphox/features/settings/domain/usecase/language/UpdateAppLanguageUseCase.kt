@@ -1,4 +1,6 @@
 package de.rwth_aachen.phyphox.features.settings.domain.usecase.language
 
-class UpdateAppLanguageUseCase {
+import javax.inject.Inject
+
+class UpdateAppLanguageUseCase @Inject constructor(){
 }

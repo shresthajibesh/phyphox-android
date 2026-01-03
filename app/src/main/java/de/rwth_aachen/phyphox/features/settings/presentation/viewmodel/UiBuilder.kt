@@ -13,18 +13,6 @@ import javax.inject.Inject
 
 internal class UiBuilder @Inject constructor() {
 
-    fun buildSeekBarConfig(
-        currentSize: Float,
-        range: ClosedFloatingPointRange<Float>,
-    ): SeekBarConfig {
-        return SeekBarConfig(
-            currentSize = currentSize,
-            minSize = range.start,
-            maxSize = range.endInclusive,
-        )
-    }
-
-
     //region - App Language
     fun buildLanguageUiModel(localeResource: UiResourceState<Locale>): UiResourceState<StringUIModel> {
         return when (localeResource) {
@@ -65,6 +53,38 @@ internal class UiBuilder @Inject constructor() {
             AppUiMode.SYSTEM -> ResourceStringUIModel(R.string.settings_mode_dark_system)
             AppUiMode.LIGHT -> ResourceStringUIModel(R.string.settings_mode_no_dark)
             AppUiMode.DARK -> ResourceStringUIModel(R.string.settings_mode_dark)
+        }
+    }
+
+    //endregion
+
+    //region - AccessPort
+    fun buildAccessPortUiModel(portResource: UiResourceState<Int>): UiResourceState<StringUIModel> {
+        return when (portResource) {
+            UiResourceState.Loading -> UiResourceState.Loading
+            is UiResourceState.Success<Int> -> UiResourceState.Success(
+                portResource.data.toString().toStringUIModel(),
+            )
+        }
+    }
+    //endregion
+
+    //region - Graph Size
+    fun buildGraphSizeUiModel(
+        currentGraphSizeFlow: UiResourceState<Float>,
+        graphSizeRangeFlow: UiResourceState<ClosedFloatingPointRange<Float>>,
+    ): UiResourceState<SeekBarConfig> {
+        return when {
+            currentGraphSizeFlow is UiResourceState.Success && graphSizeRangeFlow is UiResourceState.Success -> {
+                UiResourceState.Success(
+                    SeekBarConfig(
+                        currentSize = currentGraphSizeFlow.data,
+                        range = graphSizeRangeFlow.data.start..graphSizeRangeFlow.data.endInclusive,
+                    ),
+                )
+            }
+
+            else -> UiResourceState.Loading
         }
     }
     //endregion

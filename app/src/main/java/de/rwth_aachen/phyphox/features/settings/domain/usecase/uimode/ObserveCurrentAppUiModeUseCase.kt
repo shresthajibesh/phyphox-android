@@ -1,4 +1,12 @@
 package de.rwth_aachen.phyphox.features.settings.domain.usecase.uimode
 
-class ObserveCurrentAppUiModeUseCase {
+import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
+
+class ObserveCurrentAppUiModeUseCase @Inject constructor() {
+    operator fun invoke(): Flow<AppUiMode> {
+        return flowOf(AppUiMode.LIGHT)
+    }
 }
