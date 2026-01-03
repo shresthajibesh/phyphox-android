@@ -20,18 +20,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
+import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.clickablepreferenceitem.ClickablePreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencecategoryheader.PreferenceCategoryHeader
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonPreferenceItem
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem.SwitchPreferenceItem
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiResourceState
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SeekBarConfig
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsAction
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SegmentedButtonUiModel
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
+import de.rwth_aachen.phyphox.utils.UiResourceState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +40,7 @@ fun SettingsContent(
     modifier: Modifier = Modifier,
     currentLanguage: UiResourceState<StringUIModel>,
     seekbarConfig: UiResourceState<SeekBarConfig>,
-    segmentedButtonUiModel: UiResourceState<List<SegmentedButtonUiModel>>,
+    segmentedButtonUiModel: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>>,
     accessPort: UiResourceState<StringUIModel>,
     proximityLockEnabled: UiResourceState<Boolean>,
     onActionEvent: (SettingsAction) -> Unit,
