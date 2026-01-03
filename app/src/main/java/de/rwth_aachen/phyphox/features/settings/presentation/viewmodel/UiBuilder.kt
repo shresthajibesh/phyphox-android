@@ -26,7 +26,7 @@ internal class UiBuilder @Inject constructor() {
 
 
     //region - App Language
-    private fun buildLanguageUiModel(localeResource: UiResourceState<Locale>): UiResourceState<StringUIModel> {
+    fun buildLanguageUiModel(localeResource: UiResourceState<Locale>): UiResourceState<StringUIModel> {
         return when (localeResource) {
             UiResourceState.Loading -> UiResourceState.Loading
             is UiResourceState.Success<Locale> -> UiResourceState.Success(
