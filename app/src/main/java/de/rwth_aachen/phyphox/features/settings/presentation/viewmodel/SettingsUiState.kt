@@ -9,7 +9,7 @@ import de.rwth_aachen.phyphox.utils.UiResourceState
 data class SettingsUiState(
     val currentLanguage: UiResourceState<StringUIModel> = UiResourceState.Loading,
     val graphSize: UiResourceState<SeekBarConfig> = UiResourceState.Loading,
-    val segmentedButtonUiModel: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>> = UiResourceState.Loading,
+    val appUiMode: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>> = UiResourceState.Loading,
 //    val dynamicTheme: ResourceState<Boolean> = ResourceState.Loading,
     val accessPort: UiResourceState<StringUIModel> = UiResourceState.Loading,
     val proximityLockEnabled: UiResourceState<Boolean> = UiResourceState.Loading,
