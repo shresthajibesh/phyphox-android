@@ -40,6 +40,8 @@ internal class SettingsViewModel @Inject constructor(
         start(viewModelScope)
     }
 
+    val uiModalFlow = accessPortDelegate.inputModal
+
     override fun start(scope: CoroutineScope) {
         accessPortDelegate.start(scope)
         appLanguageDelegate.start(scope)
@@ -55,14 +57,18 @@ internal class SettingsViewModel @Inject constructor(
         graphSizeDelegate.graphSizeFlow,
         proximityLockDelegate.proximityLockFlow,
     ) { accessPort, currentLanguage, uiMode, graphSize, proximityLockEnabled ->
-        SettingsUiState(
+        UserSettings(
             currentLanguage = currentLanguage,
             graphSize = graphSize,
             appUiMode = uiMode,
             accessPort = accessPort,
             proximityLockEnabled = proximityLockEnabled,
         )
-
+    }.combine(uiModalFlow) { userSettings, modal ->
+        SettingsUiState(
+            userSettings = userSettings,
+            modal = modal,
+        )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -80,6 +86,7 @@ internal class SettingsViewModel @Inject constructor(
                     R.string.settingsTranslation,
                 ),
             )
+
             is SettingsAction.OnProximityLockChanged -> proximityLockDelegate::updateProximityLockStatus
             is SettingsAction.OnUiModeItemSelected -> appUiModeDelegate::updateAppUiMode
         }

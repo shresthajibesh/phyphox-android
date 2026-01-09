@@ -29,6 +29,7 @@ import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbu
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem.SwitchPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsAction
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortUiState
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
