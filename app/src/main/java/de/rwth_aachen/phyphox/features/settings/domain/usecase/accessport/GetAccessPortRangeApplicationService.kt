@@ -2,7 +2,7 @@ package de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport
 
 import javax.inject.Inject
 
-class GetAccessPortRangeUseCase @Inject constructor() {
+class GetAccessPortRangeApplicationService @Inject constructor() {
     operator fun invoke(): IntRange {
         return MIN_PORT..MAX_PORT
     }

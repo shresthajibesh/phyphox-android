@@ -10,5 +10,9 @@ interface AccessPortDelegate {
     fun start(scope: CoroutineScope)
 
     suspend fun showAccessPortInputModal()
+
+    suspend fun setAccessPort(newPort:String)
+
+    suspend fun getAccessPortRange() : IntRange
 }
 

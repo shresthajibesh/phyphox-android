@@ -1,6 +1,6 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport
 
-import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.GetAccessPortRangeUseCase
+import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.GetAccessPortRangeApplicationService
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.ObserveCurrentAccessPortUseCase
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.UpdateAccessPortUseCase
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiBuilder
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 internal class DefaultAccessPortDelegate @Inject constructor(
     private val observeCurrentAccessPort: ObserveCurrentAccessPortUseCase,
-    private val getAccessPortRange: GetAccessPortRangeUseCase,
+    private val getAccessPortRange: GetAccessPortRangeApplicationService,
     private val updateAccessPort: UpdateAccessPortUseCase,
     private val uiBuilder: UiBuilder,
 ) : AccessPortDelegate {
@@ -36,6 +36,14 @@ internal class DefaultAccessPortDelegate @Inject constructor(
 
     override suspend fun showAccessPortInputModal() {
 
+    }
+
+    override suspend fun setAccessPort(newPort: String) {
+        updateAccessPort(newPort)
+    }
+
+    override suspend fun getAccessPortRange(): IntRange {
+        TODO("Not yet implemented")
     }
 
 }
