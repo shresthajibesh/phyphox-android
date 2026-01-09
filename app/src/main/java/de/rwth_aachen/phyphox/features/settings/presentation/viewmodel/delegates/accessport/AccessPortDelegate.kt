@@ -6,13 +6,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 interface AccessPortDelegate {
-    val accessPortFlow: Flow<UiResourceState<StringUIModel>>
+    val accessPortFlow: Flow<UiResourceState<AccessPortUiState>>
     fun start(scope: CoroutineScope)
 
     suspend fun showAccessPortInputModal()
 
     suspend fun setAccessPort(newPort:String)
 
-    suspend fun getAccessPortRange() : IntRange
+    suspend fun dismissAccessPortInputModal()
+
 }
 

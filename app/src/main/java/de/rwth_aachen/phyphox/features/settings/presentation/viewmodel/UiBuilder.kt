@@ -4,6 +4,7 @@ import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortUiState
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.toStringUIModel
@@ -59,12 +60,21 @@ internal class UiBuilder @Inject constructor() {
     //endregion
 
     //region - AccessPort
-    fun buildAccessPortUiModel(portResource: UiResourceState<Int>): UiResourceState<StringUIModel> {
-        return when (portResource) {
-            UiResourceState.Loading -> UiResourceState.Loading
-            is UiResourceState.Success<Int> -> UiResourceState.Success(
-                portResource.data.toString().toStringUIModel(),
+    fun buildAccessPortUiModel(
+        portResource: UiResourceState<Int>,
+        range: UiResourceState<IntRange>,
+        inputModal: SettingsSheetUiModel.AccessPortSheetUiModel?,
+    ): UiResourceState<AccessPortUiState> {
+        return if (portResource is UiResourceState.Success && range is UiResourceState.Success) {
+            UiResourceState.Success(
+                AccessPortUiState(
+                    currentAccessPort = portResource.data.toString().toStringUIModel(),
+                    accessPortRange = range.data,
+                    inputModal = inputModal,
+                ),
             )
+        } else {
+            UiResourceState.Loading
         }
     }
     //endregion
