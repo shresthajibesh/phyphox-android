@@ -9,7 +9,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -17,7 +19,9 @@ import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.settingscontent.SettingsContent
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsAction
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsUiState
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortSheetUiModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,6 +30,8 @@ fun SettingsRoot(
     uiState: SettingsUiState,
     onActionEvent: (SettingsAction) -> Unit,
 ) {
+    val sheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -57,6 +63,23 @@ fun SettingsRoot(
 
         )
     }
+    when(val modal = uiState.modal){
+       is AccessPortSheetUiModel ->AccessPortBottomSheet(
+           uiModel = modal,
+           sheetState = sheetState,
+           onDismiss = {
+               coroutineScope.launch {
+                   sheetState.hide()
+               }
+           },
+           onConfirm = { newPort ->
+               // viewModel.updatePort(newPort)
+               coroutineScope.launch {
+                   sheetState.hide()
+               }
+           },
+       )
+    }
 }
 
 @Composable
@@ -65,7 +88,7 @@ internal fun SettingsRootPreview() {
     PhyphoxTheme {
         SettingsRoot(
             uiState = SettingsUiState(),
-            onActionEvent = {}
+            onActionEvent = {},
         )
     }
 }
