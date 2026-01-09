@@ -8,6 +8,9 @@ sealed interface SettingsAction {
     data class OnUiModeItemSelected(val appUiMode: SegmentedButtonUiModel<AppUiMode>) : SettingsAction
     data class OnGraphSizeChanged(val size: Float) : SettingsAction
     data class OnProximityLockChanged(val enabled: Boolean) : SettingsAction
+    data class OnAccessPortChanged(val newPort: String) : SettingsAction
+    data object OnModalDismissed : SettingsAction
+
     data object OnAppLanguageClicked : SettingsAction
     data object OnLearnMoreAboutTranslationClicked : SettingsAction
     data object OnAccessPortClicked : SettingsAction

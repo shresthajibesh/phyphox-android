@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.rwth_aachen.phyphox.R
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsEvent.*
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.AppUiModeDelegate
@@ -77,18 +78,29 @@ internal class SettingsViewModel @Inject constructor(
 
     fun onActionEvent(action: SettingsAction) {
         when (action) {
-            SettingsAction.OnAccessPortClicked -> accessPortDelegate::showAccessPortInputModal
+            SettingsAction.OnAccessPortClicked -> {
+                viewModelScope.launch {
+                    accessPortDelegate.showAccessPortInputModal()
+                }
+            }
             SettingsAction.OnAppLanguageClicked -> appLanguageDelegate::showLanguagePickerModal
-            SettingsAction.OnBackPressed -> sendEvent(SettingsEvent.NavigateBack)
+            SettingsAction.OnBackPressed -> sendEvent(NavigateBack)
             is SettingsAction.OnGraphSizeChanged -> graphSizeDelegate::updateGraphSize
             SettingsAction.OnLearnMoreAboutTranslationClicked -> sendEvent(
-                SettingsEvent.OpenWebpageFromResourceID(
+                OpenWebpageFromResourceID(
                     R.string.settingsTranslation,
                 ),
             )
 
             is SettingsAction.OnProximityLockChanged -> proximityLockDelegate::updateProximityLockStatus
             is SettingsAction.OnUiModeItemSelected -> appUiModeDelegate::updateAppUiMode
+            is SettingsAction.OnAccessPortChanged -> viewModelScope.launch {
+                accessPortDelegate.setAccessPort(action.newPort)
+            }
+
+            SettingsAction.OnModalDismissed -> viewModelScope.launch {
+                accessPortDelegate.dismissAccessPortInputModal()
+            }
         }
     }
 

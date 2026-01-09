@@ -70,10 +70,11 @@ fun SettingsRoot(
            onDismiss = {
                coroutineScope.launch {
                    sheetState.hide()
+                   onActionEvent.invoke(SettingsAction.OnModalDismissed)
                }
            },
            onConfirm = { newPort ->
-               // viewModel.updatePort(newPort)
+               onActionEvent.invoke(SettingsAction.OnAccessPortChanged(newPort))
                coroutineScope.launch {
                    sheetState.hide()
                }

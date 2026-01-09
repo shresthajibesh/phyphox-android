@@ -15,7 +15,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 internal class DefaultAccessPortDelegate @Inject constructor(
     private val observeCurrentAccessPort: ObserveCurrentAccessPortUseCase,
     private val getAccessPortRange: GetAccessPortRangeApplicationService,
@@ -54,6 +56,7 @@ internal class DefaultAccessPortDelegate @Inject constructor(
 
     override suspend fun setAccessPort(newPort: String) {
         updateAccessPort(newPort)
+        inputModalStaFlow.value = null
     }
 
     override suspend fun dismissAccessPortInputModal() {
