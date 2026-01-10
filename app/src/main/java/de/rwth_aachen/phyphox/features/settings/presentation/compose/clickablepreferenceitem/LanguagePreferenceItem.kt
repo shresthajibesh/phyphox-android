@@ -5,25 +5,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem.PreferenceSummaryItem
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.LanguageUiModel
 import de.rwth_aachen.phyphox.ui.skeleton
-import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
-import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 import de.rwth_aachen.phyphox.utils.UiResourceState
 
 @Composable
-fun ClickablePreferenceItem(
+fun LanguagePreferenceItem(
     modifier: Modifier = Modifier,
     title: StringUIModel,
-    summary: UiResourceState<StringUIModel>,
+    summary: UiResourceState<LanguageUiModel>,
     iconRes: Int? = null,
     onClick: () -> Unit = {},
 ) {
@@ -46,26 +42,10 @@ fun ClickablePreferenceItem(
                 )
 
                 is UiResourceState.Success -> PreferenceSummaryItem(
-                    primaryText = summary.data,
+                    primaryText = summary.data.displayName,
+                    secondaryText = summary.data.displayCountry,
                 )
             }
         },
     )
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-internal fun ClickablePreferenceItemPreview(
-    @PreviewParameter(ClickablePreferenceItemPreviewProvider::class) preview: UiResourceState<StringUIModel>,
-) {
-    PhyphoxTheme {
-        Surface {
-            ClickablePreferenceItem(
-                title = LoremIpsumStringUIModel(2),
-                summary = preview,
-            )
-        }
-    }
 }

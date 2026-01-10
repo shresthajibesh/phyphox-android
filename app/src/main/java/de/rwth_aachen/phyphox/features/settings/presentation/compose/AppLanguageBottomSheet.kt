@@ -15,9 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
+import de.rwth_aachen.phyphox.features.settings.domain.model.AppLanguage
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageSheetUiModel
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.LanguageUiModel
 import de.rwth_aachen.phyphox.ui.string.resolve
+import kotlin.collections.sortedWith
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -27,6 +29,7 @@ fun AppLanguageBottomSheet(
     onConfirm: (identifier:String) -> Unit,
     sheetState: SheetState = rememberModalBottomSheetState(),
 ) {
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,

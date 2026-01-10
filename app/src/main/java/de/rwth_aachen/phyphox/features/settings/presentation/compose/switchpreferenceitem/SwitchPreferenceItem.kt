@@ -42,7 +42,7 @@ fun SwitchPreferenceItem(
         iconRes = iconRes,
         content = {
             summary?.let {
-                PreferenceSummaryItem(text = summary)
+                PreferenceSummaryItem(primaryText = summary)
             }
         },
         trailingContent = {

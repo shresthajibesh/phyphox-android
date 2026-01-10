@@ -45,9 +45,7 @@ internal class DefaultAppLanguageDelegate @Inject constructor(
             UiResourceState.Loading -> null
             is UiResourceState.Success<AppLanguage> -> temp.data
         }
-        val supportedLanguages = getSupportedLanguages().map {
-            uiBuilder.buildLanguageUiModel(it)
-        }
+        val supportedLanguages = uiBuilder.getSortedLanguageModels(getSupportedLanguages())
         inputModalStaFlow.value = AppLanguageSheetUiModel(
             title = R.string.settingsLanguage.toStringUIModel(),
             currentSelection = currentLocale ?: AppLanguage.SYSTEM_DEFAULT,

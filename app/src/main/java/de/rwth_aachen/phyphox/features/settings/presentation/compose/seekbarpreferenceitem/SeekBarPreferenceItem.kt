@@ -34,7 +34,7 @@ fun SeekBarPreferenceItem(
         iconRes = iconRes,
         content = {
             summary?.let {
-                PreferenceSummaryItem(text = summary)
+                PreferenceSummaryItem(primaryText = summary)
             }
             when (seekBarConfig) {
                 UiResourceState.Loading -> Box(

@@ -38,7 +38,7 @@ fun SegmentedButtonPreferenceItem(
         iconRes = iconRes,
         content = {
             summary?.let {
-                PreferenceSummaryItem(text = summary)
+                PreferenceSummaryItem(primaryText = summary)
             }
             when (config) {
                 UiResourceState.Loading -> Box(
