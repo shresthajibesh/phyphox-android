@@ -66,7 +66,7 @@ fun AccessPortBottomSheet(
                 value = port,
                 onValueChange = {
                     port = it
-                    isError = false
+                    isError = !uiModel.range.contains(it.toIntOrNull())
                 },
                 modifier = Modifier.fillMaxWidth(),
                 label = {
@@ -78,6 +78,8 @@ fun AccessPortBottomSheet(
                 supportingText = {
                     if (uiModel.error != null && isError) {
                         Text(text = uiModel.error.resolve())
+                    }else{
+                        Text(text = uiModel.range.toString())
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),

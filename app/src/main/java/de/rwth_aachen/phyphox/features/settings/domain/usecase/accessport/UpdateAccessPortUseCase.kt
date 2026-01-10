@@ -10,13 +10,9 @@ class UpdateAccessPortUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(port: Int): Result<Unit> {
         return try {
-            if (!isPortWithinRange(port)){
-                Result.failure(AccessPortOutOfRange())
-            }else{
-                repository.updateAccessPort(port)
-                Result.success(Unit)
-            }
-
+            validatePort(port)
+            repository.updateAccessPort(port)
+            Result.success(Unit)
         } catch (error: Throwable) {
             Result.failure(error)
         }
@@ -31,8 +27,10 @@ class UpdateAccessPortUseCase @Inject constructor(
         }
     }
 
-    private fun isPortWithinRange(port: Int): Boolean {
+    private fun validatePort(port: Int) {
         val validRange = getAccessPortRange()
-        return validRange.contains(port)
+        if (!validRange.contains(port)) {
+            throw AccessPortOutOfRange(validRange)
+        }
     }
 }

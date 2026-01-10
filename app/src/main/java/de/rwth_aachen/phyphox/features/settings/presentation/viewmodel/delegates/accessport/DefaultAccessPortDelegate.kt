@@ -56,7 +56,13 @@ internal class DefaultAccessPortDelegate @Inject constructor(
 
     override suspend fun setAccessPort(newPort: String) {
         updateAccessPort(newPort)
-        inputModalStaFlow.value = null
+            .onSuccess {
+                inputModalStaFlow.value = null
+            }.onFailure {
+                inputModalStaFlow.value = inputModalStaFlow.value?.copy(
+                    error = uiBuilder.getErrorMessage(it),
+                )
+            }
     }
 
     override suspend fun dismissAccessPortInputModal() {

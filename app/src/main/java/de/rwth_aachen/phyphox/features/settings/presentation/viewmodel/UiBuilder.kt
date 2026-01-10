@@ -2,6 +2,7 @@ package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel
 
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
+import de.rwth_aachen.phyphox.features.settings.domain.model.errors.AccessPortOutOfRange
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
@@ -88,6 +89,13 @@ internal class UiBuilder @Inject constructor() {
             }
 
             else -> UiResourceState.Loading
+        }
+    }
+
+    fun getErrorMessage(error: Throwable): StringUIModel {
+        return when (error) {
+            is AccessPortOutOfRange -> "${error.intRange.first} - ${error.intRange.last}".toStringUIModel()
+            else -> "Unknown error".toStringUIModel()
         }
     }
     //endregion
