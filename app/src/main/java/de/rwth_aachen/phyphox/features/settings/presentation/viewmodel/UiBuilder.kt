@@ -52,7 +52,7 @@ internal class UiBuilder @Inject constructor(
 
     fun localeToLanguageUiModel(locale: Locale): LanguageUiModel {
         return LanguageUiModel(
-            identifier = AppLanguage.SYSTEM_DEFAULT_IDENTIFIER,
+            identifier = locale.toLanguageTag(),
             displayName = locale.displayName.toStringUIModel(),
             localDisplayName = locale.getDisplayLanguage(locale).toStringUIModel(),
             displayCountry = locale.getDisplayCountry(locale).toStringUIModel(),
