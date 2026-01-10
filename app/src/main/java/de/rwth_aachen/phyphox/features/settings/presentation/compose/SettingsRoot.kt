@@ -96,8 +96,8 @@ fun SettingsRoot(
             onConfirm = { newLanguage ->
                 onActionEvent.invoke(SettingsAction.OnAppLanguageChanged(newLanguage))
             },
-
-            )
+            sheetState = sheetState,
+        )
     }
 }
 
