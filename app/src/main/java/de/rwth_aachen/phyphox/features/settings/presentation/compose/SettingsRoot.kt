@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,6 +33,11 @@ fun SettingsRoot(
 ) {
     val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(uiState.modal) {
+        if (uiState.modal == null) {
+            sheetState.hide()
+        }
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -61,25 +67,22 @@ fun SettingsRoot(
             proximityLockEnabled = uiState.proximityLockEnabled,
             onActionEvent = onActionEvent,
 
-        )
+            )
     }
-    when(val modal = uiState.modal){
-       is AccessPortSheetUiModel ->AccessPortBottomSheet(
-           uiModel = modal,
-           sheetState = sheetState,
-           onDismiss = {
-               coroutineScope.launch {
-                   sheetState.hide()
-                   onActionEvent.invoke(SettingsAction.OnModalDismissed)
-               }
-           },
-           onConfirm = { newPort ->
-               onActionEvent.invoke(SettingsAction.OnAccessPortChanged(newPort))
-               coroutineScope.launch {
-                   sheetState.hide()
-               }
-           },
-       )
+    when (val modal = uiState.modal) {
+        is AccessPortSheetUiModel -> AccessPortBottomSheet(
+            uiModel = modal,
+            sheetState = sheetState,
+            onDismiss = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                    onActionEvent.invoke(SettingsAction.OnModalDismissed)
+                }
+            },
+            onConfirm = { newPort ->
+                onActionEvent.invoke(SettingsAction.OnAccessPortChanged(newPort))
+            },
+        )
     }
 }
 

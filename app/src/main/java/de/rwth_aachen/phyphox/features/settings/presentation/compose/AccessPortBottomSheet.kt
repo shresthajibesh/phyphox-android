@@ -6,27 +6,27 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.rwth_aachen.phyphox.R // Assuming your string resources are here
+import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortSheetUiModel
-import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.resolve
 import de.rwth_aachen.phyphox.ui.string.toStringUIModel
 
@@ -38,12 +38,15 @@ fun AccessPortBottomSheet(
     onConfirm: (String) -> Unit,
     sheetState: SheetState = rememberModalBottomSheetState(),
 ) {
-    val initial = uiModel.currentPort.resolve()
-    var textState by remember(uiModel.currentPort) {
-        mutableStateOf(initial)
+    val context = LocalContext.current
+
+    var port by remember { mutableStateOf(uiModel.currentPort.resolve(context)) }
+    var isError by remember { mutableStateOf(false) }
+    LaunchedEffect(uiModel.error) {
+        isError = uiModel.error != null
     }
 
-    val isError = uiModel.error != null
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
@@ -52,44 +55,46 @@ fun AccessPortBottomSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
-                .padding(bottom = 32.dp)
+                .padding(bottom = 32.dp),
         ) {
-            // Title for the bottom sheet
             Text(
-                text = "Title",
-                style = androidx.compose.material3.MaterialTheme.typography.titleLarge
+                text = stringResource(R.string.settingsPort),
+                style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
             )
             Spacer(modifier = Modifier.height(24.dp))
-
-            // Text input field
             OutlinedTextField(
-                value = textState,
-                onValueChange = { textState = it},
+                value = port,
+                onValueChange = {
+                    port = it
+                    isError = false
+                },
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = "Port") },
+                label = {
+                    Text(
+                        text = stringResource(R.string.settingsPort),
+                    )
+                },
                 isError = isError,
                 supportingText = {
-                    uiModel.error?.let {
-                        Text(text = it.resolve())
+                    if (uiModel.error != null && isError) {
+                        Text(text = uiModel.error.resolve())
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true
+                singleLine = true,
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Action buttons
-            TextButton(
+            Button(
+                modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    if (!isError) {
-                        onConfirm(textState)
-                    }
+                    onConfirm(port)
                 },
-                modifier = Modifier.align(Alignment.End),
-                enabled = !isError // Disable confirm button if there's an error
+                enabled = !isError,
             ) {
-                Text(text = stringResource(id = android.R.string.ok))
+                Text(stringResource(id = android.R.string.ok))
             }
+
         }
     }
 }
@@ -106,7 +111,7 @@ private fun AccessPortBottomSheetPreview() {
     val uiModel = AccessPortSheetUiModel(
         currentPort = "8080".toStringUIModel(),
         range = 1024..65535,
-        error = "Some error".toStringUIModel()
+        error = "Some error".toStringUIModel(),
     )
 
     // Example with an error state (uncomment to see)
@@ -122,6 +127,6 @@ private fun AccessPortBottomSheetPreview() {
         uiModel = uiModel,
         onDismiss = {},
         onConfirm = {},
-        sheetState = sheetState
+        sheetState = sheetState,
     )
 }
