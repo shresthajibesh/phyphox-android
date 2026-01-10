@@ -9,8 +9,8 @@ sealed interface SettingsAction {
     data class OnGraphSizeChanged(val size: Float) : SettingsAction
     data class OnProximityLockChanged(val enabled: Boolean) : SettingsAction
     data class OnAccessPortChanged(val newPort: String) : SettingsAction
+    data class OnAppLanguageChanged(val newLanguageIdentifier: String) : SettingsAction
     data object OnModalDismissed : SettingsAction
-
     data object OnAppLanguageClicked : SettingsAction
     data object OnLearnMoreAboutTranslationClicked : SettingsAction
     data object OnAccessPortClicked : SettingsAction

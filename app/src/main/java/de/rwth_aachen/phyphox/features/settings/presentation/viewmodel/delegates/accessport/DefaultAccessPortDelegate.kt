@@ -3,6 +3,7 @@ package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegate
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.GetAccessPortRangeApplicationService
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.ObserveCurrentAccessPortUseCase
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.UpdateAccessPortUseCase
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsSheetUiModel
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiBuilder
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.toStringUIModel
@@ -31,7 +32,7 @@ internal class DefaultAccessPortDelegate @Inject constructor(
     }
 
     private val inputModalStaFlow = MutableStateFlow<AccessPortSheetUiModel?>(null)
-    override val inputModal: Flow<AccessPortSheetUiModel?> = inputModalStaFlow
+    override val portInputModal: Flow<AccessPortSheetUiModel?> = inputModalStaFlow
 
     override fun start(scope: CoroutineScope) {
         observeCurrentAccessPort().onStart {
@@ -65,7 +66,7 @@ internal class DefaultAccessPortDelegate @Inject constructor(
             }
     }
 
-    override suspend fun dismissAccessPortInputModal() {
+    override fun dismissModal() {
         inputModalStaFlow.value = null
     }
 }

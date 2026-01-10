@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import de.rwth_aachen.phyphox.R
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsEvent.*
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsEvent.NavigateBack
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsEvent.OpenWebpageFromResourceID
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.AppUiModeDelegate
@@ -41,8 +42,6 @@ internal class SettingsViewModel @Inject constructor(
         start(viewModelScope)
     }
 
-    val uiModalFlow = accessPortDelegate.inputModal
-
     override fun start(scope: CoroutineScope) {
         accessPortDelegate.start(scope)
         appLanguageDelegate.start(scope)
@@ -51,9 +50,15 @@ internal class SettingsViewModel @Inject constructor(
         proximityLockDelegate.start(scope)
     }
 
+    private val uiModalFlow = combine(
+        accessPortDelegate.portInputModal,
+        appLanguageDelegate.languageSelectionModal,
+    ) { modals: Array<SettingsSheetUiModel?> ->
+        modals.firstOrNull { it != null }
+    }
     val uiState = combine(
         accessPortDelegate.accessPortFlow,
-        appLanguageDelegate.appLanguageFlow,
+        appLanguageDelegate.currentAppLanguageFlow,
         appUiModeDelegate.appUiModeFlow,
         graphSizeDelegate.graphSizeFlow,
         proximityLockDelegate.proximityLockFlow,
@@ -77,34 +82,33 @@ internal class SettingsViewModel @Inject constructor(
     )
 
     fun onActionEvent(action: SettingsAction) {
-        when (action) {
-            SettingsAction.OnAccessPortClicked -> {
-                viewModelScope.launch {
-                    accessPortDelegate.showAccessPortInputModal()
-                }
-            }
-            SettingsAction.OnAppLanguageClicked -> appLanguageDelegate::showLanguagePickerModal
-            SettingsAction.OnBackPressed -> sendEvent(NavigateBack)
-            is SettingsAction.OnGraphSizeChanged -> graphSizeDelegate::updateGraphSize
-            SettingsAction.OnLearnMoreAboutTranslationClicked -> sendEvent(
-                OpenWebpageFromResourceID(
-                    R.string.settingsTranslation,
-                ),
-            )
-
-            is SettingsAction.OnProximityLockChanged -> proximityLockDelegate::updateProximityLockStatus
-            is SettingsAction.OnUiModeItemSelected -> appUiModeDelegate::updateAppUiMode
-            is SettingsAction.OnAccessPortChanged -> viewModelScope.launch {
-                accessPortDelegate.setAccessPort(action.newPort)
-            }
-
-            SettingsAction.OnModalDismissed -> viewModelScope.launch {
-                accessPortDelegate.dismissAccessPortInputModal()
+        viewModelScope.launch {
+            when (action) {
+                is SettingsAction.OnGraphSizeChanged -> graphSizeDelegate.updateGraphSize(action.size)
+                is SettingsAction.OnProximityLockChanged -> proximityLockDelegate.updateProximityLockStatus(action.enabled)
+                is SettingsAction.OnUiModeItemSelected -> appUiModeDelegate.updateAppUiMode(action.appUiMode)
+                is SettingsAction.OnAccessPortChanged -> accessPortDelegate.setAccessPort(action.newPort)
+                is SettingsAction.OnAppLanguageChanged -> appLanguageDelegate.updateLanguage(action.newLanguageIdentifier)
+                SettingsAction.OnAccessPortClicked -> accessPortDelegate.showAccessPortInputModal()
+                SettingsAction.OnAppLanguageClicked -> appLanguageDelegate.showLanguagePickerModal()
+                SettingsAction.OnModalDismissed -> dismissModal()
+                SettingsAction.OnBackPressed -> sendEvent(NavigateBack)
+                SettingsAction.OnLearnMoreAboutTranslationClicked -> sendEvent(
+                    OpenWebpageFromResourceID(
+                        R.string.settingsTranslation,
+                    ),
+                )
             }
         }
     }
 
+
     private fun sendEvent(event: SettingsEvent) = viewModelScope.launch {
         _uiEvent.emit(event)
+    }
+
+    override fun dismissModal() {
+        accessPortDelegate.dismissModal()
+        appLanguageDelegate.dismissModal()
     }
 }

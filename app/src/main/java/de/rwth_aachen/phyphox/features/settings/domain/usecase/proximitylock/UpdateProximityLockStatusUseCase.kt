@@ -4,9 +4,14 @@ import de.rwth_aachen.phyphox.features.settings.domain.data.AppPreferencesReposi
 import javax.inject.Inject
 
 class UpdateProximityLockStatusUseCase @Inject constructor(
-    private val repository: AppPreferencesRepository
-){
-    suspend operator fun invoke(enabled: Boolean) : Result<Unit>{
-        return Result.success(Unit)
+    private val repository: AppPreferencesRepository,
+) {
+    suspend operator fun invoke(enabled: Boolean): Result<Unit> {
+        return try {
+            repository.updateProximityLockStatus(enabled)
+            Result.success(Unit)
+        } catch (error: Throwable) {
+            Result.failure(error)
+        }
     }
 }

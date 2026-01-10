@@ -2,14 +2,17 @@ package de.rwth_aachen.phyphox.features.settings.data
 
 import de.rwth_aachen.phyphox.features.settings.domain.data.AppPreferencesRepository
 import de.rwth_aachen.phyphox.features.settings.domain.data.local.LocalAppPreferencesDataSource
+import de.rwth_aachen.phyphox.features.settings.domain.data.local.converter.toAppLanguage
+import de.rwth_aachen.phyphox.features.settings.domain.model.AppLanguage
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
 class DefaultAppPreferencesRepository @Inject constructor(
-    private val localAppPreferencesDataSource: LocalAppPreferencesDataSource
-) : AppPreferencesRepository{
+    private val localAppPreferencesDataSource: LocalAppPreferencesDataSource,
+) : AppPreferencesRepository {
     override fun observeCurrentAccessPort(): Flow<Int?> {
         return localAppPreferencesDataSource.observeCurrentAccessPort()
     }
@@ -26,19 +29,25 @@ class DefaultAppPreferencesRepository @Inject constructor(
         localAppPreferencesDataSource.updateGraphSize(size)
     }
 
-    override fun observeLanguage(): Flow<String?> {
-        return localAppPreferencesDataSource.observeLanguage()
+    override fun observeCurrentLanguage(): Flow<AppLanguage?> {
+        return localAppPreferencesDataSource.observeLanguage().map {
+            toAppLanguage(it)
+        }
     }
 
-    override suspend fun updateLanguage(language: String) {
-        localAppPreferencesDataSource.updateLanguage(language)
+    override suspend fun getSupportedLanguages(): List<AppLanguage> {
+        return localAppPreferencesDataSource.getSupportedLanguages().map { AppLanguage(it) }
+    }
+
+    override suspend fun updateLanguage(language: AppLanguage) {
+        localAppPreferencesDataSource.updateLanguage(language.identifier)
     }
 
     override fun observeProximityLockEnabled(): Flow<Boolean?> {
         return localAppPreferencesDataSource.observeProximityLockEnabled()
     }
 
-    override suspend fun updateProximityLockEnabled(enabled: Boolean) {
+    override suspend fun updateProximityLockStatus(enabled: Boolean) {
         localAppPreferencesDataSource.updateProximityLockEnabled(enabled)
     }
 
@@ -50,3 +59,4 @@ class DefaultAppPreferencesRepository @Inject constructor(
         localAppPreferencesDataSource.updateAppUiMode(mode)
     }
 }
+

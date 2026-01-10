@@ -1,13 +1,12 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock
 
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.SettingsDelegate
 import de.rwth_aachen.phyphox.utils.UiResourceState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
-interface ProximityLockDelegate {
+interface ProximityLockDelegate: SettingsDelegate {
     val proximityLockFlow: Flow<UiResourceState<Boolean>>
-
-    fun start(scope: CoroutineScope)
 
     suspend fun updateProximityLockStatus(enabled: Boolean)
 }

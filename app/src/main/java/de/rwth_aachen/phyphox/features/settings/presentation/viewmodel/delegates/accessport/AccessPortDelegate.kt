@@ -1,21 +1,17 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport
 
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsSheetUiModel
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.SettingsDelegate
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.utils.UiResourceState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
-interface AccessPortDelegate {
+interface AccessPortDelegate : SettingsDelegate {
     val accessPortFlow: Flow<UiResourceState<StringUIModel>>
-    val inputModal: Flow<AccessPortSheetUiModel?>
-    fun start(scope: CoroutineScope)
+    val portInputModal: Flow<AccessPortSheetUiModel??>
 
     suspend fun showAccessPortInputModal()
 
-    suspend fun setAccessPort(newPort:String)
-
-    suspend fun dismissAccessPortInputModal()
-
+    suspend fun setAccessPort(newPort: String)
+    fun dismissModal()
 }
 

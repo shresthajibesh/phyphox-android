@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.clickablepreferenceitem.ClickablePreferenceItem
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.clickablepreferenceitem.LanguagePreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencecategoryheader.PreferenceCategoryHeader
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarPreferenceItem
@@ -30,6 +31,7 @@ import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbu
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem.SwitchPreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsAction
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortUiState
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.LanguageUiModel
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
@@ -39,7 +41,7 @@ import de.rwth_aachen.phyphox.utils.UiResourceState
 @Composable
 fun SettingsContent(
     modifier: Modifier = Modifier,
-    currentLanguage: UiResourceState<StringUIModel>,
+    currentLanguage: UiResourceState<LanguageUiModel>,
     seekbarConfig: UiResourceState<SeekBarConfig>,
     appUiMode: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>>,
     accessPort: UiResourceState<StringUIModel>,
@@ -74,7 +76,7 @@ fun SettingsContent(
             )
         }
         item {
-            ClickablePreferenceItem(
+            LanguagePreferenceItem(
                 title = ResourceStringUIModel(resId = R.string.settingsLanguage),
                 summary = currentLanguage,
                 iconRes = R.drawable.setting_language,

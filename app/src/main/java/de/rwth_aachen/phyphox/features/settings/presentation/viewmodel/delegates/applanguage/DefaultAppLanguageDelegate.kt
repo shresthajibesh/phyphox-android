@@ -1,10 +1,12 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage
 
+import de.rwth_aachen.phyphox.R
+import de.rwth_aachen.phyphox.features.settings.domain.model.AppLanguage
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.language.GetSupportedLanguagesUseCase
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.language.ObserveCurrentAppLanguageUseCase
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.language.UpdateAppLanguageUseCase
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiBuilder
-import de.rwth_aachen.phyphox.ui.string.StringUIModel
+import de.rwth_aachen.phyphox.ui.string.toStringUIModel
 import de.rwth_aachen.phyphox.utils.UiResourceState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +15,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import java.util.Locale
 import javax.inject.Inject
 
 internal class DefaultAppLanguageDelegate @Inject constructor(
@@ -22,10 +23,14 @@ internal class DefaultAppLanguageDelegate @Inject constructor(
     private val updateAppLanguage: UpdateAppLanguageUseCase,
     private val uiBuilder: UiBuilder,
 ) : AppLanguageDelegate {
-    private val currentLanguageFlow = MutableStateFlow<UiResourceState<Locale>>(UiResourceState.Loading)
-    override val appLanguageFlow: Flow<UiResourceState<StringUIModel>> = currentLanguageFlow.map { localeResource ->
-        uiBuilder.buildLanguageUiModel(localeResource)
-    }
+    private val currentLanguageFlow = MutableStateFlow<UiResourceState<AppLanguage>>(UiResourceState.Loading)
+    override val currentAppLanguageFlow: Flow<UiResourceState<LanguageUiModel>> =
+        currentLanguageFlow.map { appLanguage ->
+            uiBuilder.buildLanguageUiModel(appLanguage)
+        }
+    private val inputModalStaFlow = MutableStateFlow<AppLanguageSheetUiModel?>(null)
+
+    override val languageSelectionModal: Flow<AppLanguageSheetUiModel?> = inputModalStaFlow
 
     override fun start(scope: CoroutineScope) {
         observeCurrentAppLanguage().onStart {
@@ -36,6 +41,25 @@ internal class DefaultAppLanguageDelegate @Inject constructor(
     }
 
     override suspend fun showLanguagePickerModal() {
+        val currentLocale = when (val temp = currentLanguageFlow.value) {
+            UiResourceState.Loading -> null
+            is UiResourceState.Success<AppLanguage> -> temp.data
+        }
+        val supportedLanguages = getSupportedLanguages().map {
+            uiBuilder.buildLanguageUiModel(it)
+        }
+        inputModalStaFlow.value = AppLanguageSheetUiModel(
+            title = R.string.settingsLanguage.toStringUIModel(),
+            currentSelection = currentLocale ?: AppLanguage.SYSTEM_DEFAULT,
+            availableLocales = supportedLanguages,
+        )
+    }
 
+    override suspend fun updateLanguage(identifier: String) {
+        updateAppLanguage(identifier)
+    }
+
+    override fun dismissModal() {
+        inputModalStaFlow.value = null
     }
 }

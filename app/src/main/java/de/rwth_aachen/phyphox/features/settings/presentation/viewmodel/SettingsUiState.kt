@@ -4,11 +4,12 @@ import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortUiState
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.LanguageUiModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.utils.UiResourceState
 
 data class SettingsUiState(
-    val currentLanguage: UiResourceState<StringUIModel> = UiResourceState.Loading,
+    val currentLanguage: UiResourceState<LanguageUiModel> = UiResourceState.Loading,
     val graphSize: UiResourceState<SeekBarConfig> = UiResourceState.Loading,
     val appUiMode: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>> = UiResourceState.Loading,
     val accessPort: UiResourceState<StringUIModel> = UiResourceState.Loading,
@@ -29,7 +30,7 @@ data class SettingsUiState(
 }
 
 data class UserSettings(
-    val currentLanguage: UiResourceState<StringUIModel> = UiResourceState.Loading,
+    val currentLanguage: UiResourceState<LanguageUiModel> = UiResourceState.Loading,
     val graphSize: UiResourceState<SeekBarConfig> = UiResourceState.Loading,
     val appUiMode: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>> = UiResourceState.Loading,
     val accessPort: UiResourceState<StringUIModel> = UiResourceState.Loading,

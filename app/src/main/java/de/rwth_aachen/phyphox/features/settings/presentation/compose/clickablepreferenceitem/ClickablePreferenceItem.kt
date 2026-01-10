@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem.PreferenceItem
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem.PreferenceSummaryItem
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.LanguageUiModel
 import de.rwth_aachen.phyphox.ui.skeleton
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
@@ -47,6 +48,40 @@ fun ClickablePreferenceItem(
 
                 is UiResourceState.Success -> PreferenceSummaryItem(
                     text = summary.data,
+                )
+            }
+        },
+    )
+}
+
+@Composable
+fun LanguagePreferenceItem(
+    modifier: Modifier = Modifier,
+    title: StringUIModel,
+    summary: UiResourceState<LanguageUiModel>,
+    iconRes: Int? = null,
+    onClick: () -> Unit = {},
+) {
+
+    PreferenceItem(
+        modifier = modifier.clickable(
+            enabled = summary is UiResourceState.Success,
+            onClick = onClick,
+        ),
+        title = title,
+        iconRes = iconRes,
+        content = {
+            when (summary) {
+                UiResourceState.Loading -> Box(
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .fillMaxWidth()
+                        .height(16.dp)
+                        .skeleton(),
+                )
+
+                is UiResourceState.Success -> PreferenceSummaryItem(
+                    text = summary.data.displayName,
                 )
             }
         },

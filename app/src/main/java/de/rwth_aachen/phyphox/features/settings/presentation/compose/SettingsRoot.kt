@@ -21,6 +21,7 @@ import de.rwth_aachen.phyphox.features.settings.presentation.compose.settingscon
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsAction
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsUiState
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortSheetUiModel
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageSheetUiModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 import kotlinx.coroutines.launch
 
@@ -31,7 +32,8 @@ fun SettingsRoot(
     uiState: SettingsUiState,
     onActionEvent: (SettingsAction) -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(uiState.modal) {
         if (uiState.modal == null) {
@@ -66,8 +68,7 @@ fun SettingsRoot(
             accessPort = uiState.accessPort,
             proximityLockEnabled = uiState.proximityLockEnabled,
             onActionEvent = onActionEvent,
-
-            )
+        )
     }
     when (val modal = uiState.modal) {
         is AccessPortSheetUiModel -> AccessPortBottomSheet(
@@ -83,8 +84,23 @@ fun SettingsRoot(
                 onActionEvent.invoke(SettingsAction.OnAccessPortChanged(newPort))
             },
         )
+
+        is AppLanguageSheetUiModel -> AppLanguageBottomSheet(
+            uiModel = modal,
+            onDismiss = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                    onActionEvent.invoke(SettingsAction.OnModalDismissed)
+                }
+            },
+            onConfirm = { newLanguage ->
+                onActionEvent.invoke(SettingsAction.OnAppLanguageChanged(newLanguage))
+            },
+
+            )
     }
 }
+
 
 @Composable
 @PreviewLightDark

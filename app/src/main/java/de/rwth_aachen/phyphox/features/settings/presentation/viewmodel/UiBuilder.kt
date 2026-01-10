@@ -1,10 +1,12 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel
 
 import de.rwth_aachen.phyphox.R
+import de.rwth_aachen.phyphox.features.settings.domain.model.AppLanguage
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.features.settings.domain.model.errors.AccessPortOutOfRange
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.LanguageUiModel
 import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.toStringUIModel
@@ -15,17 +17,30 @@ import javax.inject.Inject
 internal class UiBuilder @Inject constructor() {
 
     //region - App Language
-    fun buildLanguageUiModel(localeResource: UiResourceState<Locale>): UiResourceState<StringUIModel> {
-        return when (localeResource) {
+    fun buildLanguageUiModel(languageResource: UiResourceState<AppLanguage>): UiResourceState<LanguageUiModel> {
+        return when (languageResource) {
             UiResourceState.Loading -> UiResourceState.Loading
-            is UiResourceState.Success<Locale> -> UiResourceState.Success(
-                mapLocaleToUiModel(localeResource.data),
+            is UiResourceState.Success<AppLanguage> -> UiResourceState.Success(
+                buildLanguageUiModel(languageResource.data),
             )
         }
     }
 
-    private fun mapLocaleToUiModel(locale: Locale): StringUIModel {
-        return locale.displayName.toStringUIModel()
+    fun buildLanguageUiModel(appLanguage: AppLanguage): LanguageUiModel {
+        return if (appLanguage.identifier == AppLanguage.SYSTEM_DEFAULT_IDENTIFIER) {
+            LanguageUiModel(
+                identifier = AppLanguage.SYSTEM_DEFAULT_IDENTIFIER,
+                displayName = R.string.settingsDefault.toStringUIModel(),
+            )
+        } else {
+            val locale = Locale.forLanguageTag(appLanguage.identifier)
+            LanguageUiModel(
+                identifier = AppLanguage.SYSTEM_DEFAULT_IDENTIFIER,
+                displayName = locale.displayName.toStringUIModel(),
+                localDisplayName = locale.getDisplayLanguage(locale).toStringUIModel(),
+                displayCountry = locale.getDisplayCountry(locale).toStringUIModel(),
+            )
+        }
     }
     //endregion
 

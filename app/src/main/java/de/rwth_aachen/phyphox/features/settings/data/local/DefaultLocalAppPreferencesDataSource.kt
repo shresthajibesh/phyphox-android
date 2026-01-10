@@ -16,6 +16,7 @@ import javax.inject.Inject
 
 class DefaultLocalAppPreferencesDataSource @Inject constructor(
     @param:SettingsDataStore private val dataStore: DataStore<Preferences>,
+    private val systemDataSource: SystemDataSource,
 ) : LocalAppPreferencesDataSource {
 
     override fun observeCurrentAccessPort(): Flow<Int?> = dataStore.data.map { preferences ->
@@ -48,6 +49,10 @@ class DefaultLocalAppPreferencesDataSource @Inject constructor(
         }
     }
 
+    override suspend fun getSupportedLanguages(): List<String> {
+        return systemDataSource.getSupportedLanguages()
+    }
+
     override fun observeProximityLockEnabled(): Flow<Boolean?> = dataStore.data.map { preferences ->
         preferences[PreferencesKeys.PROXIMITY_LOCK_ENABLED]
     }
@@ -67,6 +72,7 @@ class DefaultLocalAppPreferencesDataSource @Inject constructor(
             preferences[PreferencesKeys.APP_UI_MODE] = mode.identifier
         }
     }
+
     private object PreferencesKeys {
         val ACCESS_PORT = intPreferencesKey("access_port")
         val GRAPH_SIZE = floatPreferencesKey("graph_size")
