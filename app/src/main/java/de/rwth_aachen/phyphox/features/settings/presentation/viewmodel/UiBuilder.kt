@@ -23,9 +23,14 @@ internal class UiBuilder @Inject constructor(
         val systemDefaultModel = buildLanguageUiModel(AppLanguage.SYSTEM_DEFAULT)
         val otherLanguageModels = supportedLanguages
             .filter { it != AppLanguage.SYSTEM_DEFAULT }
-            .map { Locale.forLanguageTag(it.identifier) }
-            .sortedBy { it.displayName }
-            .map{ localeToLanguageUiModel(it)}
+            .map {
+                Pair(
+                    it.identifier,
+                    Locale.forLanguageTag(it.identifier),
+                )
+            }
+            .sortedBy { it.second.displayName }
+            .map { localeToLanguageUiModel(it.first, it.second) }
         return listOf(systemDefaultModel) + otherLanguageModels
     }
 
@@ -46,13 +51,13 @@ internal class UiBuilder @Inject constructor(
             )
         } else {
             val locale = Locale.forLanguageTag(appLanguage.identifier)
-            localeToLanguageUiModel(locale)
+            localeToLanguageUiModel(appLanguage.identifier, locale)
         }
     }
 
-    fun localeToLanguageUiModel(locale: Locale): LanguageUiModel {
+    fun localeToLanguageUiModel(identifier: String, locale: Locale): LanguageUiModel {
         return LanguageUiModel(
-            identifier = locale.toLanguageTag(),
+            identifier = identifier,
             displayName = locale.displayName.toStringUIModel(),
             localDisplayName = locale.getDisplayLanguage(locale).toStringUIModel(),
             displayCountry = locale.getDisplayCountry(locale).toStringUIModel(),
