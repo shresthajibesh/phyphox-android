@@ -11,8 +11,6 @@ import de.rwth_aachen.phyphox.ui.string.ResourceStringUIModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.toStringUIModel
 import de.rwth_aachen.phyphox.utils.UiResourceState
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import java.util.Locale
 import javax.inject.Inject
 
@@ -22,14 +20,13 @@ internal class UiBuilder @Inject constructor(
 
     //region - App Language
     fun getSortedLanguageModels(supportedLanguages: List<AppLanguage>): List<LanguageUiModel> {
-        return listOf(
-            buildLanguageUiModel(AppLanguage.SYSTEM_DEFAULT),
-        ) + supportedLanguages.filter { it != AppLanguage.SYSTEM_DEFAULT }
-            .map {
-                Locale.forLanguageTag(it.identifier)
-            }.sortedBy { it.displayName }.map {
-                localeToLanguageUiModel(it)
-            }
+        val systemDefaultModel = buildLanguageUiModel(AppLanguage.SYSTEM_DEFAULT)
+        val otherLanguageModels = supportedLanguages
+            .filter { it != AppLanguage.SYSTEM_DEFAULT }
+            .map { Locale.forLanguageTag(it.identifier) }
+            .sortedBy { it.displayName }
+            .map{ localeToLanguageUiModel(it)}
+        return listOf(systemDefaultModel) + otherLanguageModels
     }
 
     fun buildLanguageUiModel(languageResource: UiResourceState<AppLanguage>): UiResourceState<LanguageUiModel> {
