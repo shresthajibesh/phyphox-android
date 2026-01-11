@@ -13,7 +13,9 @@ import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class DefaultLocalAppPreferencesDataSource @Inject constructor(
     @param:SettingsDataStore private val dataStore: DataStore<Preferences>,
     private val systemDataSource: SystemDataSource,
