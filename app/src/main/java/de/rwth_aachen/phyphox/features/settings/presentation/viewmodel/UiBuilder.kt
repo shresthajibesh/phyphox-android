@@ -58,8 +58,8 @@ internal class UiBuilder @Inject constructor(
     fun localeToLanguageUiModel(identifier: String, locale: Locale): LanguageUiModel {
         return LanguageUiModel(
             identifier = identifier,
-            displayName = locale.displayName.toStringUIModel(),
-            localDisplayName = locale.getDisplayLanguage(locale).toStringUIModel(),
+            displayName = locale.getDisplayName(locale).toStringUIModel(),
+            localDisplayName = locale.displayName.toStringUIModel(),
             displayCountry = locale.getDisplayCountry(locale).toStringUIModel(),
         )
     }
