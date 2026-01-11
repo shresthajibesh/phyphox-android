@@ -2,7 +2,7 @@ package de.rwth_aachen.phyphox
 
 import androidx.multidex.MultiDexApplication
 import dagger.hilt.android.HiltAndroidApp
-import de.rwth_aachen.phyphox.appdelegate.LanguageDelegate
+import de.rwth_aachen.phyphox.common.AppDelegate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Inject
@@ -14,7 +14,8 @@ class App : MultiDexApplication() {
     private val applicationScope = CoroutineScope(SupervisorJob())
 
     @Inject
-    lateinit var languageDelegate: LanguageDelegate
+    lateinit var appDelegates: Set<@JvmSuppressWildcards AppDelegate>
+
 
 
     //Need to get rid off of this ASAP
@@ -23,6 +24,14 @@ class App : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        languageDelegate.start(applicationScope)
+        appDelegates.forEach { it.start(applicationScope) }
     }
+
+    override fun onTerminate() {
+        appDelegates.forEach { it.stop() }
+        super.onTerminate()
+    }
+
 }
+
+

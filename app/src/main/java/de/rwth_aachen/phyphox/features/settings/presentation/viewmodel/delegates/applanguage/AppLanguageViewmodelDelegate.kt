@@ -1,10 +1,10 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage
 
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.SettingsDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.SettingsViewmodelDelegate
 import de.rwth_aachen.phyphox.utils.UiResourceState
 import kotlinx.coroutines.flow.Flow
 
-interface AppLanguageDelegate : SettingsDelegate {
+interface AppLanguageViewmodelDelegate : SettingsViewmodelDelegate {
 
     val currentAppLanguageFlow: Flow<UiResourceState<LanguageUiModel>>
 

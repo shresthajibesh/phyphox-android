@@ -17,12 +17,12 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
-internal class DefaultAppLanguageDelegate @Inject constructor(
+internal class DefaultAppLanguageViewmodelDelegate @Inject constructor(
     private val observeCurrentAppLanguage: ObserveCurrentAppLanguageUseCase,
     private val getSupportedLanguages: GetSupportedLanguagesUseCase,
     private val updateAppLanguage: UpdateAppLanguageUseCase,
     private val uiBuilder: UiBuilder,
-) : AppLanguageDelegate {
+) : AppLanguageViewmodelDelegate {
     private val currentLanguageFlow = MutableStateFlow<UiResourceState<AppLanguage>>(UiResourceState.Loading)
     override val currentAppLanguageFlow: Flow<UiResourceState<LanguageUiModel>> =
         currentLanguageFlow.map { appLanguage ->

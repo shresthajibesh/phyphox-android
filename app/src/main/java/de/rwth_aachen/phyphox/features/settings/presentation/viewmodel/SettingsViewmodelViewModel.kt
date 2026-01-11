@@ -6,11 +6,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsEvent.NavigateBack
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsEvent.OpenWebpageFromResourceID
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.AppUiModeDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.graphsize.GraphSizeDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.ProximityLockDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.AppUiModeViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.graphsize.GraphSizeViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.ProximityLockViewmodelDelegate
 import de.rwth_aachen.phyphox.utils.UIEventFlow
 import de.rwth_aachen.phyphox.utils.asFlow
 import kotlinx.coroutines.CoroutineScope
@@ -21,18 +21,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class SettingsViewModel @Inject constructor(
-    private val accessPortDelegate: AccessPortDelegate,
-    private val appLanguageDelegate: AppLanguageDelegate,
-    private val appUiModeDelegate: AppUiModeDelegate,
-    private val graphSizeDelegate: GraphSizeDelegate,
-    private val proximityLockDelegate: ProximityLockDelegate,
+internal class SettingsViewmodelViewModel @Inject constructor(
+    private val accessPortDelegate: AccessPortViewmodelDelegate,
+    private val appLanguageDelegate: AppLanguageViewmodelDelegate,
+    private val appUiModeDelegate: AppUiModeViewmodelDelegate,
+    private val graphSizeDelegate: GraphSizeViewmodelDelegate,
+    private val proximityLockDelegate: ProximityLockViewmodelDelegate,
 ) : ViewModel(),
-    AccessPortDelegate by accessPortDelegate,
-    AppLanguageDelegate by appLanguageDelegate,
-    AppUiModeDelegate by appUiModeDelegate,
-    GraphSizeDelegate by graphSizeDelegate,
-    ProximityLockDelegate by proximityLockDelegate {
+    AccessPortViewmodelDelegate by accessPortDelegate,
+    AppLanguageViewmodelDelegate by appLanguageDelegate,
+    AppUiModeViewmodelDelegate by appUiModeDelegate,
+    GraphSizeViewmodelDelegate by graphSizeDelegate,
+    ProximityLockViewmodelDelegate by proximityLockDelegate {
 
 
     private val _uiEvent = UIEventFlow<SettingsEvent>()

@@ -17,12 +17,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-internal class DefaultAppUiModeDelegate @Inject constructor(
+internal class DefaultAppUiModeViewmodelDelegate @Inject constructor(
     private val observeCurrentUiMode: ObserveCurrentAppUiModeUseCase,
     private val getSupportedUiModes: GetSupportedAppUiModeUseCase,
     private val updateCurrentAppUiMode: UpdateCurrentAppUiModeUseCase,
     private val uiBuilder: UiBuilder,
-) : AppUiModeDelegate {
+) : AppUiModeViewmodelDelegate {
     private val currentUiModeUiModelFlow = MutableStateFlow<UiResourceState<AppUiMode>>(UiResourceState.Loading)
     private val supportedUiModesFlowUiModel =
         MutableStateFlow<UiResourceState<List<AppUiMode>>>(UiResourceState.Loading)

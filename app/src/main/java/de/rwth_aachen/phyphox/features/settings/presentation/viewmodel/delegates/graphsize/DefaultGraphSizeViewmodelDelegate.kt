@@ -16,12 +16,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-internal class DefaultGraphSizeDelegate @Inject constructor(
+internal class DefaultGraphSizeViewmodelDelegate @Inject constructor(
     private val observeCurrentGraphSize: ObserveCurrentGraphSizeUseCase,
     private val getGraphSizeRange: GetGraphSizeRangeUseCase,
     private val updateGraphSize: UpdateGraphSizeUseCase,
     private val uiBuilder: UiBuilder,
-) : GraphSizeDelegate {
+) : GraphSizeViewmodelDelegate {
     private val currentGraphSizeFlow = MutableStateFlow<UiResourceState<Float>>(
         UiResourceState.Loading,
     )

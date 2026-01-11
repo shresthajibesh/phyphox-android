@@ -14,12 +14,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import de.rwth_aachen.phyphox.features.settings.presentation.compose.SettingsRoot
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsEvent
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsViewModel
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsViewmodelViewModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 
 @AndroidEntryPoint
 class NewSettingsActivity : ComponentActivity() {
-    private val viewModel: SettingsViewModel by viewModels()
+    private val viewModel: SettingsViewmodelViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

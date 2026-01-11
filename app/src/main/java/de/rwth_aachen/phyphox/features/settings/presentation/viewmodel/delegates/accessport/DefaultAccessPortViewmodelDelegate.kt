@@ -3,7 +3,6 @@ package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegate
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.GetAccessPortRangeApplicationService
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.ObserveCurrentAccessPortUseCase
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.accessport.UpdateAccessPortUseCase
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsSheetUiModel
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiBuilder
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.ui.string.toStringUIModel
@@ -19,12 +18,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class DefaultAccessPortDelegate @Inject constructor(
+internal class DefaultAccessPortViewmodelDelegate @Inject constructor(
     private val observeCurrentAccessPort: ObserveCurrentAccessPortUseCase,
     private val getAccessPortRange: GetAccessPortRangeApplicationService,
     private val updateAccessPort: UpdateAccessPortUseCase,
     private val uiBuilder: UiBuilder,
-) : AccessPortDelegate {
+) : AccessPortViewmodelDelegate {
     private val currentAccessPortStateFlow = MutableStateFlow<UiResourceState<Int>>(UiResourceState.Loading)
 
     override val accessPortFlow: Flow<UiResourceState<StringUIModel>> = currentAccessPortStateFlow.map { accessPort ->

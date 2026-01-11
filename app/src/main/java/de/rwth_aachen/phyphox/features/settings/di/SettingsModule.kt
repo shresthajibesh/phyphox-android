@@ -11,20 +11,24 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.IntoSet
+import de.rwth_aachen.phyphox.common.AppDelegate
 import de.rwth_aachen.phyphox.features.settings.data.DefaultAppPreferencesRepository
 import de.rwth_aachen.phyphox.features.settings.data.local.DefaultLocalAppPreferencesDataSource
 import de.rwth_aachen.phyphox.features.settings.domain.data.AppPreferencesRepository
 import de.rwth_aachen.phyphox.features.settings.domain.data.local.LocalAppPreferencesDataSource
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.DefaultAccessPortDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.DefaultAppLanguageDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.AppUiModeDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.DefaultAppUiModeDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.graphsize.DefaultGraphSizeDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.graphsize.GraphSizeDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.DefaultProximityLockDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.ProximityLockDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.AppLanguageDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.DefaultAccessPortViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.DefaultAppLanguageViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.AppUiModeViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.DefaultAppUiModeViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.graphsize.DefaultGraphSizeViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.graphsize.GraphSizeViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.DefaultProximityLockViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.ProximityLockViewmodelDelegate
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -34,28 +38,28 @@ abstract class SettingsModule {
 
     @Binds
     internal abstract fun bindsAccessPortDelegate(
-        implementation: DefaultAccessPortDelegate,
-    ): AccessPortDelegate
+        implementation: DefaultAccessPortViewmodelDelegate,
+    ): AccessPortViewmodelDelegate
 
     @Binds
     internal abstract fun bindsAppLanguageDelegate(
-        implementation: DefaultAppLanguageDelegate,
-    ): AppLanguageDelegate
+        implementation: DefaultAppLanguageViewmodelDelegate,
+    ): AppLanguageViewmodelDelegate
 
     @Binds
     internal abstract fun bindsAppUiModeDelegate(
-        implementation: DefaultAppUiModeDelegate,
-    ): AppUiModeDelegate
+        implementation: DefaultAppUiModeViewmodelDelegate,
+    ): AppUiModeViewmodelDelegate
 
     @Binds
     internal abstract fun bindsGraphSizeDelegate(
-        implementation: DefaultGraphSizeDelegate,
-    ): GraphSizeDelegate
+        implementation: DefaultGraphSizeViewmodelDelegate,
+    ): GraphSizeViewmodelDelegate
 
     @Binds
     internal abstract fun bindsProximityLockDelegate(
-        implementation: DefaultProximityLockDelegate,
-    ): ProximityLockDelegate
+        implementation: DefaultProximityLockViewmodelDelegate,
+    ): ProximityLockViewmodelDelegate
 
     @Binds
     internal abstract fun bindLocalDataSource(
@@ -67,6 +71,10 @@ abstract class SettingsModule {
         implementation: DefaultAppPreferencesRepository,
     ): AppPreferencesRepository
 
+    @Binds
+    @Singleton
+    @IntoSet
+    abstract fun provideAppLanguageDelegate(implementation: AppLanguageDelegate): AppDelegate
 
     companion object {
         @Provides

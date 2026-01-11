@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
-class DefaultProximityLockDelegate @Inject constructor(
+class DefaultProximityLockViewmodelDelegate @Inject constructor(
     private val observeProximityLockEnabled: ObserveIsCurrentProximityLockEnabledUseCase,
     private val updateProximityLockEnabled: UpdateProximityLockStatusUseCase,
-) : ProximityLockDelegate {
+) : ProximityLockViewmodelDelegate {
 
     private val proximityLockEnabledFlow = MutableStateFlow<UiResourceState<Boolean>>(UiResourceState.Loading)
 
