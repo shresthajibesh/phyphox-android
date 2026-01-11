@@ -5,7 +5,7 @@ import de.rwth_aachen.phyphox.features.settings.presentation.compose.common.segm
 
 sealed interface SettingsAction {
 
-    data class OnUiModeItemSelected(val appUiMode: SegmentedButtonUiModel<AppUiMode>) : SettingsAction
+    data class OnUiModeItemSelected(val appUiMode: AppUiMode) : SettingsAction
     data class OnGraphSizeChanged(val size: Float) : SettingsAction
     data class OnProximityLockChanged(val enabled: Boolean) : SettingsAction
     data class OnAccessPortChanged(val newPort: String) : SettingsAction

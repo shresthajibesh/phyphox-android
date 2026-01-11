@@ -9,5 +9,5 @@ import kotlinx.coroutines.flow.Flow
 interface AppUiModeViewmodelDelegate : SettingsViewmodelDelegate {
     val appUiModeFlow: Flow<UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>>>
 
-    suspend fun updateAppUiMode(appUiMode: SegmentedButtonUiModel<AppUiMode>)
+    suspend fun updateAppUiMode(appUiMode: AppUiMode)
 }

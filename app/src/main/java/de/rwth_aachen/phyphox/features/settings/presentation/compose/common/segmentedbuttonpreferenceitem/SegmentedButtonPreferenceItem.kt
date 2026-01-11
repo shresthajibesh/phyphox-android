@@ -30,7 +30,7 @@ fun SegmentedButtonPreferenceItem(
     summary: StringUIModel? = null,
     iconRes: Int? = null,
     config: UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>>,
-    onOptionSelected: (SegmentedButtonUiModel<AppUiMode>) -> Unit,
+    onOptionSelected: (AppUiMode) -> Unit,
 ) {
     PreferenceItem(
         modifier = modifier,
@@ -59,7 +59,7 @@ fun SegmentedButtonPreferenceItem(
                                 count = config.data.size,
                             ),
                             onClick = {
-                                onOptionSelected(option)
+                                onOptionSelected(option.item)
                             },
                             selected = option.isSelected,
                             label = { Text(option.text.resolve()) },

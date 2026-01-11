@@ -37,8 +37,8 @@ internal class DefaultAppUiModeViewmodelDelegate @Inject constructor(
         fetchSupportedUiModes(scope)
     }
 
-    override suspend fun updateAppUiMode(appUiMode: SegmentedButtonUiModel<AppUiMode>) {
-
+    override suspend fun updateAppUiMode(appUiMode: AppUiMode) {
+        updateCurrentAppUiMode(appUiMode)
     }
 
     private fun fetchSupportedUiModes(scope: CoroutineScope) {
