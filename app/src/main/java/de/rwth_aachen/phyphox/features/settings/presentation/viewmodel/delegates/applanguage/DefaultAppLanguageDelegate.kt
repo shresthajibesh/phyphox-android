@@ -55,6 +55,7 @@ internal class DefaultAppLanguageDelegate @Inject constructor(
 
     override suspend fun updateLanguage(identifier: String) {
         updateAppLanguage(identifier)
+        dismissModal()
     }
 
     override fun dismissModal() {
