@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencecategoryheader
+package de.rwth_aachen.phyphox.features.settings.presentation.compose.common.preferencecategoryheader
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel

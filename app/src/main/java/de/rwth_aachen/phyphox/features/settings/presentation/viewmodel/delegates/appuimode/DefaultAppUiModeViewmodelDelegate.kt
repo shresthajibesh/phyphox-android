@@ -4,7 +4,7 @@ import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.uimode.GetSupportedAppUiModeUseCase
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.uimode.ObserveCurrentAppUiModeUseCase
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.uimode.UpdateCurrentAppUiModeUseCase
-import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.common.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiBuilder
 import de.rwth_aachen.phyphox.utils.UiResourceState
 import kotlinx.coroutines.CoroutineScope

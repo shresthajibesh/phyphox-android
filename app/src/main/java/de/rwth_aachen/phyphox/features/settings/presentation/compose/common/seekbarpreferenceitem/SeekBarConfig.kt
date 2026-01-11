@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem
+package de.rwth_aachen.phyphox.features.settings.presentation.compose.common.seekbarpreferenceitem
 
 data class SeekBarConfig(
     val currentSize: Float,

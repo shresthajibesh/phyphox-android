@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.compose.preferenceitem
+package de.rwth_aachen.phyphox.features.settings.presentation.compose.common.preferenceitem
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

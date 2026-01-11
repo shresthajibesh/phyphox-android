@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.compose.switchpreferenceitem
+package de.rwth_aachen.phyphox.features.settings.presentation.compose.common.switchpreferenceitem
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import de.rwth_aachen.phyphox.utils.UiResourceState

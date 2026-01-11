@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencesummaryitem
+package de.rwth_aachen.phyphox.features.settings.presentation.compose.common.preferencesummaryitem
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

@@ -1,9 +1,8 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel
 
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
-import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
-import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortUiState
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.common.seekbarpreferenceitem.SeekBarConfig
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.common.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.LanguageUiModel
 import de.rwth_aachen.phyphox.ui.string.StringUIModel
 import de.rwth_aachen.phyphox.utils.UiResourceState

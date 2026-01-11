@@ -3,7 +3,7 @@ package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegate
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize.GetGraphSizeRangeUseCase
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize.ObserveCurrentGraphSizeUseCase
 import de.rwth_aachen.phyphox.features.settings.domain.usecase.graphsize.UpdateGraphSizeUseCase
-import de.rwth_aachen.phyphox.features.settings.presentation.compose.seekbarpreferenceitem.SeekBarConfig
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.common.seekbarpreferenceitem.SeekBarConfig
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.UiBuilder
 import de.rwth_aachen.phyphox.utils.UiResourceState
 import kotlinx.coroutines.CoroutineScope

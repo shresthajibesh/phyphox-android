@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.compose.clickablepreferenceitem
+package de.rwth_aachen.phyphox.features.settings.presentation.compose.common.clickablepreferenceitem
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import de.rwth_aachen.phyphox.ui.string.LoremIpsumStringUIModel

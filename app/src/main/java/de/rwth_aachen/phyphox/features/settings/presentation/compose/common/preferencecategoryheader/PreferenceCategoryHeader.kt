@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.features.settings.presentation.compose.preferencecategoryheader
+package de.rwth_aachen.phyphox.features.settings.presentation.compose.common.preferencecategoryheader
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme

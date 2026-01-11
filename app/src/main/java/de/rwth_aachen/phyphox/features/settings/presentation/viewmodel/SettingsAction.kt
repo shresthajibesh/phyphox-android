@@ -1,7 +1,7 @@
 package de.rwth_aachen.phyphox.features.settings.presentation.viewmodel
 
 import de.rwth_aachen.phyphox.features.settings.domain.model.AppUiMode
-import de.rwth_aachen.phyphox.features.settings.presentation.compose.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
+import de.rwth_aachen.phyphox.features.settings.presentation.compose.common.segmentedbuttonpreferenceitem.SegmentedButtonUiModel
 
 sealed interface SettingsAction {
 
