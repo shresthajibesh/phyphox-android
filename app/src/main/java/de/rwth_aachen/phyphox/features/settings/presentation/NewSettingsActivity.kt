@@ -41,7 +41,7 @@ class NewSettingsActivity : ComponentActivity() {
 
 
     @Composable
-    private fun ObserveSettingsEvents(){
+    private fun ObserveSettingsEvents() {
         val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
         LaunchedEffect(Unit) {
             viewModel.uiEvent.collect { event ->
@@ -55,4 +55,6 @@ class NewSettingsActivity : ComponentActivity() {
 
     }
 
+
 }
+

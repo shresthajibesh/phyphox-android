@@ -6,7 +6,7 @@ import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates
 import de.rwth_aachen.phyphox.utils.UiResourceState
 import kotlinx.coroutines.flow.Flow
 
-interface AppUiModeViewmodelDelegate : SettingsViewmodelDelegate {
+interface UiModeViewmodelDelegate : SettingsViewmodelDelegate {
     val appUiModeFlow: Flow<UiResourceState<List<SegmentedButtonUiModel<AppUiMode>>>>
 
     suspend fun updateAppUiMode(appUiMode: AppUiMode)

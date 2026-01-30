@@ -22,13 +22,12 @@ import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.DefaultAccessPortViewmodelDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageViewmodelDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.DefaultAppLanguageViewmodelDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.AppUiModeViewmodelDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.DefaultAppUiModeViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.UiModeViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.DefaultUiModeViewmodelDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.graphsize.DefaultGraphSizeViewmodelDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.graphsize.GraphSizeViewmodelDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.DefaultProximityLockViewmodelDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.ProximityLockViewmodelDelegate
-import kotlinx.coroutines.CoroutineScope
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -48,8 +47,8 @@ abstract class SettingsModule {
 
     @Binds
     internal abstract fun bindsAppUiModeDelegate(
-        implementation: DefaultAppUiModeViewmodelDelegate,
-    ): AppUiModeViewmodelDelegate
+        implementation: DefaultUiModeViewmodelDelegate,
+    ): UiModeViewmodelDelegate
 
     @Binds
     internal abstract fun bindsGraphSizeDelegate(

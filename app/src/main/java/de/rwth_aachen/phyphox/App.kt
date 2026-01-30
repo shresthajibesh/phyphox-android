@@ -24,6 +24,7 @@ class App : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
+
         appDelegates.forEach { it.start(applicationScope) }
     }
 

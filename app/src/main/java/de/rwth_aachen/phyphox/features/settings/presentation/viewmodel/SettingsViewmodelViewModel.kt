@@ -8,7 +8,7 @@ import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsE
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.SettingsEvent.OpenWebpageFromResourceID
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.accessport.AccessPortViewmodelDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.applanguage.AppLanguageViewmodelDelegate
-import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.AppUiModeViewmodelDelegate
+import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.appuimode.UiModeViewmodelDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.graphsize.GraphSizeViewmodelDelegate
 import de.rwth_aachen.phyphox.features.settings.presentation.viewmodel.delegates.proximitylock.ProximityLockViewmodelDelegate
 import de.rwth_aachen.phyphox.utils.UIEventFlow
@@ -24,13 +24,13 @@ import javax.inject.Inject
 internal class SettingsViewmodelViewModel @Inject constructor(
     private val accessPortDelegate: AccessPortViewmodelDelegate,
     private val appLanguageDelegate: AppLanguageViewmodelDelegate,
-    private val appUiModeDelegate: AppUiModeViewmodelDelegate,
+    private val appUiModeDelegate: UiModeViewmodelDelegate,
     private val graphSizeDelegate: GraphSizeViewmodelDelegate,
     private val proximityLockDelegate: ProximityLockViewmodelDelegate,
 ) : ViewModel(),
     AccessPortViewmodelDelegate by accessPortDelegate,
     AppLanguageViewmodelDelegate by appLanguageDelegate,
-    AppUiModeViewmodelDelegate by appUiModeDelegate,
+    UiModeViewmodelDelegate by appUiModeDelegate,
     GraphSizeViewmodelDelegate by graphSizeDelegate,
     ProximityLockViewmodelDelegate by proximityLockDelegate {
 
