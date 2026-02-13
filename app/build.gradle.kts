@@ -106,9 +106,9 @@ android {
     ndkVersion = "28.0.13004108"
 
     lint {
-        abortOnError = false
-        checkReleaseBuilds = false
-        warningsAsErrors = false
+        abortOnError = true
+        checkReleaseBuilds = true
+        warningsAsErrors = true
         checkDependencies = true
 //        baseline = file("lint-baseline.xml") no baseline till satisfactory state is reached
 
