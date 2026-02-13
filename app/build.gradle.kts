@@ -55,8 +55,6 @@ android {
             useSupportLibrary = true
         }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        multiDexEnabled = true
     }
 
     buildTypes {
@@ -65,7 +63,7 @@ android {
                 disable.add("MissingTranslation")
             }
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
@@ -112,7 +110,7 @@ android {
         checkReleaseBuilds = false
         warningsAsErrors = false
         checkDependencies = true
-//        baseline = file("lint-baseline.xml") no base line till satisfactory state is reached
+//        baseline = file("lint-baseline.xml") no baseline till satisfactory state is reached
 
         // Reports
 //        textReport = true
@@ -180,7 +178,6 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation(libs.androidx.multidex)
     implementation(libs.google.material)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.appcompat)

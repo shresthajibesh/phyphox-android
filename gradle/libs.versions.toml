@@ -10,7 +10,6 @@ kotlin = "2.2.21"
 ksp = "2.3.2"
 
 # Dependency Versions
-multidex = "2.0.1"
 material = "1.12.0"
 annotation = "1.9.1"
 appcompat = "1.7.1"
@@ -43,7 +42,6 @@ detekt = "1.23.8"
 detektCompose = "0.5.3"
 
 [libraries]
-androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
