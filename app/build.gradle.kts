@@ -131,7 +131,7 @@ android {
         android.set(true)
         ignoreFailures.set(true)
         coloredOutput.set(true)
-        this.outputToConsole.set(true)
+        outputToConsole.set(true)
 
 
         reporters {
