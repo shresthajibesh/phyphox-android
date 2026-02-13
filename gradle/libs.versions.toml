@@ -5,9 +5,9 @@ minSdk = "21"
 targetSdk = "36"
 
 # Plugin Versions
-androidGradlePlugin = "8.13.2"
+androidGradlePlugin = "9.0.1"
 kotlin = "2.2.21"
-ksp = "2.2.21-2.0.4"
+ksp = "2.3.2"
 
 # Dependency Versions
 multidex = "2.0.1"
