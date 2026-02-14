@@ -219,6 +219,11 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.google.truth)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.params)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
 }
 
 tasks.register("lintCheck") {
@@ -227,7 +232,7 @@ tasks.register("lintCheck") {
 
     dependsOn(
         ":app:detekt",
-        ":app:ktlintCheck"
+        ":app:ktlintCheck",
 //        ":app:lintRegularDebug",
     )
 }
