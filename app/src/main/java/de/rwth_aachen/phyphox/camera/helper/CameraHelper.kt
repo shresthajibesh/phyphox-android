@@ -1,13 +1,11 @@
 package de.rwth_aachen.phyphox.camera.helper
 
-import android.content.res.Resources
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
 import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import de.rwth_aachen.phyphox.R
 import de.rwth_aachen.phyphox.camera.model.CameraSettingMode
@@ -19,14 +17,13 @@ import java.util.Arrays
 import kotlin.math.abs
 import kotlin.math.log
 import kotlin.math.round
-import kotlin.math.roundToInt
 
-
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 object CameraHelper {
     private var cameraList: MutableMap<String, CameraCharacteristics>? = null
+
     @JvmField
     val EXPERIMENT_ARG = "experiment"
+
     @JvmField
     val EXPERIMENT_SCROLL_ARG = "experiment_scroll"
 
@@ -36,7 +33,8 @@ object CameraHelper {
         try {
             for (cameraId in cm.cameraIdList) {
                 try {
-                    (cameraList as HashMap<String, CameraCharacteristics>)[cameraId] = cm.getCameraCharacteristics(cameraId)
+                    (cameraList as HashMap<String, CameraCharacteristics>)[cameraId] =
+                        cm.getCameraCharacteristics(cameraId)
                 } catch (e: CameraAccessException) {
                     //If a single camera is unavailable, skip it.
                 }
@@ -104,11 +102,11 @@ object CameraHelper {
                 jsonCam.put("id", key1)
                 jsonCam.put(
                     "facing",
-                    facingConstToString(value.get(CameraCharacteristics.LENS_FACING)!!)
+                    facingConstToString(value.get(CameraCharacteristics.LENS_FACING)!!),
                 )
                 jsonCam.put(
                     "hardwareLevel",
-                    hardwareLevelConstToString(value.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)!!)
+                    hardwareLevelConstToString(value.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)!!),
                 )
                 val caps = value.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
                 val jsonCaps = JSONArray()
@@ -196,7 +194,7 @@ object CameraHelper {
                 } catch (e2: JSONException) {
                     Log.e(
                         "CameraHelper",
-                        "Severe JSON error when creating camera2api caps string: " + e2.message
+                        "Severe JSON error when creating camera2api caps string: " + e2.message,
                     )
                 }
             }
@@ -237,21 +235,21 @@ object CameraHelper {
     data class Fraction(val numerator: Long, val denominator: Long)
 
 
-    fun convertNanoSecondToSecond(value: Long) : Fraction {
+    fun convertNanoSecondToSecond(value: Long): Fraction {
         if (value > 1e9)
-            return Fraction(round(value.toDouble()/1.0e9).toLong(), 1)
+            return Fraction(round(value.toDouble() / 1.0e9).toLong(), 1)
         else
-            return Fraction(1, round(1.0e9/value.toDouble()).toLong())
+            return Fraction(1, round(1.0e9 / value.toDouble()).toLong())
     }
 
-    private fun fractionToNanoseconds(fraction: Fraction): Long{
+    private fun fractionToNanoseconds(fraction: Fraction): Long {
         val numerator = fraction.numerator * 1_000_000_000L
         val denominator = fraction.denominator
         return numerator / denominator
     }
 
     // TODO create the range mathematically and in loop
-    fun shutterSpeedRange(min: Long, max: Long) : List<Fraction>{
+    fun shutterSpeedRange(min: Long, max: Long): List<Fraction> {
         val shutterSpeedRange = listOf<Fraction>(
             Fraction(1, 1),
             Fraction(1, 2),
@@ -267,7 +265,7 @@ object CameraHelper {
             Fraction(1, 2000),
             Fraction(1, 4000),
             Fraction(1, 8000),
-            )
+        )
 
         val filteredShutterSpeedRange = shutterSpeedRange.filter {
             fractionToNanoseconds(it) in min..max
@@ -277,9 +275,9 @@ object CameraHelper {
 
     }
 
-    fun isoRange(min: Int, max: Int): List<Int>{
+    fun isoRange(min: Int, max: Int): List<Int> {
         val isoRange = listOf<Int>(
-            25,50,100,200,400,800,1600,3200,6400,12800, 25600, 51200
+            25, 50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200,
         )
 
         val filteredIsoRange = isoRange.filter {
@@ -289,7 +287,7 @@ object CameraHelper {
         return filteredIsoRange
     }
 
-    fun findIsoNearestNumber(input: Int, numbers: List<Int>): Int{
+    fun findIsoNearestNumber(input: Int, numbers: List<Int>): Int {
         if (numbers.size == 0)
             return input
 
@@ -307,7 +305,7 @@ object CameraHelper {
         return nearestNumber
     }
 
-    fun stringToNanoseconds(value: String): Long{
+    fun stringToNanoseconds(value: String): Long {
         val parts = value.split("/").map {
             it.toLong()
         }
@@ -378,8 +376,8 @@ object CameraHelper {
         return value
     }
 
-    fun getWhiteBalanceTemperatureList() : MutableList<Int> {
-        return mutableListOf(3000, 4000, 5000, 6000, 6600, 7000, 8000, 9000, 10000 , 12000, 15000)
+    fun getWhiteBalanceTemperatureList(): MutableList<Int> {
+        return mutableListOf(3000, 4000, 5000, 6000, 6600, 7000, 8000, 9000, 10000, 12000, 15000)
     }
 
     fun getWhiteBalanceModes(): MutableMap<Int, Int> {
@@ -394,7 +392,7 @@ object CameraHelper {
     }
 
     fun getAvailableOpticalZoomList(maxOpticalZoom: Float?): MutableList<Int> {
-        if(maxOpticalZoom != null) {
+        if (maxOpticalZoom != null) {
             if (maxOpticalZoom == 1.0f)
                 return mutableListOf()
 
@@ -422,20 +420,25 @@ object CameraHelper {
     fun adjustExposure(adjust: Double, state: CameraSettingState, shutterTarget: Long): Pair<Long, Int> {
         var iso = state.currentIsoValue
         var shutter = state.currentShutterValue
-        val shutterMax = 1_000_000_000 * state.shutterSpeedRange!!.first().numerator / state.shutterSpeedRange!!.first().denominator
-        val shutterMin = 1_000_000_000 * state.shutterSpeedRange!!.last().numerator / state.shutterSpeedRange!!.last().denominator
+        val shutterMax =
+            1_000_000_000 * state.shutterSpeedRange!!.first().numerator / state.shutterSpeedRange!!.first().denominator
+        val shutterMin =
+            1_000_000_000 * state.shutterSpeedRange!!.last().numerator / state.shutterSpeedRange!!.last().denominator
         val isoMax = state.isoRange?.last()?.toInt() ?: 100
         val isoMin = state.isoRange?.first()?.toInt() ?: 100
 
         fun isoShutterRating(iso: Int, shutter: Long): Double {
-            return abs(log(iso.toDouble()/50.0, 2.0)) + // Prefer ISO 100
-                    10*abs(log(shutter.toDouble()/(shutterTarget.toDouble()), 2.0)) + // Strongly Prefer 1/30s shutter
-                    if (shutter > shutterTarget) 1000.0 else 0.0 // Big penalty for exposure times that reduce the frame rate
+            return abs(log(iso.toDouble() / 50.0, 2.0)) + // Prefer ISO 100
+                10 * abs(log(shutter.toDouble() / (shutterTarget.toDouble()), 2.0)) + // Strongly Prefer 1/30s shutter
+                if (shutter > shutterTarget) 1000.0 else 0.0 // Big penalty for exposure times that reduce the frame rate
         }
 
         var shutterOption = shutter
         var isoOption = iso
-        var optionRating = isoShutterRating(iso, shutter) + 10000 //The unchecked original is just a fallback that should never be necessary
+        var optionRating = isoShutterRating(
+            iso,
+            shutter,
+        ) + 10000 //The unchecked original is just a fallback that should never be necessary
         for (isoCandidate in state.isoRange!!) {
             val thisIso = isoCandidate.toInt()
             val thisShutter = (shutter * adjust * iso / thisIso).toLong()
