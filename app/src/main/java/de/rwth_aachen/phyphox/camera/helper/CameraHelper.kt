@@ -464,5 +464,4 @@ object CameraHelper {
 
         return Pair(shutter, iso)
     }
-
 }
