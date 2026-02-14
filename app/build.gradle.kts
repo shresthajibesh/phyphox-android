@@ -216,6 +216,7 @@ dependencies {
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.google.truth)
 
     testImplementation(libs.junit)
     testImplementation(libs.google.truth)
