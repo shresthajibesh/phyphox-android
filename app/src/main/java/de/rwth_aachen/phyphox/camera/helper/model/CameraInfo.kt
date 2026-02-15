@@ -2,12 +2,13 @@ package de.rwth_aachen.phyphox.camera.helper.model
 
 import com.google.gson.annotations.SerializedName
 
+typealias CameraInfoList = List<CameraInfo>
 data class CameraInfo(
     @SerializedName("id")
     val id: String,
 
     @SerializedName("facing")
-    val lensFacing: String,
+    val lensFacing: LensFacing,
 
     @SerializedName("hardwareLevel")
     val hardwareLevel: String,
