@@ -6,5 +6,6 @@ import de.rwth_aachen.phyphox.common.camera.domain.model.CameraInfoList
 interface CameraInfoDataSource {
     suspend fun upsertCameraInfo(cameraInfo: CameraInfo)
     suspend fun upsertCameraInfos(cameraInfos: CameraInfoList)
-    suspend fun getCameraInfo(cameraId: String): Result<CameraInfo>
+    suspend fun getCameraInfo(cameraId: String): CameraInfo?
+    suspend fun getAllCameraInfos(): List<CameraInfo>
 }
