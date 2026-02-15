@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.camera.helper.model
+package de.rwth_aachen.phyphox.common.camera.domain.model
 
 import com.google.gson.annotations.SerializedName
 
