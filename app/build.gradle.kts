@@ -208,6 +208,10 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     detektPlugins(libs.detekt.compose)
 
+    //gson + serilization
+    implementation(libs.gson)
+    implementation(libs.kotlinx.serialization.json)
+
     add("androidTestScreenshotImplementation", libs.junit)
     add("androidTestScreenshotImplementation", libs.fastlane.screengrab)
     add("androidTestScreenshotImplementation", libs.androidx.test.rules)
