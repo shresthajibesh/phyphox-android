@@ -224,6 +224,8 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
     testImplementation(libs.turbine)
 }
 
