@@ -8,7 +8,6 @@ import javax.inject.Inject
 class UpsertCameraInfo @Inject constructor(
     val repository: CameraInfoRepository,
 ) {
-
     suspend operator fun invoke(cameraInfo: CameraInfo) {
         repository.upsertCameraInfo(cameraInfo)
     }

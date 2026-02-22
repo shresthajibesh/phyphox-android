@@ -7,7 +7,6 @@ import javax.inject.Inject
 class GetAllCameraInfosUseCase @Inject constructor(
     val repository: CameraInfoRepository,
 ) {
-
     suspend operator fun invoke(cameraId: String): Result<List<CameraInfo>> {
         return try {
             Result.success(repository.getAllCameraInfos())

@@ -6,6 +6,4 @@ import dagger.hilt.components.SingletonComponent
 
 @Module(includes = [])
 @InstallIn(SingletonComponent::class)
-abstract class CommonCameraModule {
-
-}
+abstract class CommonCameraModule

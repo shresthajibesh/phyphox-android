@@ -132,8 +132,6 @@ android {
         ignoreFailures.set(true)
         coloredOutput.set(true)
         outputToConsole.set(true)
-
-
         reporters {
 //            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML)

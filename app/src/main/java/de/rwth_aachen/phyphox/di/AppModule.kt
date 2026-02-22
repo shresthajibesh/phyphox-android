@@ -13,5 +13,4 @@ import de.rwth_aachen.phyphox.libs.CoroutinesModule
     ],
 )
 @InstallIn(SingletonComponent::class)
-abstract class AppModule {}
-
+abstract class AppModule

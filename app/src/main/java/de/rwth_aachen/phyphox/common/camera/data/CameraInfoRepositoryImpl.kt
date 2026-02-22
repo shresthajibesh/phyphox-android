@@ -7,8 +7,8 @@ import de.rwth_aachen.phyphox.common.camera.domain.model.CameraInfoList
 import javax.inject.Inject
 
 class CameraInfoRepositoryImpl @Inject constructor(
-    private val cameraInfoDataSource: CameraInfoDataSource
-): CameraInfoRepository {
+    private val cameraInfoDataSource: CameraInfoDataSource,
+) : CameraInfoRepository {
 
     override suspend fun upsertCameraInfo(cameraInfo: CameraInfo) {
         cameraInfoDataSource.upsertCameraInfo(cameraInfo)
