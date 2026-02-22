@@ -21,7 +21,6 @@ import kotlin.math.round
 @Suppress(
     "unused",
     "MemberVisibilityCanBePrivate",
-    "SpellCheckingInspection",
     "UNCHECKED_CAST",
     "SameParameterValue",
     "RemoveExplicitTypeArguments",
