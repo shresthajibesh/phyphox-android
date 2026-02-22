@@ -3,7 +3,7 @@ package de.rwth_aachen.phyphox.common.camera.data.converter
 import android.hardware.camera2.CameraCharacteristics
 import android.os.Build
 import de.rwth_aachen.phyphox.common.camera.domain.model.CameraInfo
-import de.rwth_aachen.phyphox.common.camera.domain.model.Capability
+import de.rwth_aachen.phyphox.common.camera.domain.model.CameraCapability
 import de.rwth_aachen.phyphox.common.camera.domain.model.FpsRange
 import de.rwth_aachen.phyphox.common.camera.domain.model.HardwareLevel
 import de.rwth_aachen.phyphox.common.camera.domain.model.HighSpeedVideoSizeConfiguration
@@ -36,23 +36,23 @@ class CameraCharacteristicsToCameraInfoConverterTest {
             lensFacing = LensFacing.LENS_FACING_FRONT,
             hardwareLevel = HardwareLevel.INFO_SUPPORTED_HARDWARE_LEVEL_FULL,
             capabilities = listOf(
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_BURST_CAPTURE,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_RAW,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_PRIVATE_REPROCESSING,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_READ_SENSOR_SETTINGS,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_YUV_REPROCESSING,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_DEPTH_OUTPUT,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_CONSTRAINED_HIGH_SPEED_VIDEO,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_MOTION_TRACKING,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_LOGICAL_MULTI_CAMERA,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_MONOCHROME,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_SECURE_IMAGE_DATA,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_SYSTEM_CAMERA,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_OFFLINE_PROCESSING,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_ULTRA_HIGH_RESOLUTION_SENSOR,
-                Capability.REQUEST_AVAILABLE_CAPABILITIES_REMOSAIC_REPROCESSING,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_BURST_CAPTURE,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_RAW,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_PRIVATE_REPROCESSING,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_READ_SENSOR_SETTINGS,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_YUV_REPROCESSING,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_DEPTH_OUTPUT,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_CONSTRAINED_HIGH_SPEED_VIDEO,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_MOTION_TRACKING,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_LOGICAL_MULTI_CAMERA,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_MONOCHROME,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_SECURE_IMAGE_DATA,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_SYSTEM_CAMERA,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_OFFLINE_PROCESSING,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_ULTRA_HIGH_RESOLUTION_SENSOR,
+                CameraCapability.REQUEST_AVAILABLE_CAPABILITIES_REMOSAIC_REPROCESSING,
 
                 ),
             captureRequestKeys = listOf(
