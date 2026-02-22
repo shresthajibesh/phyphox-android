@@ -8,7 +8,6 @@ import android.os.Build
 import android.util.Range
 import de.rwth_aachen.phyphox.common.camera.domain.model.CameraCapability
 import de.rwth_aachen.phyphox.common.camera.domain.model.CameraInfo
-import de.rwth_aachen.phyphox.common.camera.domain.model.CameraInfoSnippet
 import de.rwth_aachen.phyphox.common.camera.domain.model.FpsRange
 import de.rwth_aachen.phyphox.common.camera.domain.model.HardwareLevel
 import de.rwth_aachen.phyphox.common.camera.domain.model.HighSpeedVideoSizeConfiguration
@@ -16,47 +15,47 @@ import de.rwth_aachen.phyphox.common.camera.domain.model.LensFacing
 import de.rwth_aachen.phyphox.common.camera.domain.model.Size
 import de.rwth_aachen.phyphox.common.camera.domain.model.StreamConfiguration
 
-fun CameraCharacteristics.toDomainSnippet(id: String): CameraInfoSnippet {
-    return CameraInfoSnippet(
-        id = id,
-        lensFacing = cameraCharacteristicsToLensFacing(
-            characteristics = this.get(CameraCharacteristics.LENS_FACING),
-        ),
-        hardwareLevel = cameraCharacteristicsToHardwareLevel(
-            characteristics = this.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL),
-        ),
-        capabilities = cameraCharacteristicsToCapabilities(
-            capabilityIds = this.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES),
-        ),
-    )
-}
-
-fun CameraCharacteristics.toDomain(id: String): CameraInfo {
-    return CameraInfo(
-        id = id,
-        lensFacing = cameraCharacteristicsToLensFacing(
-            characteristics = this.get(CameraCharacteristics.LENS_FACING),
-        ),
-        hardwareLevel = cameraCharacteristicsToHardwareLevel(
-            characteristics = this.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL),
-        ),
-        capabilities = cameraCharacteristicsToCapabilities(
-            capabilityIds = this.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES),
-        ),
-        captureRequestKeys = availableCaptureRequestKeysToCaptureRequestKeys(
-            availableCaptureRequestKeys = this.availableCaptureRequestKeys,
-        ),
-        captureResultKeys = availableCaptureResultKeysToCaptureResultKeys(
-            availableCaptureResultKeys = this.availableCaptureResultKeys,
-        ),
-        fpsRanges = availableTargetFpsRangesToFpsRanges(
-            ranges = this.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES),
-        ),
-        physicalCamIds = this.getPhysicalCameraIdLists(),
-        streamConfigurations = scalerStreamConfigToStreamConfigurations(
-            configMap = this.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP),
-        ),
-    )
+fun CameraCharacteristics.toDomain(id: String, fullInfo: Boolean = false): CameraInfo {
+    return if (fullInfo) {
+        CameraInfo.FullCameraInfo(
+            id = id,
+            lensFacing = cameraCharacteristicsToLensFacing(
+                characteristics = this.get(CameraCharacteristics.LENS_FACING),
+            ),
+            hardwareLevel = cameraCharacteristicsToHardwareLevel(
+                characteristics = this.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL),
+            ),
+            capabilities = cameraCharacteristicsToCapabilities(
+                capabilityIds = this.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES),
+            ),
+            captureRequestKeys = availableCaptureRequestKeysToCaptureRequestKeys(
+                availableCaptureRequestKeys = this.availableCaptureRequestKeys,
+            ),
+            captureResultKeys = availableCaptureResultKeysToCaptureResultKeys(
+                availableCaptureResultKeys = this.availableCaptureResultKeys,
+            ),
+            fpsRanges = availableTargetFpsRangesToFpsRanges(
+                ranges = this.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES),
+            ),
+            physicalCamIds = this.getPhysicalCameraIdLists(),
+            streamConfigurations = scalerStreamConfigToStreamConfigurations(
+                configMap = this.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP),
+            ),
+        )
+    } else {
+        CameraInfo.PartialCameraInfo(
+            id = id,
+            lensFacing = cameraCharacteristicsToLensFacing(
+                characteristics = this.get(CameraCharacteristics.LENS_FACING),
+            ),
+            hardwareLevel = cameraCharacteristicsToHardwareLevel(
+                characteristics = this.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL),
+            ),
+            capabilities = cameraCharacteristicsToCapabilities(
+                capabilityIds = this.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES),
+            ),
+        )
+    }
 }
 
 fun scalerStreamConfigToStreamConfigurations(configMap: StreamConfigurationMap?): List<StreamConfiguration> {
