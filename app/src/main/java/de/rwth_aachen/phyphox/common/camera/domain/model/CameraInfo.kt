@@ -49,6 +49,3 @@ sealed interface CameraInfo {
     ) : CameraInfo
 
 }
-
-
-
