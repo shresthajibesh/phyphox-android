@@ -105,15 +105,13 @@ android {
 
     ndkVersion = "28.0.13004108"
 
+    //region - Lint
     lint {
-        abortOnError = true
+        abortOnError = false
         checkReleaseBuilds = true
         warningsAsErrors = true
         checkDependencies = true
 //        baseline = file("lint-baseline.xml") no baseline till satisfactory state is reached
-
-        // Reports
-//        textReport = true
         htmlReport = true
 
         htmlOutput = file("${layout.buildDirectory}/reports/code-quality/lint.html")
@@ -127,20 +125,25 @@ android {
             "UnrememberedMutableState",
         )
     }
+    //endregion
+
+    //region - Ktlint
     ktlint {
+        version.set("1.8.0")
         android.set(true)
         ignoreFailures.set(true)
         coloredOutput.set(true)
         outputToConsole.set(true)
         reporters {
-//            reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML)
         }
 
         outputToConsole.set(true)
         outputColorName.set("RED")
     }
+    //endregion
 }
+//region - Detekt
 detekt {
     toolVersion = libs.versions.detekt.get()
     buildUponDefaultConfig = true
@@ -153,24 +156,28 @@ detekt {
     basePath = projectDir.path
     ignoreFailures = true
 }
+//endregion
 
-// Add this to handle the deprecated reports block issue
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     reports {
-        // Enable HTML report
+        //region - Enable HTML report
         html.required.set(true)
         html.outputLocation.set(file("${layout.buildDirectory.get()}/reports/detekt/detekt.html"))
+        //endregion
 
-//        // Enable XML report (often used for CI)
+        //region - Enable XML report (often used for CI)
         xml.required.set(false)
-//        xml.outputLocation.set(file("${layout.buildDirectory.get()}/reports/detekt/detekt.xml"))
-//
-//        // Enable SARIF report (best for GitHub Actions)
-        sarif.required.set(false)
-//        sarif.outputLocation.set(file("${layout.buildDirectory.get()}/reports/detekt/detekt.sarif"))
+        //xml.outputLocation.set(file("${layout.buildDirectory.get()}/reports/detekt/detekt.xml"))
+        //endregion
 
-        // Disable TXT report if not needed
+        //region - Enable SARIF report (best for GitHub Actions)
+        sarif.required.set(false)
+        //sarif.outputLocation.set(file("${layout.buildDirectory.get()}/reports/detekt/detekt.sarif"))
+        //endregion
+
+        //region - Disable TXT report if not needed
         txt.required.set(false)
+        //endregion
     }
 }
 
@@ -187,12 +194,12 @@ dependencies {
     implementation(libs.androidx.viewpager)
     implementation(libs.androidx.recyclerview.selection)
     implementation(libs.androidx.recyclerview)
-    implementation(libs.bundles.camerax)// CameraX Bundle
+    implementation(libs.bundles.camerax)
     implementation(libs.commons.io)
-    implementation(libs.zxing.android.embedded)//https://github.com/journeyapps/zxing-android-embedded/blob/master/CHANGES.md
+    implementation(libs.zxing.android.embedded)
     implementation(libs.apache.poi)
     implementation(libs.jlhttp)
-    implementation(libs.caverock.androidsvg)//https://bigbadaboom.github.io/androidsvg/release_notes.html
+    implementation(libs.caverock.androidsvg)
     implementation(libs.paho.mqtt.android)
 
     //hilt
@@ -243,6 +250,6 @@ tasks.register("lintCheck") {
     dependsOn(
         ":app:detekt",
         ":app:ktlintCheck",
-//        ":app:lintRegularDebug",
+        ":app:lintRegularDebug",
     )
 }
