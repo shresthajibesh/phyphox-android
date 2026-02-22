@@ -10,5 +10,5 @@ data class StreamConfiguration(
     val outputSizes: List<Size>,
 
     @SerializedName("highspeed")
-    val highspeed: List<HighSpeedConfiguration>
+    val highSpeedVideoSize: List<HighSpeedVideoSizeConfiguration>
 )

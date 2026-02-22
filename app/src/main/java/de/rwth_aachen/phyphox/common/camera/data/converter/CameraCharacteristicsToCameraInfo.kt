@@ -3,13 +3,17 @@ package de.rwth_aachen.phyphox.common.camera.data.converter
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CaptureRequest
 import android.hardware.camera2.CaptureResult
+import android.hardware.camera2.params.StreamConfigurationMap
 import android.os.Build
 import android.util.Range
 import de.rwth_aachen.phyphox.common.camera.domain.model.CameraInfo
 import de.rwth_aachen.phyphox.common.camera.domain.model.Capability
 import de.rwth_aachen.phyphox.common.camera.domain.model.FpsRange
 import de.rwth_aachen.phyphox.common.camera.domain.model.HardwareLevel
+import de.rwth_aachen.phyphox.common.camera.domain.model.HighSpeedVideoSizeConfiguration
 import de.rwth_aachen.phyphox.common.camera.domain.model.LensFacing
+import de.rwth_aachen.phyphox.common.camera.domain.model.Size
+import de.rwth_aachen.phyphox.common.camera.domain.model.StreamConfiguration
 
 class CameraCharacteristicsToCameraInfo {
 
@@ -26,10 +30,53 @@ class CameraCharacteristicsToCameraInfo {
             captureResultKeys = availableCaptureResultKeysToCaptureResultKeys(item.availableCaptureResultKeys),
             fpsRanges = availableTargetFpsRangesToFpsRanges(item.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)),
             physicalCamIds = item.getPhysicalCameraIdLists(),
-            streamConfigurations = emptyList(),
+            streamConfigurations = scalerStreamConfigToStreamConfigurations(item.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)),
+        )
+    }
+
+    private fun scalerStreamConfigToStreamConfigurations(configMap: StreamConfigurationMap?): List<StreamConfiguration> {
+        if (configMap == null) {
+            return emptyList()
+        }
+        return configMap.outputFormats.map { format ->
+            val outputSizes = configMap.getOutputSizes(format).map { outPutSize ->
+                outPutSizeToSize(outPutSize)
+            }
+
+            val highSpeedVideoSizes = configMap.highSpeedVideoSizes.map { highSpeedVideoSize ->
+                highSpeedVideoSizeToHighSpeedVideoSizeConfig(
+                    highSpeedVideoSize = highSpeedVideoSize,
+                    fpsRanges = configMap.getHighSpeedVideoFpsRangesFor(highSpeedVideoSize)
+                )
+            }
+
+            StreamConfiguration(
+                format = format,
+                outputSizes = outputSizes,
+                highSpeedVideoSize = highSpeedVideoSizes,
+            )
+        }
+    }
+
+    private fun highSpeedVideoSizeToHighSpeedVideoSizeConfig(
+        highSpeedVideoSize: android.util.Size,
+        fpsRanges: Array<Range<Int>>,
+    ): HighSpeedVideoSizeConfiguration {
+        return HighSpeedVideoSizeConfiguration(
+            width = highSpeedVideoSize.width,
+            height = highSpeedVideoSize.height,
+            fpsRanges = availableTargetFpsRangesToFpsRanges(fpsRanges),
+        )
+    }
+
+    private fun outPutSizeToSize(outPutSize: android.util.Size): Size {
+        return Size(
+            width = outPutSize.width,
+            height = outPutSize.height,
         )
     }
 }
+
 
 fun availableTargetFpsRangesToFpsRanges(ranges: Array<Range<Int>>?): List<FpsRange> {
     return ranges?.map { range ->

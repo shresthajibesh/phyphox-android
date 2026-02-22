@@ -3,17 +3,17 @@ package de.rwth_aachen.phyphox.common.camera.domain.model
 import com.google.gson.annotations.SerializedName
 
 enum class HardwareLevel {
-    @SerializedName("INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED")
+    @SerializedName("HARDWARE_LEVEL_LIMITED")
     INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED,
-    @SerializedName("INFO_SUPPORTED_HARDWARE_LEVEL_FULL")
+    @SerializedName("HARDWARE_LEVEL_FULL")
     INFO_SUPPORTED_HARDWARE_LEVEL_FULL,
-    @SerializedName("INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY")
+    @SerializedName("HARDWARE_LEVEL_LEGACY")
     INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY,
-    @SerializedName("INFO_SUPPORTED_HARDWARE_LEVEL_3")
+    @SerializedName("HARDWARE_LEVEL_3")
     INFO_SUPPORTED_HARDWARE_LEVEL_3,
-    @SerializedName("INFO_SUPPORTED_HARDWARE_LEVEL_EXTERNAL")
+    @SerializedName("HARDWARE_LEVEL_EXTERNAL")
     INFO_SUPPORTED_HARDWARE_LEVEL_EXTERNAL,
-    @SerializedName("INFO_SUPPORTED_UNKNOWN")
+    @SerializedName("UNKNOWN")
     UNKNOWN
 
 }

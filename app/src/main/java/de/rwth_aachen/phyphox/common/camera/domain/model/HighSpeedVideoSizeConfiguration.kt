@@ -2,7 +2,7 @@ package de.rwth_aachen.phyphox.common.camera.domain.model
 
 import com.google.gson.annotations.SerializedName
 
-data class HighSpeedConfiguration(
+data class HighSpeedVideoSizeConfiguration(
     @SerializedName("w")
     val width: Int,
 
