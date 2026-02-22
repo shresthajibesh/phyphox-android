@@ -18,6 +18,14 @@ import kotlin.math.abs
 import kotlin.math.log
 import kotlin.math.round
 
+@Suppress(
+    "unused",
+    "MemberVisibilityCanBePrivate",
+    "SpellCheckingInspection",
+    "UNCHECKED_CAST",
+    "SameParameterValue",
+    "RemoveExplicitTypeArguments",
+)
 object CameraHelper {
     private var cameraList: MutableMap<String, CameraCharacteristics>? = null
 
@@ -219,7 +227,7 @@ object CameraHelper {
             }
         }
 
-        return availableSettingModes;
+        return availableSettingModes
     }
 
     data class Fraction(val numerator: Long, val denominator: Long)
@@ -400,9 +408,9 @@ object CameraHelper {
     }
 
     fun cameraLensToSelector(@CameraSelector.LensFacing lensFacing: Int): CameraSelector {
-        when (lensFacing) {
-            CameraSelector.LENS_FACING_FRONT -> return CameraSelector.DEFAULT_FRONT_CAMERA
-            CameraSelector.LENS_FACING_BACK -> return CameraSelector.DEFAULT_BACK_CAMERA
+        return when (lensFacing) {
+            CameraSelector.LENS_FACING_FRONT -> CameraSelector.DEFAULT_FRONT_CAMERA
+            CameraSelector.LENS_FACING_BACK -> CameraSelector.DEFAULT_BACK_CAMERA
             else -> throw IllegalArgumentException("Invalid lens facing type: $lensFacing")
         }
     }
@@ -414,8 +422,6 @@ object CameraHelper {
             1_000_000_000 * state.shutterSpeedRange!!.first().numerator / state.shutterSpeedRange!!.first().denominator
         val shutterMin =
             1_000_000_000 * state.shutterSpeedRange!!.last().numerator / state.shutterSpeedRange!!.last().denominator
-        val isoMax = state.isoRange?.last()?.toInt() ?: 100
-        val isoMin = state.isoRange?.first()?.toInt() ?: 100
 
         fun isoShutterRating(iso: Int, shutter: Long): Double {
             return abs(log(iso.toDouble() / 50.0, 2.0)) + // Prefer ISO 100
@@ -430,15 +436,14 @@ object CameraHelper {
             shutter,
         ) + 10000 //The unchecked original is just a fallback that should never be necessary
         for (isoCandidate in state.isoRange!!) {
-            val thisIso = isoCandidate.toInt()
-            val thisShutter = (shutter * adjust * iso / thisIso).toLong()
-            if (thisShutter < shutterMin || thisShutter > shutterMax)
+            val thisShutter = (shutter * adjust * iso / isoCandidate).toLong()
+            if (thisShutter !in shutterMin..shutterMax)
                 continue
-            val rating = isoShutterRating(thisIso, thisShutter)
+            val rating = isoShutterRating(isoCandidate, thisShutter)
 
             if (rating < optionRating) {
                 shutterOption = thisShutter
-                isoOption = thisIso
+                isoOption = isoCandidate
                 optionRating = rating
             }
         }
