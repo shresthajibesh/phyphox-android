@@ -9,10 +9,10 @@ import android.hardware.camera2.CaptureResult
 import android.hardware.camera2.params.StreamConfigurationMap
 import android.util.Range
 import android.util.Size
-import de.rwth_aachen.phyphox.common.camera.data.converter.getPhysicalCameraIdLists
 import io.mockk.every
 import io.mockk.mockk
 
+@Suppress("DEPRECATION")
 object CameraManagerFixture {
 
     val CAPABILITIES = intArrayOf(
@@ -56,14 +56,14 @@ object CameraManagerFixture {
     val FPS_RANGE_2 = Range(10, 10000)
     val FPS_RANGES = arrayOf(FPS_RANGE_1, FPS_RANGE_2)
 
-    val CAMERA_ID_1 = "1"
-    val CAMERA_ID_2 = "10"
-    val CAMERA_ID_3 = "100"
+    const val CAMERA_ID_1 = "1"
+    const val CAMERA_ID_2 = "10"
+    const val CAMERA_ID_3 = "100"
     val CAMERA_IDS = setOf(CAMERA_ID_1, CAMERA_ID_2, CAMERA_ID_3)
 
-    val SENSOR_INFO_EXPOSURE_TIME_RANGE_LOWER = 1_000L
-    val SENSOR_INFO_EXPOSURE_TIME_RANGE_UPPER = 1_000_000_000L
-    val SENSOR_ORIENTATION = 90
+    const val SENSOR_INFO_EXPOSURE_TIME_RANGE_LOWER = 1_000L
+    const val SENSOR_INFO_EXPOSURE_TIME_RANGE_UPPER = 1_000_000_000L
+    const val SENSOR_ORIENTATION = 90
     val SENSOR_INFO_EXPOSURE_TIME_RANGE = Range(
         SENSOR_INFO_EXPOSURE_TIME_RANGE_LOWER,
         SENSOR_INFO_EXPOSURE_TIME_RANGE_UPPER,
@@ -167,7 +167,7 @@ object CameraManagerFixture {
         return mockk<CameraCharacteristics> {
             // 🔴 CRITICAL: generic fallback — prevents MockK auto-hinting
             every { get<Any>(any()) } answers {
-                map[firstArg()] as Any?
+                map[firstArg()]
             }
             every { getAvailableCaptureRequestKeys() } returns captureRequestKeys
             every { getAvailableCaptureResultKeys() } returns captureResultKeys
@@ -176,17 +176,17 @@ object CameraManagerFixture {
     }
 
     fun getMockCameraManager(
-        cameraCharacteristicsMap:Map<String, CameraCharacteristics> = mapOf(
+        cameraCharacteristicsMap: Map<String, CameraCharacteristics> = mapOf(
             CAMERA_ID_1 to getMockCameraCharacteristics(
-                facing = CameraCharacteristics.LENS_FACING_FRONT
+                facing = CameraCharacteristics.LENS_FACING_FRONT,
             ),
             CAMERA_ID_2 to getMockCameraCharacteristics(
-                facing = CameraCharacteristics.LENS_FACING_BACK
+                facing = CameraCharacteristics.LENS_FACING_BACK,
             ),
             CAMERA_ID_3 to getMockCameraCharacteristics(
-                facing = CameraCharacteristics.LENS_FACING_EXTERNAL
-            )
-        )
+                facing = CameraCharacteristics.LENS_FACING_EXTERNAL,
+            ),
+        ),
     ): CameraManager {
         return mockk<CameraManager>(relaxed = true) {
             every { cameraIdList } returns cameraCharacteristicsMap.keys.toTypedArray()
