@@ -130,7 +130,7 @@ object CameraHelper {
                             jsonCapResultKeys.put(key.name)
                         }
                     }
-                    jsonCam.put("captureResultKeys", jsonCapRequestKeys)
+                    jsonCam.put("captureResultKeys", jsonCapResultKeys)
                     val jsonFpsRanges = JSONArray()
                     val fpsRanges =
                         value.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)!!
@@ -149,12 +149,14 @@ object CameraHelper {
                         jsonPhysicalCamIds.put(physicalCamId)
                     }
                     jsonCam.put("physicalCamIds", jsonPhysicalCamIds)
+
                     val jsonStreamConfigs = JSONArray()
                     val configMap = value.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
                     val formats = configMap!!.outputFormats
                     for (format in formats) {
                         val jsonFormat = JSONObject()
                         jsonFormat.put("format", format)
+
                         val jsonSizes = JSONArray()
                         val sizes = configMap.getOutputSizes(format)
                         for (size in sizes) {
@@ -164,6 +166,7 @@ object CameraHelper {
                             jsonSizes.put(jsonSize)
                         }
                         jsonFormat.put("outputSizes", jsonSizes)
+
                         val jsonHighspeed = JSONArray()
                         val highSpeedVideoSizes = configMap.highSpeedVideoSizes
                         for (size in highSpeedVideoSizes) {
