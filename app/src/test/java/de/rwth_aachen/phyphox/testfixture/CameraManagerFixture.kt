@@ -3,6 +3,7 @@ package de.rwth_aachen.phyphox.testfixture
 import android.graphics.ImageFormat
 import android.graphics.PixelFormat
 import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CaptureRequest
 import android.hardware.camera2.CaptureResult
 import android.hardware.camera2.params.StreamConfigurationMap
@@ -171,6 +172,27 @@ object CameraManagerFixture {
             every { getAvailableCaptureRequestKeys() } returns captureRequestKeys
             every { getAvailableCaptureResultKeys() } returns captureResultKeys
             every { this@mockk.physicalCameraIds } returns physicalCameraIdentifiers
+        }
+    }
+
+    fun getMockCameraManager(
+        cameraCharacteristicsMap:Map<String, CameraCharacteristics> = mapOf(
+            CAMERA_ID_1 to getMockCameraCharacteristics(
+                facing = CameraCharacteristics.LENS_FACING_FRONT
+            ),
+            CAMERA_ID_2 to getMockCameraCharacteristics(
+                facing = CameraCharacteristics.LENS_FACING_BACK
+            ),
+            CAMERA_ID_3 to getMockCameraCharacteristics(
+                facing = CameraCharacteristics.LENS_FACING_EXTERNAL
+            )
+        )
+    ): CameraManager {
+        return mockk<CameraManager>(relaxed = true) {
+            every { cameraIdList } returns cameraCharacteristicsMap.keys.toTypedArray()
+            cameraCharacteristicsMap.forEach { (cameraId, cameraCharacteristics) ->
+                every { getCameraCharacteristics(cameraId) } returns cameraCharacteristics
+            }
         }
     }
 }
