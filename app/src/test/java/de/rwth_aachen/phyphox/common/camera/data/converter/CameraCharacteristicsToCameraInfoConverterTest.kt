@@ -23,7 +23,7 @@ class CameraCharacteristicsToCameraInfoConverterTest {
 
 
     @Test
-    fun convertsSuccessfully() {
+    fun `should convert camera Characteristics to CameraInfo without any loss or corruption`() {
         val converter = CameraCharacteristicsToCameraInfoConverter()
         val result = converter.convert(
             "1",
