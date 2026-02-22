@@ -222,16 +222,20 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.google.truth)
 
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.property)
     testImplementation(libs.junit)
     testImplementation(libs.google.truth)
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.jupiter.params)
     testRuntimeOnly(libs.junit.jupiter.engine)
+
     testImplementation(libs.mockk)
-    testImplementation(libs.roboelectric)
     androidTestImplementation(libs.mockk)
     androidTestImplementation(libs.mockk.android)
+
     testImplementation(libs.turbine)
+    testImplementation(libs.roboelectric)
 }
 
 tasks.register("lintCheck") {
