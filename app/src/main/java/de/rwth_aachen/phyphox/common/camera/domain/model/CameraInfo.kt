@@ -36,7 +36,7 @@ data class PartialCameraInfo(
     @SerializedName("id")
     val id: String,
 
-    @SerializedName("lensFacing")
+    @SerializedName("facing")
     val lensFacing: LensFacing,
 
     @SerializedName("hardwareLevel")
