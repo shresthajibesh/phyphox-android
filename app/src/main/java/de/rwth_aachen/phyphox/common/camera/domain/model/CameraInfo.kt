@@ -4,48 +4,44 @@ import com.google.gson.annotations.SerializedName
 
 typealias CameraInfoList = List<CameraInfo>
 
-sealed interface CameraInfo {
-    data class FullCameraInfo(
-        @SerializedName("id")
-        val id: String,
+data class CameraInfo(
+    @SerializedName("id")
+    val id: String,
 
-        @SerializedName("facing")
-        val lensFacing: LensFacing,
+    @SerializedName("facing")
+    val lensFacing: LensFacing,
 
-        @SerializedName("hardwareLevel")
-        val hardwareLevel: HardwareLevel,
+    @SerializedName("hardwareLevel")
+    val hardwareLevel: HardwareLevel,
 
-        @SerializedName("capabilities")
-        val capabilities: List<CameraCapability>,
+    @SerializedName("capabilities")
+    val capabilities: List<CameraCapability>,
 
-        @SerializedName("captureRequestKeys")
-        val captureRequestKeys: List<String>,
+    @SerializedName("captureRequestKeys")
+    val captureRequestKeys: List<String>,
 
-        @SerializedName("captureResultKeys")
-        val captureResultKeys: List<String>,
+    @SerializedName("captureResultKeys")
+    val captureResultKeys: List<String>,
 
-        @SerializedName("fpsRanges")
-        val fpsRanges: List<FpsRange>,
+    @SerializedName("fpsRanges")
+    val fpsRanges: List<FpsRange>,
 
-        @SerializedName("physicalCamIds")
-        val physicalCamIds: List<String>,
+    @SerializedName("physicalCamIds")
+    val physicalCamIds: List<String>,
 
-        @SerializedName("streamConfigurations")
-        val streamConfigurations: List<StreamConfiguration>,
-    ) : CameraInfo
+    @SerializedName("streamConfigurations")
+    val streamConfigurations: List<StreamConfiguration>,
+)
+data class PartialCameraInfo(
+    @SerializedName("id")
+    val id: String,
 
-    data class PartialCameraInfo(
-        @SerializedName("id")
-        val id: String,
+    @SerializedName("lensFacing")
+    val lensFacing: LensFacing,
 
-        @SerializedName("lensFacing")
-        val lensFacing: LensFacing,
+    @SerializedName("hardwareLevel")
+    val hardwareLevel: HardwareLevel,
 
-        @SerializedName("hardwareLevel")
-        val hardwareLevel: HardwareLevel,
-
-        @SerializedName("capabilities")
-        val capabilities: List<CameraCapability>,
-    ) : CameraInfo
-
-}
+    @SerializedName("capabilities")
+    val capabilities: List<CameraCapability>,
+)
