@@ -24,13 +24,9 @@ class CameraCharacteristicsToCameraInfoConverterTest {
 
     @Test
     fun `should convert camera Characteristics to CameraInfo without any loss or corruption`() {
-        val converter = CameraCharacteristicsToCameraInfoConverter()
-        val result = converter.convert(
-            "1",
-            CameraManagerFixture.getMockCameraCharacteristics(
-                CameraCharacteristics.LENS_FACING_FRONT,
-            ),
-        )
+        val result = CameraManagerFixture.getMockCameraCharacteristics(
+            CameraCharacteristics.LENS_FACING_FRONT,
+        ).toDomain("1")
         result shouldBeEqual CameraInfo(
             id = "1",
             lensFacing = LensFacing.LENS_FACING_FRONT,
