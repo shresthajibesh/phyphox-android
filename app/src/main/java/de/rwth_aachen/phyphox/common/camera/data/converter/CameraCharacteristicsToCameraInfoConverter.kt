@@ -15,7 +15,7 @@ import de.rwth_aachen.phyphox.common.camera.domain.model.LensFacing
 import de.rwth_aachen.phyphox.common.camera.domain.model.Size
 import de.rwth_aachen.phyphox.common.camera.domain.model.StreamConfiguration
 
-class CameraCharacteristicsToCameraInfo {
+class CameraCharacteristicsToCameraInfoConverter {
 
     fun convert(
         id: String,
