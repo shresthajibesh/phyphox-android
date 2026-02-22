@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder
 import de.rwth_aachen.phyphox.camera.helper.CameraHelper
 import de.rwth_aachen.phyphox.camera.model.CameraSettingMode
 import de.rwth_aachen.phyphox.common.camera.data.converter.toDomain
+import de.rwth_aachen.phyphox.common.camera.data.converter.toPartialDomain
 import io.kotest.matchers.equals.shouldBeEqual
 import junit.framework.TestCase
 import org.junit.Test
@@ -141,6 +142,21 @@ class CameraHelperTest {
         }
         val new = GsonBuilder().create().toJson(infos)
         val old = CameraHelper.getCamera2FormattedCaps(true)
+
+        new shouldBeEqual old
+    }
+
+    @Test
+    fun `new PartialCameraInfo model structure should be equal to existing json structure`() {
+        val cameraManager = CameraManagerFixture.getMockCameraManager()
+        CameraHelper.updateCameraList(cameraManager)
+        val cameraHelperCameraList = CameraHelper.getCameraList()
+        requireNotNull(cameraHelperCameraList)
+        val infos = cameraHelperCameraList.entries.map { (key, value) ->
+            value.toPartialDomain(key)
+        }
+        val new = GsonBuilder().create().toJson(infos)
+        val old = CameraHelper.getCamera2FormattedCaps(false)
 
         new shouldBeEqual old
     }
