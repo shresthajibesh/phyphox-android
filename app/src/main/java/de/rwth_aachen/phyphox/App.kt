@@ -14,11 +14,4 @@ class App : Application() {
     @JvmField
     var experiment: PhyphoxExperiment? = null
 
-    override fun onCreate() {
-        super.onCreate()
-        val cameraManager: CameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
-        val cc =cameraManager.getCameraCharacteristics(cameraManager.cameraIdList.first())
-        CameraHelper.updateCameraList(cameraManager)
-        Log.d("App", "Camera list updated $cc")
-    }
 }
