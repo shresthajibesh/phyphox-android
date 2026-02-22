@@ -13,7 +13,6 @@ class GetCameraInfoUseCase @Inject constructor(
             repository.getCameraInfo(cameraId)?.let {
                 Result.success(it)
             } ?: Result.failure(CameraInfoNotFound(cameraId))
-
         } catch (e: Throwable) {
             Result.failure(e)
         }

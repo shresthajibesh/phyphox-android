@@ -152,15 +152,16 @@ class CameraHelperTest {
         CameraHelper.updateCameraList(cameraManager)
         val cameraHelperCameraList = CameraHelper.getCameraList()
         requireNotNull(cameraHelperCameraList)
-        val infos = cameraHelperCameraList.entries.map { (key, value) ->
-            value.toPartialDomain(key)
-        }
+        val infos = cameraHelperCameraList
+            .entries
+            .map { (key, value) ->
+                value.toPartialDomain(key)
+            }
         val new = GsonBuilder().create().toJson(infos)
         val old = CameraHelper.getCamera2FormattedCaps(false)
 
         new shouldBeEqual old
     }
-
 
     @Suppress("unused")
     enum class FacingConstToStringScenario(
@@ -178,7 +179,7 @@ class CameraHelperTest {
         LENS_FACING_EXTERNAL(
             CameraCharacteristics.LENS_FACING_EXTERNAL,
             "LENS_FACING_EXTERNAL",
-        )
+        ),
     }
 
     @Suppress("unused")
@@ -205,7 +206,7 @@ class CameraHelperTest {
         INFO_SUPPORTED_HARDWARE_LEVEL_EXTERNAL(
             givenCameraCharacteristics = CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_EXTERNAL,
             expectedString = "HARDWARE_LEVEL_EXTERNAL",
-        )
+        ),
     }
 
     @Suppress("unused")
