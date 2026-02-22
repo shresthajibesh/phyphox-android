@@ -21,12 +21,6 @@ import kotlin.math.round
 object CameraHelper {
     private var cameraList: MutableMap<String, CameraCharacteristics>? = null
 
-    @JvmField
-    val EXPERIMENT_ARG = "experiment"
-
-    @JvmField
-    val EXPERIMENT_SCROLL_ARG = "experiment_scroll"
-
     @JvmStatic
     fun updateCameraList(cm: CameraManager) {
         cameraList = HashMap()
@@ -35,11 +29,11 @@ object CameraHelper {
                 try {
                     (cameraList as HashMap<String, CameraCharacteristics>)[cameraId] =
                         cm.getCameraCharacteristics(cameraId)
-                } catch (e: CameraAccessException) {
+                } catch (_: CameraAccessException) {
                     //If a single camera is unavailable, skip it.
                 }
             }
-        } catch (e: CameraAccessException) {
+        } catch (_: CameraAccessException) {
             //That's it. If no camera is available, the list shall remain empty
         }
     }
@@ -116,34 +110,28 @@ object CameraHelper {
                 jsonCam.put("capabilities", jsonCaps)
                 if (full) {
                     val jsonCapRequestKeys = JSONArray()
-                    val captureRequestKeys = value.availableCaptureRequestKeys
-                    if (captureRequestKeys != null) {
-                        for (key in captureRequestKeys) {
-                            jsonCapRequestKeys.put(key.name)
-                        }
+                    value.availableCaptureRequestKeys.forEach { key ->
+                        jsonCapRequestKeys.put(key.name)
                     }
                     jsonCam.put("captureRequestKeys", jsonCapRequestKeys)
+
                     val jsonCapResultKeys = JSONArray()
-                    val captureResultKeys = value.availableCaptureResultKeys
-                    if (captureResultKeys != null) {
-                        for (key in captureResultKeys) {
-                            jsonCapResultKeys.put(key.name)
-                        }
+                    value.availableCaptureResultKeys.forEach { key ->
+                        jsonCapResultKeys.put(key.name)
                     }
                     jsonCam.put("captureResultKeys", jsonCapResultKeys)
+
                     val jsonFpsRanges = JSONArray()
-                    val fpsRanges =
-                        value.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)!!
-                    for (fpsRange in fpsRanges) {
+                    value.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES)?.forEach { fpsRange ->
                         val jsonFpsRange = JSONObject()
                         jsonFpsRange.put("min", fpsRange.lower)
                         jsonFpsRange.put("max", fpsRange.upper)
                         jsonFpsRanges.put(jsonFpsRange)
                     }
                     jsonCam.put("fpsRanges", jsonFpsRanges)
+
                     val jsonPhysicalCamIds = JSONArray()
-                    var physicalCamIds: Set<String?>
-                    physicalCamIds =
+                    val physicalCamIds: Set<String?> =
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) value.physicalCameraIds else HashSet()
                     for (physicalCamId in physicalCamIds) {
                         jsonPhysicalCamIds.put(physicalCamId)
@@ -152,14 +140,12 @@ object CameraHelper {
 
                     val jsonStreamConfigs = JSONArray()
                     val configMap = value.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-                    val formats = configMap!!.outputFormats
-                    for (format in formats) {
+                    configMap?.outputFormats?.forEach { format ->
                         val jsonFormat = JSONObject()
                         jsonFormat.put("format", format)
 
                         val jsonSizes = JSONArray()
-                        val sizes = configMap.getOutputSizes(format)
-                        for (size in sizes) {
+                        configMap.getOutputSizes(format).forEach { size ->
                             val jsonSize = JSONObject()
                             jsonSize.put("w", size.width)
                             jsonSize.put("h", size.height)
@@ -167,27 +153,28 @@ object CameraHelper {
                         }
                         jsonFormat.put("outputSizes", jsonSizes)
 
-                        val jsonHighspeed = JSONArray()
-                        val highSpeedVideoSizes = configMap.highSpeedVideoSizes
-                        for (size in highSpeedVideoSizes) {
+                        val jsonHighSpeed = JSONArray()
+                        configMap.highSpeedVideoSizes.forEach { size ->
                             val jsonSize = JSONObject()
                             jsonSize.put("w", size.width)
                             jsonSize.put("h", size.height)
+
                             val jsonHighSpeedVideoFpsRanges = JSONArray()
-                            val highSpeedVideoFpsRange =
-                                configMap.getHighSpeedVideoFpsRangesFor(size)
-                            for (fpsRange in highSpeedVideoFpsRange) {
+                            configMap.getHighSpeedVideoFpsRangesFor(size).forEach { fpsRange ->
                                 val jsonFpsRange = JSONObject()
                                 jsonFpsRange.put("min", fpsRange.lower)
                                 jsonFpsRange.put("max", fpsRange.upper)
                                 jsonHighSpeedVideoFpsRanges.put(jsonFpsRange)
                             }
+
                             jsonSize.put("fpsRanges", jsonHighSpeedVideoFpsRanges)
-                            jsonHighspeed.put(jsonSize)
+                            jsonHighSpeed.put(jsonSize)
                         }
-                        jsonFormat.put("highspeed", jsonHighspeed)
+
+                        jsonFormat.put("highspeed", jsonHighSpeed)
                         jsonStreamConfigs.put(jsonFormat)
                     }
+
                     jsonCam.put("streamConfigurations", jsonStreamConfigs)
                 }
                 json.put(jsonCam)
