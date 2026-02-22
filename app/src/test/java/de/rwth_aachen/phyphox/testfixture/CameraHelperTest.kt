@@ -1,7 +1,6 @@
 package de.rwth_aachen.phyphox.testfixture
 
 import android.hardware.camera2.CameraCharacteristics
-import android.hardware.camera2.CameraManager
 import android.os.Build
 import com.google.common.truth.Truth
 import com.google.gson.GsonBuilder
@@ -9,8 +8,6 @@ import de.rwth_aachen.phyphox.camera.helper.CameraHelper
 import de.rwth_aachen.phyphox.camera.model.CameraSettingMode
 import de.rwth_aachen.phyphox.common.camera.data.converter.CameraCharacteristicsToCameraInfoConverter
 import io.kotest.matchers.equals.shouldBeEqual
-import io.mockk.every
-import io.mockk.mockk
 import junit.framework.TestCase
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -134,17 +131,16 @@ class CameraHelperTest {
     }
 
     @Test
-    fun testNewConverterResultsAreEquivalent() {
+    fun `new CameraInfo model structure should be equal to existing json structure`() {
         val converter = CameraCharacteristicsToCameraInfoConverter()
         val cameraManager = CameraManagerFixture.getMockCameraManager()
-        val infos = listOf(
-            converter.convert("1", cameraManager.getCameraCharacteristics("1")),
-            converter.convert("100", cameraManager.getCameraCharacteristics("100")),
-            converter.convert("10", cameraManager.getCameraCharacteristics("10")),
-        )
-        val new = GsonBuilder().create().toJson(infos)
-
         CameraHelper.updateCameraList(cameraManager)
+        val cameraHelperCameraList = CameraHelper.getCameraList()
+        requireNotNull(cameraHelperCameraList)
+        val infos = cameraHelperCameraList.entries.map { (key, value) ->
+            converter.convert(key,value)
+        }
+        val new = GsonBuilder().create().toJson(infos)
         val old = CameraHelper.getCamera2FormattedCaps(true)
 
         new shouldBeEqual old
