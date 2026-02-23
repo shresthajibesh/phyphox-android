@@ -6,4 +6,6 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.ktlint) apply false
     alias(libs.plugins.detekt) apply false
+    alias(libs.plugins.junit5) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
 }
