@@ -9,9 +9,18 @@ plugins {
 }
 
 android {
+    val locales = listOf(
+        "en", "cs", "de", "el", "es", "fr", "hi", "it", "ja", "ka",
+        "nl", "pl", "pt", "ru", "sr", "b+sr+Latn", "tr", "vi",
+        "zh-rCN", "zh-rTW",
+    )
     namespace = "de.rwth_aachen.phyphox"
     testNamespace = "de.rwth_aachen.phyphoxTest"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk {
+        version = release(libs.versions.compileSdk.get().toInt()) {
+            minorApiLevel = 1
+        }
+    }
 
     defaultConfig {
         applicationId = "de.rwth_aachen.phyphox"
@@ -22,48 +31,29 @@ android {
         //  format  WXXYYZZ, where WW is major, XX is minor, YY is patch, and ZZ is build
         versionCode = 1020009 //1.02.00-09
 
-        val locales = listOf(
-            "en",
-            "cs",
-            "de",
-            "el",
-            "es",
-            "fr",
-            "hi",
-            "it",
-            "ja",
-            "ka",
-            "nl",
-            "pl",
-            "pt",
-            "ru",
-            "sr",
-            "b+sr+Latn",
-            "tr",
-            "vi",
-            "zh-rCN",
-            "zh-rTW",
-        )
         buildConfigField(
             "String[]",
             "LOCALE_ARRAY",
             "new String[]{\"" + locales.joinToString("\",\"") + "\"}",
         )
-        resourceConfigurations.addAll(locales)
 
         vectorDrawables {
             useSupportLibrary = true
         }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    androidResources {
+        @Suppress("UnstableApiUsage")
+        localeFilters += locales
+    }
 
     buildTypes {
-        getByName("release") {
-            lint {
-                disable.add("MissingTranslation")
-            }
+        release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 
@@ -94,6 +84,7 @@ android {
 
     bundle {
         language {
+            @Suppress("UnstableApiUsage")
             enableSplit = false
         }
     }
@@ -111,13 +102,11 @@ android {
         checkReleaseBuilds = true
         warningsAsErrors = true
         checkDependencies = true
-//        baseline = file("lint-baseline.xml") no baseline till satisfactory state is reached
-        htmlReport = true
 
+        htmlReport = true
         htmlOutput = file("${layout.buildDirectory}/reports/code-quality/lint.html")
         textOutput = file("${layout.buildDirectory}/reports/code-quality/lint.txt")
-
-        // Compose-specific checks
+        disable.add("MissingTranslation")
         enable += setOf(
             "ComposableNaming",
             "ComposableFunctionName",
@@ -129,7 +118,6 @@ android {
 
     //region - Ktlint
     ktlint {
-        version.set("1.8.0")
         android.set(true)
         ignoreFailures.set(true)
         coloredOutput.set(true)
@@ -137,9 +125,6 @@ android {
         reporters {
             reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML)
         }
-
-        outputToConsole.set(true)
-        outputColorName.set("RED")
     }
     //endregion
 }
@@ -148,8 +133,7 @@ detekt {
     toolVersion = libs.versions.detekt.get()
     buildUponDefaultConfig = true
     allRules = false
-//    ignoredFlavors = listOf("screenshot")
-//    ignoredBuildTypes = listOf("release")
+    parallel = true
 
     config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
     baseline = file("$rootDir/config/detekt/detekt-baseline.xml")
@@ -243,13 +227,18 @@ dependencies {
     testImplementation(libs.roboelectric)
 }
 
-tasks.register("lintCheck") {
+tasks.register("lintAll") {
     group = "verification"
-    description = "Run ktlint, detekt, and Android Lint sequentially"
+    description = "Run ktlint, detekt, and Android Lint (debug + release)"
 
     dependsOn(
-        ":app:detekt",
-        ":app:ktlintCheck",
-        ":app:lintRegularDebug",
+        "ktlintCheck",
+        "detekt",
+        "lintRegularDebug",
+        "lintRegularRelease",
     )
+}
+
+tasks.named("check") {
+    dependsOn("lintAll")
 }
