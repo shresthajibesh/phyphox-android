@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.UUID;
 import java.util.Vector;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import de.rwth_aachen.phyphox.ExperimentList.handler.CategoryComparator;
 import de.rwth_aachen.phyphox.ExperimentList.model.ExperimentListEnvironment;
 import de.rwth_aachen.phyphox.ExperimentList.model.ExperimentShortInfo;
@@ -22,7 +25,8 @@ import de.rwth_aachen.phyphox.ExperimentList.ui.ExperimentsInCategory;
 import de.rwth_aachen.phyphox.Helper.Helper;
 import de.rwth_aachen.phyphox.R;
 
-public class ExperimentRepository{
+@Singleton
+public class ExperimentRepository {
 
     Vector<ExperimentsInCategory> categories;
 
@@ -32,10 +36,11 @@ public class ExperimentRepository{
     public final HashMap<String, Vector<String>> bluetoothDeviceNameList = new HashMap<>();
 
     /**
-     *  Collects uuids of Bluetooth devices (services or characteristics) and maps them to (hidden) experiments supporting these devices
+     * Collects uuids of Bluetooth devices (services or characteristics) and maps them to (hidden) experiments supporting these devices
      */
     public final HashMap<UUID, Vector<String>> bluetoothDeviceUUIDList = new HashMap<>();
 
+    @Inject
     public ExperimentRepository() {
 
     }
@@ -65,7 +70,7 @@ public class ExperimentRepository{
         assetExperimentLoader.loadAndAddExperimentsFromHiddenBluetoothAssets();
     }
 
-    public void addExperimentCategoriesToLinearLayout(LinearLayout target, Resources res){
+    public void addExperimentCategoriesToLinearLayout(LinearLayout target, Resources res) {
         Collections.sort(categories, new CategoryComparator(res));
 
         target.removeAllViews();
@@ -134,8 +139,7 @@ public class ExperimentRepository{
     }
 
     public void setPreselectedBluetoothAddress(String preselectedBluetoothAddress) {
-        if (categories == null)
-            return;
+        if (categories == null) return;
         for (ExperimentsInCategory experimentCats : categories) {
             experimentCats.setPreselectedBluetoothAddress(preselectedBluetoothAddress);
         }

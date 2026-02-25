@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentBottom="true"
+    android:padding="16dp"
+    android:theme="@style/rwth">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_padding">
+
+        <ImageView
+            android:id="@+id/rwth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:adjustViewBounds="true"
+            android:background="@drawable/rwth"
+            android:contentDescription="@string/empty_string"
+            android:maxWidth="250dp"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/creditRWTH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/creditsRWTH"
+            android:textSize="@dimen/credit_font_main" />
+
+        <TextView
+            android:id="@+id/creditNames"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:background="@color/phyphox_rwth_primary"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:text="@string/creditsNames"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/credit_font_main" />
+
+        <TextView
+            android:id="@+id/gpl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/lib_margin"
+            android:text="@string/gpl"
+            android:textSize="@dimen/credit_font" />
+
+        <TextView
+            android:id="@+id/creditLibs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/lib_margin"
+            android:text="@string/creditsLibs"
+            android:textSize="@dimen/credit_font" />
+
+        <TextView
+            android:id="@+id/creditsApache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/lib_margin"
+            android:text="@string/creditsApache"
+            android:textSize="@dimen/credit_font" />
+
+        <TextView
+            android:id="@+id/creditsZxing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/lib_margin"
+            android:text="@string/creditsZxing"
+            android:textSize="@dimen/credit_font" />
+
+
+        <TextView
+            android:id="@+id/creditsPahoMQTT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/lib_margin"
+            android:text="@string/creditsPahoMQTT"
+            android:textSize="@dimen/credit_font" />
+    </LinearLayout>
+</ScrollView>

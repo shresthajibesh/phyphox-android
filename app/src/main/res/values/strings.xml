@@ -500,4 +500,5 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     <string name="common_musical_note_gb7">F#7 / Gb7</string>
     <string name="common_musical_note_g7">G7</string>
     <string name="common_musical_note_ab7">G#7 / Ab7</string>
+    <string name="empty_string" />
 </resources>
