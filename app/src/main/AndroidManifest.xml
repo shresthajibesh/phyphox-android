@@ -35,7 +35,7 @@
         <activity
             android:name="de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity"
             android:exported="true"
-            android:theme="@style/splashTheme"
+            android:theme="@style/Theme.Phyphox.DayNight"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

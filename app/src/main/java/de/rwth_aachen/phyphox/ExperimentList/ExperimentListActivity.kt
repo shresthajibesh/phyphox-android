@@ -114,9 +114,6 @@ class ExperimentListActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        setTheme(R.style.Theme_Phyphox_DayNight)
-
         val themePreference: String = PreferenceManager.getDefaultSharedPreferences(this).getString(
             getString(R.string.setting_dark_mode_key),
             SettingsFragment.DARK_MODE_ON,
