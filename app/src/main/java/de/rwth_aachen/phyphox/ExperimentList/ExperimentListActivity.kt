@@ -1189,8 +1189,8 @@ class ExperimentListActivity : AppCompatActivity() {
             builder.setPositiveButton(
                 if (isError) R.string.tryagain else R.string.doContinue,
             ) { _, _ -> //(new RunBluetoothScan()).execute();
-                val bluetoothNameKeySet = experimentRepository!!.getBluetoothDeviceNameList().keys
-                val bluetoothUUIDKeySet = experimentRepository!!.getBluetoothDeviceUUIDList().keys
+                val bluetoothNameKeySet = experimentRepository.getBluetoothDeviceNameList().keys
+                val bluetoothUUIDKeySet = experimentRepository.getBluetoothDeviceUUIDList().keys
 
                 BluetoothScanner(
                     parent,
