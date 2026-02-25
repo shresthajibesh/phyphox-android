@@ -36,6 +36,7 @@ import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
@@ -61,6 +62,7 @@ import de.rwth_aachen.phyphox.ExperimentList.handler.ZipIntentHandler
 import de.rwth_aachen.phyphox.ExperimentList.model.Const
 import de.rwth_aachen.phyphox.ExperimentList.model.ExperimentListEnvironment
 import de.rwth_aachen.phyphox.ExperimentList.model.ExperimentLoadInfoData
+import de.rwth_aachen.phyphox.ExperimentList.viewmodel.ExperimentListViewModel
 import de.rwth_aachen.phyphox.Helper.Helper
 import de.rwth_aachen.phyphox.Helper.ReportingScrollView
 import de.rwth_aachen.phyphox.Helper.WindowInsetHelper
@@ -88,6 +90,7 @@ import java.util.UUID
 import java.util.regex.Pattern
 import java.util.zip.CRC32
 import javax.inject.Inject
+import kotlin.getValue
 
 @AndroidEntryPoint
 class ExperimentListActivity : AppCompatActivity() {
@@ -106,6 +109,8 @@ class ExperimentListActivity : AppCompatActivity() {
 
     @Inject
     lateinit var experimentRepository: ExperimentRepository
+
+    private val viewModel: ExperimentListViewModel by viewModels()
 
     // region - old click listeners
     val neocl = View.OnClickListener { _: View? ->
