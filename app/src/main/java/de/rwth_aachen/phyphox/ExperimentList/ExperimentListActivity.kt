@@ -81,7 +81,6 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.util.Arrays
 import java.util.Locale
 import java.util.UUID
 import java.util.regex.Pattern
@@ -135,21 +134,21 @@ class ExperimentListActivity : AppCompatActivity() {
         }
 
         WindowInsetHelper.setInsets(
-            findViewById<View?>(R.id.experimentList),
+            findViewById(R.id.experimentList),
             WindowInsetHelper.ApplyTo.PADDING,
             WindowInsetHelper.ApplyTo.IGNORE,
             WindowInsetHelper.ApplyTo.PADDING,
             WindowInsetHelper.ApplyTo.PADDING,
         )
         WindowInsetHelper.setInsets(
-            findViewById<View?>(R.id.expListHeader),
+            findViewById(R.id.expListHeader),
             WindowInsetHelper.ApplyTo.PADDING,
             WindowInsetHelper.ApplyTo.PADDING,
             WindowInsetHelper.ApplyTo.PADDING,
             WindowInsetHelper.ApplyTo.IGNORE,
         )
         WindowInsetHelper.setInsets(
-            findViewById<View?>(R.id.newExperiment),
+            findViewById(R.id.newExperiment),
             WindowInsetHelper.ApplyTo.IGNORE,
             WindowInsetHelper.ApplyTo.IGNORE,
             WindowInsetHelper.ApplyTo.MARGIN,
@@ -203,7 +202,7 @@ class ExperimentListActivity : AppCompatActivity() {
             showPopupMenu(it)
         }
 
-        val neocl = View.OnClickListener { v: View? ->
+        val neocl = View.OnClickListener { _: View? ->
             if (newExperimentDialogOpen) hideNewExperimentDialog()
             else showNewExperimentDialog()
         }
@@ -211,7 +210,7 @@ class ExperimentListActivity : AppCompatActivity() {
         newExperimentButton!!.setOnClickListener(neocl)
         backgroundDimmer!!.setOnClickListener(neocl)
 
-        val neoclSimple = View.OnClickListener { v: View? ->
+        val neoclSimple = View.OnClickListener { _: View? ->
             hideNewExperimentDialog()
             openSimpleExperimentConfigurationDialog(this)
         }
@@ -219,7 +218,7 @@ class ExperimentListActivity : AppCompatActivity() {
         newExperimentSimple!!.setOnClickListener(neoclSimple)
         newExperimentSimpleLabel!!.setOnClickListener(neoclSimple)
 
-        val neoclBluetooth = View.OnClickListener { v: View? ->
+        val neoclBluetooth = View.OnClickListener { _: View? ->
             hideNewExperimentDialog()
             val bluetoothNameKeySet = experimentRepository!!.getBluetoothDeviceNameList().keys
             val bluetoothUUIDKeySet = experimentRepository!!.getBluetoothDeviceUUIDList().keys
@@ -242,9 +241,9 @@ class ExperimentListActivity : AppCompatActivity() {
                         isFatal: Boolean?,
                     ) {
                         showBluetoothScanError(
-                            getString(R.string.bt_android_version),
-                            true,
-                            true,
+                            msg = getString(R.string.bt_android_version),
+                            isError = true,
+                            isFatal = true,
                         )
                     }
                 },
@@ -254,7 +253,7 @@ class ExperimentListActivity : AppCompatActivity() {
         newExperimentBluetooth!!.setOnClickListener(neoclBluetooth)
         newExperimentBluetoothLabel!!.setOnClickListener(neoclBluetooth)
 
-        val neoclQR = View.OnClickListener { v: View? ->
+        val neoclQR = View.OnClickListener { _: View? ->
             hideNewExperimentDialog()
             scanQRCode()
         }
@@ -339,7 +338,7 @@ class ExperimentListActivity : AppCompatActivity() {
         val sb = StringBuilder()
         val pInfo = try {
             packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
 
@@ -510,7 +509,7 @@ class ExperimentListActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(ctw)
         builder.setMessage(text).setTitle(R.string.deviceInfo).setPositiveButton(
             R.string.copyToClipboard,
-        ) { dialog, id -> //Copy the device info to the clipboard and notify the user
+        ) { _, _ -> //Copy the device info to the clipboard and notify the user
 
             val cm = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val data = ClipData.newPlainText(getString(R.string.deviceInfo), text)
@@ -523,7 +522,7 @@ class ExperimentListActivity : AppCompatActivity() {
             ).show()
         }.setNegativeButton(
             R.string.close,
-        ) { dialog, id ->
+        ) { _, _ ->
             //Closed by user. Nothing to do.
         }
         val dialog = builder.create()
@@ -576,12 +575,9 @@ class ExperimentListActivity : AppCompatActivity() {
         credits.setView(creditLayout)
         credits.setPositiveButton(
             getText(R.string.close),
-            object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    //Nothing to do. Just close the thing.
-                }
-            },
-        )
+        ) { _, _ ->
+            //Nothing to do. Just close the thing.
+        }
 
         //Present the dialog
         credits.show()
@@ -621,23 +617,21 @@ class ExperimentListActivity : AppCompatActivity() {
         popupWindow!!.setOnDismissListener { popupWindow = null }
 
         val root = findViewById<View>(R.id.rootExperimentList)
-        root.post(
-            Runnable {
-                try {
-                    popupWindow!!.showAtLocation(
-                        root,
-                        Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
-                        0,
-                        0,
-                    )
-                } catch (e: BadTokenException) {
-                    Log.e(
-                        "showHint",
-                        "Bad token when showing hint. This is not unusual when app is rotating while showing the hint.",
-                    )
-                }
-            },
-        )
+        root.post {
+            try {
+                popupWindow!!.showAtLocation(
+                    root,
+                    Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
+                    0,
+                    0,
+                )
+            } catch (_: BadTokenException) {
+                Log.e(
+                    "showHint",
+                    "Bad token when showing hint. This is not unusual when app is rotating while showing the hint.",
+                )
+            }
+        }
     }
 
     private fun showSupportHintIfRequired() {
@@ -648,7 +642,7 @@ class ExperimentListActivity : AppCompatActivity() {
                 ).versionName!!.split("-".toRegex()).dropLastWhile { it.isEmpty() }
                     .toTypedArray()[0] != Const.phyphoxCatHintRelease
             ) return
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             return
         }
 
@@ -672,15 +666,9 @@ class ExperimentListActivity : AppCompatActivity() {
         if (result.isEmpty()) {
             val tempPath = File(filesDir, "temp_zip")
             val extensions = arrayOf<String?>("phyphox")
-            val files: List<File> =
-                tempPath
-                    .walkTopDown()
-                    .filter { it.isFile }
-                    .filter { file ->
-                        extensions.isEmpty() ||
-                            extensions.any { ext -> file.extension.equals(ext, ignoreCase = true) }
-                    }
-                    .toList()
+            val files: List<File> = tempPath.walkTopDown().filter { it.isFile }.filter { file ->
+                extensions.isEmpty() || extensions.any { ext -> file.extension.equals(ext, ignoreCase = true) }
+            }.toList()
             if (files.isEmpty()) {
                 Toast.makeText(
                     this,
@@ -738,13 +726,13 @@ class ExperimentListActivity : AppCompatActivity() {
                 val view = inflater.inflate(R.layout.open_multipe_dialog, null)
                 builder.setView(view).setPositiveButton(
                     R.string.open_save_all,
-                ) { dialog: DialogInterface?, id: Int ->
+                ) { dialog: DialogInterface?, _: Int ->
                     zipRepository.saveExperimentsToMainList(ExperimentListEnvironment(this))
                     experimentRepository!!.loadAndShowMainExperimentList(this)
                     dialog!!.dismiss()
                 }.setNegativeButton(
                     R.string.cancel,
-                ) { dialog: DialogInterface?, id: Int -> dialog!!.dismiss() }
+                ) { dialog: DialogInterface?, _: Int -> dialog!!.dismiss() }
                 val dialog = builder.create()
 
                 (view.findViewById<View?>(R.id.open_multiple_dialog_instructions) as TextView).setText(
@@ -833,10 +821,9 @@ class ExperimentListActivity : AppCompatActivity() {
         if (progress != null) progress!!.dismiss()
 
         val scheme = intent.scheme ?: return
-        var isZip = false
+        var isZip: Boolean
         if (scheme == ContentResolver.SCHEME_FILE) {
-            if (!intent.data!!.path!!
-                    .startsWith(filesDir.path) && ContextCompat.checkSelfPermission(
+            if (!intent.data!!.path!!.startsWith(filesDir.path) && ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                 ) != PackageManager.PERMISSION_GRANTED
@@ -862,10 +849,10 @@ class ExperimentListActivity : AppCompatActivity() {
                     return
                 }
                 inputStream.close()
-            } catch (e: FileNotFoundException) {
+            } catch (_: FileNotFoundException) {
                 Toast.makeText(this, "Error: File not found.", Toast.LENGTH_LONG).show()
                 return
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 Toast.makeText(this, "Error: IOException.", Toast.LENGTH_LONG).show()
                 return
             }
@@ -901,7 +888,7 @@ class ExperimentListActivity : AppCompatActivity() {
         }
     }
 
-    protected fun showNewExperimentDialog() {
+    fun showNewExperimentDialog() {
         newExperimentDialogOpen = true
 
         val rotate45In = AnimationUtils.loadAnimation(baseContext, R.anim.experiment_list_fab_rotate45)
@@ -927,7 +914,7 @@ class ExperimentListActivity : AppCompatActivity() {
         backgroundDimmer!!.isClickable = true
     }
 
-    protected fun hideNewExperimentDialog() {
+    fun hideNewExperimentDialog() {
         newExperimentDialogOpen = false
 
         val rotate0In = AnimationUtils.loadAnimation(baseContext, R.anim.experiment_list_fab_rotate0)
@@ -953,7 +940,7 @@ class ExperimentListActivity : AppCompatActivity() {
         backgroundDimmer!!.startAnimation(fadeTransparent)
     }
 
-    protected fun scanQRCode() {
+    fun scanQRCode() {
         val qrScan = IntentIntegrator(this)
 
         qrScan.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES)
@@ -964,40 +951,27 @@ class ExperimentListActivity : AppCompatActivity() {
         qrScan.initiateScan()
     }
 
-    protected fun showQRScanError(msg: String?, isError: Boolean) {
+    fun showQRScanError(msg: String?, isError: Boolean) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(msg).setTitle(if (isError) R.string.newExperimentQRErrorTitle else R.string.newExperimentQR)
             .setPositiveButton(
                 if (isError) R.string.tryagain else R.string.doContinue,
-                object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, id: Int) {
-                        scanQRCode()
-                    }
-                },
-            ).setNegativeButton(
+            ) { _, _ -> scanQRCode() }.setNegativeButton(
                 getString(R.string.cancel),
-                object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, id: Int) {
-                    }
-                },
-            )
-        this.runOnUiThread(
-            object : Runnable {
-                override fun run() {
-                    val dialog = builder.create()
-                    dialog.show()
-                }
-            },
-        )
+            ) { _, _ -> }
+        this.runOnUiThread {
+            val dialog = builder.create()
+            dialog.show()
+        }
     }
 
     fun showBluetoothExperimentReadError(msg: String?, device: BluetoothDevice) {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(msg).setTitle(R.string.newExperimentBTReadErrorTitle).setPositiveButton(
             R.string.tryagain,
-        ) { dialog, id -> loadExperimentFromBluetoothDevice(device) }.setNegativeButton(
+        ) { _, _ -> loadExperimentFromBluetoothDevice(device) }.setNegativeButton(
             getString(R.string.cancel),
-        ) { dialog, id -> }
+        ) { _, _ -> }
         this.runOnUiThread {
             val dialog = builder.create()
             dialog.show()
@@ -1013,7 +987,7 @@ class ExperimentListActivity : AppCompatActivity() {
                     Locale.getDefault(),
                 ).startsWith("https://") || textResult.lowercase(Locale.getDefault()).startsWith("phyphox://")
             ) {
-                //This is an URL, open it
+                //This is a URL, open it
                 //Create an intent for this new file
                 val urlIntent = Intent(this, Experiment::class.java)
                 urlIntent.setData(
@@ -1045,7 +1019,11 @@ class ExperimentListActivity : AppCompatActivity() {
                 val index = data[11].toInt()
                 val count = data[12].toInt()
 
-                if ((currentQRcrc32 >= 0 && currentQRcrc32 != crc32) || (currentQRsize >= 0 && count != currentQRsize) || (currentQRsize >= 0 && index >= currentQRsize)) {
+                if (
+                    (currentQRcrc32 >= 0 && currentQRcrc32 != crc32) ||
+                    (currentQRsize >= 0 && count != currentQRsize) ||
+                    (currentQRsize in 0..index)
+                ) {
                     showQRScanError(getString(R.string.newExperimentQRcrcMismatch), true)
                     currentQRsize = -1
                     currentQRcrc32 = -1
@@ -1053,11 +1031,11 @@ class ExperimentListActivity : AppCompatActivity() {
                 if (currentQRcrc32 < 0) {
                     currentQRcrc32 = crc32
                     currentQRsize = count
-                    currentQRdataPackets = arrayOfNulls<ByteArray>(count)
+                    currentQRdataPackets = arrayOfNulls(count)
                 }
-                currentQRdataPackets!![index] = Arrays.copyOfRange(data, 13, data.size)
+                currentQRdataPackets!![index] = data.copyOfRange(13, data.size)
                 var missing = 0
-                for (i in 0..<currentQRsize) {
+                for (i in 0 downTo currentQRsize) {
                     if (currentQRdataPackets!![i] == null) missing++
                 }
                 if (missing == 0) {
@@ -1085,12 +1063,12 @@ class ExperimentListActivity : AppCompatActivity() {
 
                     var totalSize = 0
 
-                    for (i in 0..<currentQRsize) {
+                    for (i in 0 downTo currentQRsize) {
                         totalSize += currentQRdataPackets!![i]!!.size
                     }
                     val dataReceived = ByteArray(totalSize)
                     var offset = 0
-                    for (i in 0..<currentQRsize) {
+                    for (i in 0 downTo currentQRsize) {
                         System.arraycopy(
                             currentQRdataPackets!![i],
                             0,
@@ -1120,7 +1098,7 @@ class ExperimentListActivity : AppCompatActivity() {
                         val out = FileOutputStream(zipFile)
                         out.write(zipData)
                         out.close()
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         showQRScanError("Could not write QR content to zip file.", true)
                         return
                     }
@@ -1158,23 +1136,22 @@ class ExperimentListActivity : AppCompatActivity() {
         val hiddenBluetoothRepository = ExperimentRepository()
         hiddenBluetoothRepository.loadHiddenBluetoothExperiments(this)
 
-        val experiments: MutableSet<String?> = HashSet<String?>()
+        val experiments: MutableSet<String?> = HashSet()
         if (device.getName() != null) {
             for (name in hiddenBluetoothRepository.getBluetoothDeviceNameList().keys) {
                 if (device.getName().contains(name)) {
-                    val experimentsForName = hiddenBluetoothRepository.getBluetoothDeviceNameList().get(name)
+                    val experimentsForName = hiddenBluetoothRepository.getBluetoothDeviceNameList()[name]
                     if (experimentsForName != null) experiments.addAll(experimentsForName)
                 }
             }
         }
 
         for (uuid in uuids) {
-            val experimentsForUUID = hiddenBluetoothRepository.getBluetoothDeviceUUIDList().get(uuid)
+            val experimentsForUUID = hiddenBluetoothRepository.getBluetoothDeviceUUIDList()[uuid]
             if (experimentsForUUID != null) experiments.addAll(experimentsForUUID)
         }
-        val supportedExperiments = experiments
 
-        if (supportedExperiments.isEmpty() && phyphoxService) {
+        if (experiments.isEmpty() && phyphoxService) {
             //We do not have any experiments for this device, so there is no choice. Just load the experiment provided by the device.
             loadExperimentFromBluetoothDevice(device)
             return
@@ -1188,39 +1165,32 @@ class ExperimentListActivity : AppCompatActivity() {
 
         val bleRepository = ExperimentRepository()
 
-        if (!supportedExperiments.isEmpty()) {
+        if (!experiments.isEmpty()) {
             builder.setPositiveButton(
                 R.string.open_save_all,
-                object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface, id: Int) {
-                        bleRepository.saveExperimentsToMainList(ExperimentListEnvironment(parent))
-                        experimentRepository!!.loadAndShowMainExperimentList(parent)
-                        dialog.dismiss()
-                    }
-                },
-            )
+            ) { dialog, _ ->
+                bleRepository.saveExperimentsToMainList(ExperimentListEnvironment(parent))
+                experimentRepository!!.loadAndShowMainExperimentList(parent)
+                dialog.dismiss()
+            }
         }
         builder.setNegativeButton(
             R.string.cancel,
-            DialogInterface.OnClickListener { dialog: DialogInterface?, id: Int -> dialog!!.dismiss() },
-        )
+        ) { dialog: DialogInterface?, _: Int -> dialog!!.dismiss() }
 
         var instructions = ""
-        if (!supportedExperiments.isEmpty()) {
+        if (!experiments.isEmpty()) {
             instructions += getString(R.string.open_bluetooth_assets)
         }
-        if (!supportedExperiments.isEmpty() && phyphoxService) instructions += "\n\n"
+        if (!experiments.isEmpty() && phyphoxService) instructions += "\n\n"
         if (phyphoxService) {
             instructions += getString(R.string.newExperimentBluetoothLoadFromDeviceInfo)
             builder.setNeutralButton(
                 R.string.newExperimentBluetoothLoadFromDevice,
-                object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface, id: Int) {
-                        loadExperimentFromBluetoothDevice(device)
-                        dialog.dismiss()
-                    }
-                },
-            )
+            ) { dialog, _ ->
+                loadExperimentFromBluetoothDevice(device)
+                dialog.dismiss()
+            }
         }
         val dialog = builder.create()
 
@@ -1229,10 +1199,10 @@ class ExperimentListActivity : AppCompatActivity() {
         dialog.setTitle(parent.getResources().getString(R.string.open_bluetooth_assets_title))
 
         val assetManager = parent.assets
-        for (file in supportedExperiments) {
+        for (file in experiments) {
             //Load details for each experiment
             try {
-                val input = assetManager.open("experiments/" + file)
+                val input = assetManager.open("experiments/$file")
                 val data = ExperimentLoadInfoData(input, file, null, true)
                 val shortInfo = AssetExperimentLoader.loadExperimentShortInfo(
                     data,
@@ -1242,14 +1212,14 @@ class ExperimentListActivity : AppCompatActivity() {
                     bleRepository.addExperiment(shortInfo, this)
                 }
                 input.close()
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 Log.e(
                     "ExperimentList",
-                    "Error: Could not load experiment \"" + file + "\" from asset.",
+                    "Error: Could not load experiment \"$file\" from asset.",
                 )
                 Toast.makeText(
                     parent,
-                    "Error: Could not load experiment \"" + file + "\" from asset.",
+                    "Error: Could not load experiment \"$file\" from asset.",
                     Toast.LENGTH_LONG,
                 ).show()
             }
@@ -1271,55 +1241,45 @@ class ExperimentListActivity : AppCompatActivity() {
         if (!isFatal) {
             builder.setPositiveButton(
                 if (isError) R.string.tryagain else R.string.doContinue,
-                object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, id: Int) {
-                        //(new RunBluetoothScan()).execute();
-                        val bluetoothNameKeySet = experimentRepository!!.getBluetoothDeviceNameList().keys
-                        val bluetoothUUIDKeySet = experimentRepository!!.getBluetoothDeviceUUIDList().keys
+            ) { _, _ -> //(new RunBluetoothScan()).execute();
+                val bluetoothNameKeySet = experimentRepository!!.getBluetoothDeviceNameList().keys
+                val bluetoothUUIDKeySet = experimentRepository!!.getBluetoothDeviceUUIDList().keys
 
-                        BluetoothScanner(
-                            parent,
-                            bluetoothNameKeySet,
-                            bluetoothUUIDKeySet,
-                            object : BluetoothScanListener {
-                                override fun onBluetoothDeviceFound(result: BluetoothDeviceInfo) {
-                                    openBluetoothExperiments(
-                                        result.device,
-                                        result.uuids,
-                                        result.phyphoxService,
-                                    )
-                                }
+                BluetoothScanner(
+                    parent,
+                    bluetoothNameKeySet,
+                    bluetoothUUIDKeySet,
+                    object : BluetoothScanListener {
+                        override fun onBluetoothDeviceFound(result: BluetoothDeviceInfo) {
+                            openBluetoothExperiments(
+                                result.device,
+                                result.uuids,
+                                result.phyphoxService,
+                            )
+                        }
 
-                                override fun onBluetoothScanError(
-                                    msg: String?,
-                                    isError: Boolean?,
-                                    isFatal: Boolean?,
-                                ) {
-                                    showBluetoothScanError(
-                                        getString(R.string.bt_android_version),
-                                        true,
-                                        true,
-                                    )
-                                }
-                            },
-                        ).execute()
-                    }
-                },
-            )
+                        override fun onBluetoothScanError(
+                            msg: String?,
+                            isError: Boolean?,
+                            isFatal: Boolean?,
+                        ) {
+                            showBluetoothScanError(
+                                msg = getString(R.string.bt_android_version),
+                                isError = true,
+                                isFatal = true,
+                            )
+                        }
+                    },
+                ).execute()
+            }
         }
         builder.setNegativeButton(
             getString(R.string.cancel),
-            object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, id: Int) {
-                }
-            },
-        )
-        runOnUiThread(
-            Runnable {
-                val dialog = builder.create()
-                dialog.show()
-            },
-        )
+        ) { _, _ -> }
+        runOnUiThread {
+            val dialog = builder.create()
+            dialog.show()
+        }
     }
 
     //Displays a warning message that some experiments might damage the phone
@@ -1338,7 +1298,7 @@ class ExperimentListActivity : AppCompatActivity() {
         adb.setTitle(R.string.warning)
         adb.setPositiveButton(
             getText(R.string.ok),
-        ) { dialog, which -> //User clicked ok. Did the user decide to skip future warnings?
+        ) { _, _ -> //User clicked ok. Did the user decide to skip future warnings?
             var skipWarning = false
             if (dontShowAgain.isChecked) skipWarning = true
 
@@ -1370,14 +1330,14 @@ class ExperimentListActivity : AppCompatActivity() {
         neDialog.setTitle(R.string.newExperiment)
         neDialog.setPositiveButton(
             getText(R.string.ok),
-        ) { dialog: DialogInterface?, which: Int ->
+        ) { _: DialogInterface?, _: Int ->
             //Here we have to create the experiment definition file
             val creator = SimpleExperimentCreator(c, neLayout)
             creator.generateAndOpenSimpleExperiment()
         }
         neDialog.setNegativeButton(
             getText(R.string.cancel),
-        ) { dialog: DialogInterface?, which: Int -> }
+        ) { _: DialogInterface?, _: Int -> }
 
         neDialog.show()
     }
