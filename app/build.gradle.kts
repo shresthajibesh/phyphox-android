@@ -202,8 +202,6 @@ dependencies {
     //gson + serilization
     implementation(libs.gson)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.xmlutil.core)
-    implementation(libs.xmlutil.serialization)
 
     add("androidTestScreenshotImplementation", libs.junit)
     add("androidTestScreenshotImplementation", libs.fastlane.screengrab)

@@ -10,13 +10,10 @@ import de.rwth_aachen.phyphox.libs.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
+import nl.adaptivity.xmlutil.QName
 import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.serialization.decodeFromStream
-import nl.adaptivity.xmlutil.xmlStreaming
 import javax.inject.Inject
-import kotlin.io.use
-import kotlin.use
 
 @HiltViewModel
 class ExperimentListViewModel @Inject constructor(
@@ -55,20 +52,26 @@ class ExperimentListDataSourceImpl @Inject constructor(
 
     override suspend fun getExperimentsFromAssets(): Unit = withContext(dispatcher) {
         val assetManager = context.assets
-        val xml = XML.v1
-        val streams = assetManager.list("experiments")?.filter { it.endsWith(".phyphox") }?.map { fileName ->
-            assetManager.open("experiments/$fileName").use { inputStream ->
-                inputStream
+        val xml = XML.v1.invoke {
+            this.repairNamespaces = true
+            isCollectingNSAttributes = false
+            this.recommended_1_0_0 {
+                this.autoPolymorphic = true
+                this.ignoreUnknownChildren()
+
             }
+        }
+        val streams = assetManager.list("experiments")?.filter { it.endsWith(".phyphox") }?.map { fileName ->
+            val reader = assetManager.open("experiments/$fileName").reader()
+            xml.decodeFromStream<PhyphoxExperiment>(
+                deserializer = PhyphoxExperiment.serializer(),
+                source = reader,
+                rootName = QName.valueOf("phyphox"),
+            )
         } ?: emptyList()
 
 
-        val files = streams.map {
-            it.reader(Charsets.UTF_8).use { reader ->
-                xml.decodeFromString<PhyphoxExperiment>(reader.readText())
-            }
-        }
-        files.forEach {
+        streams.forEach {
             Log.d("Assetrs",it.locale)
         }
 
