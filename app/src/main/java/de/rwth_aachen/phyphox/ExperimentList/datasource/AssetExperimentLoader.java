@@ -465,9 +465,7 @@ public class AssetExperimentLoader {
                     addBluetoothInfos(shortInfo);
                     addExperiment(shortInfo);
                 }
-
             }
-
         } catch (IOException e) {
             Toast.makeText(environment.context, "Error: Could not load internal experiment list. " + e, Toast.LENGTH_LONG).show();
         }

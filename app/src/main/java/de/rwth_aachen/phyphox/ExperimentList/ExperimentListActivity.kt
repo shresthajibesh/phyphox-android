@@ -194,7 +194,7 @@ class ExperimentListActivity : AppCompatActivity() {
         if (!displayDoNotDamageYourPhone()) { //Show the do-not-damage-your-phone-warning
             showSupportHintIfRequired()
         }
-
+        viewModel.ld()
         setWindowInsets()
 
         setUpOnClickListener()
