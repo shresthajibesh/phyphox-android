@@ -27,18 +27,14 @@ import android.text.Spanned
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager.BadTokenException
 import android.view.animation.AnimationUtils
-import android.widget.CheckBox
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -76,6 +72,11 @@ import de.rwth_aachen.phyphox.SettingsActivity.SettingsFragment
 import de.rwth_aachen.phyphox.camera.depth.DepthInput
 import de.rwth_aachen.phyphox.camera.helper.CameraHelper.getCamera2FormattedCaps
 import de.rwth_aachen.phyphox.databinding.ActivityExperimentListBinding
+import de.rwth_aachen.phyphox.databinding.DonotshowagainBinding
+import de.rwth_aachen.phyphox.databinding.LayoutCreditsBinding
+import de.rwth_aachen.phyphox.databinding.NewExperimentBinding
+import de.rwth_aachen.phyphox.databinding.OpenMultipeDialogBinding
+import de.rwth_aachen.phyphox.databinding.SupportPhyphoxHintBinding
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -102,9 +103,6 @@ class ExperimentListActivity : AppCompatActivity() {
 
     var popupWindow: PopupWindow? = null
 
-
-
-    private lateinit var binding: ActivityExperimentListBinding
 
     @Inject
     lateinit var experimentRepository: ExperimentRepository
@@ -155,7 +153,7 @@ class ExperimentListActivity : AppCompatActivity() {
     }
 
     val onScrollChangedListener: ReportingScrollView.OnScrollChangedListener =
-        ReportingScrollView.OnScrollChangedListener { scrollView, x, y, oldx, oldy ->
+        ReportingScrollView.OnScrollChangedListener { scrollView, _, y, _, _ ->
             val bottom = scrollView!!.getChildAt(scrollView.childCount - 1).bottom
             if (y + 10 > bottom - scrollView.height) {
                 scrollView.setOnScrollChangedListener(null)
@@ -165,6 +163,16 @@ class ExperimentListActivity : AppCompatActivity() {
                 }
             }
         }
+    //endregion
+
+    // region - view bindings
+    private lateinit var binding: ActivityExperimentListBinding
+    private val creditsLayout by lazy { LayoutCreditsBinding.inflate(layoutInflater) }
+    private val supportHintBinding by lazy { SupportPhyphoxHintBinding.inflate(layoutInflater) }
+
+    private val openMultipleDialogBinding by lazy { OpenMultipeDialogBinding.inflate(layoutInflater) }
+    private val doNotShowaAgainBinding by lazy { DonotshowagainBinding.inflate(layoutInflater) }
+
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -182,33 +190,36 @@ class ExperimentListActivity : AppCompatActivity() {
             showSupportHintIfRequired()
         }
 
-        WindowInsetHelper.setInsets(
-            findViewById(R.id.experimentList),
-            WindowInsetHelper.ApplyTo.PADDING,
-            WindowInsetHelper.ApplyTo.IGNORE,
-            WindowInsetHelper.ApplyTo.PADDING,
-            WindowInsetHelper.ApplyTo.PADDING,
-        )
-        WindowInsetHelper.setInsets(
-            findViewById(R.id.expListHeader),
-            WindowInsetHelper.ApplyTo.PADDING,
-            WindowInsetHelper.ApplyTo.PADDING,
-            WindowInsetHelper.ApplyTo.PADDING,
-            WindowInsetHelper.ApplyTo.IGNORE,
-        )
-        WindowInsetHelper.setInsets(
-            findViewById(R.id.newExperiment),
-            WindowInsetHelper.ApplyTo.IGNORE,
-            WindowInsetHelper.ApplyTo.IGNORE,
-            WindowInsetHelper.ApplyTo.MARGIN,
-            WindowInsetHelper.ApplyTo.MARGIN,
-        )
+        setWindowInsets()
 
         setUpOnClickListener()
 
         handleIntent(intent)
     }
 
+    private fun setWindowInsets() {
+        WindowInsetHelper.setInsets(
+            binding.experimentList,
+            WindowInsetHelper.ApplyTo.PADDING,
+            WindowInsetHelper.ApplyTo.IGNORE,
+            WindowInsetHelper.ApplyTo.PADDING,
+            WindowInsetHelper.ApplyTo.PADDING,
+        )
+        WindowInsetHelper.setInsets(
+            binding.expListHeader,
+            WindowInsetHelper.ApplyTo.PADDING,
+            WindowInsetHelper.ApplyTo.PADDING,
+            WindowInsetHelper.ApplyTo.PADDING,
+            WindowInsetHelper.ApplyTo.IGNORE,
+        )
+        WindowInsetHelper.setInsets(
+            binding.newExperiment,
+            WindowInsetHelper.ApplyTo.IGNORE,
+            WindowInsetHelper.ApplyTo.IGNORE,
+            WindowInsetHelper.ApplyTo.MARGIN,
+            WindowInsetHelper.ApplyTo.MARGIN,
+        )
+    }
 
     override fun onResume() {
         super.onResume()
@@ -502,14 +513,11 @@ class ExperimentListActivity : AppCompatActivity() {
     }
 
     private fun openCreditDialog() {
+
         //Create the credits as an AlertDialog
         val ctw = ContextThemeWrapper(this@ExperimentListActivity, R.style.Theme_Phyphox)
         val credits = AlertDialog.Builder(ctw)
-        val creditsInflater = ctw.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val creditLayout = creditsInflater.inflate(R.layout.credits, null)
 
-        //Set the credit texts, which require HTML markup
-        val tv = creditLayout.findViewById<View?>(R.id.creditNames) as TextView
 
         val creditsNamesSpannable = SpannableStringBuilder()
         var first = true
@@ -528,7 +536,7 @@ class ExperimentListActivity : AppCompatActivity() {
                 Spanned.SPAN_INCLUSIVE_INCLUSIVE,
             )
         }
-        tv.text = creditsNamesSpannable
+        creditsLayout.creditNames.text = creditsNamesSpannable
 
         //The following texts are not translateable. Get them from the basic English version.
         var conf = resources.configuration
@@ -536,20 +544,14 @@ class ExperimentListActivity : AppCompatActivity() {
         conf.setLocale(Locale.ENGLISH)
         val localizedRes = baseContext.createConfigurationContext(conf).resources
 
-        val tvA = creditLayout.findViewById<View?>(R.id.creditsApache) as TextView
-        tvA.text = Html.fromHtml(localizedRes.getString(R.string.creditsApache))
-        val tvB = creditLayout.findViewById<View?>(R.id.creditsZxing) as TextView
-        tvB.text = Html.fromHtml(localizedRes.getString(R.string.creditsZxing))
-        val tvC = creditLayout.findViewById<View?>(R.id.creditsPahoMQTT) as TextView
-        tvC.text = Html.fromHtml(localizedRes.getString(R.string.creditsPahoMQTT))
+        creditsLayout.creditsApache.text = Html.fromHtml(localizedRes.getString(R.string.creditsApache))
+        creditsLayout.creditsZxing.text = Html.fromHtml(localizedRes.getString(R.string.creditsZxing))
+        creditsLayout.creditsPahoMQTT.text = Html.fromHtml(localizedRes.getString(R.string.creditsPahoMQTT))
 
-        //Finish alertDialog builder
-        credits.setView(creditLayout)
+        credits.setView(creditsLayout.root)
         credits.setPositiveButton(
             getText(R.string.close),
-        ) { _, _ ->
-            //Nothing to do. Just close the thing.
-        }
+        ) { _, _ -> }
 
         //Present the dialog
         credits.show()
@@ -558,17 +560,13 @@ class ExperimentListActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     private fun showSupportHint() {
         if (popupWindow != null) return
-        val inflater = this.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val hintView = inflater.inflate(R.layout.support_phyphox_hint, window.decorView.parent as ViewGroup)
-        val text = hintView.findViewById<TextView>(R.id.support_phyphox_hint_text)
-        text.text = getString(R.string.categoryPhyphoxOrgHint)
-        val iv = hintView.findViewById<ImageView>(R.id.support_phyphox_hint_arrow)
-        val lp = iv.layoutParams as LinearLayout.LayoutParams
-        lp.gravity = Gravity.CENTER_HORIZONTAL
-        iv.setLayoutParams(lp)
-
+        supportHintBinding.supportPhyphoxHintText.text = getString(R.string.categoryPhyphoxOrgHint)
+        supportHintBinding.supportPhyphoxHintArrow.apply {
+            val layoutParams = this.layoutParams as LinearLayout.LayoutParams
+            layoutParams.gravity = Gravity.CENTER_HORIZONTAL
+        }
         popupWindow = PopupWindow(
-            hintView,
+            supportHintBinding.root,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
         ).apply {
@@ -577,22 +575,16 @@ class ExperimentListActivity : AppCompatActivity() {
             isTouchable = false
             isFocusable = false
         }
-
-
-        val ll = hintView.findViewById<LinearLayout>(R.id.support_phyphox_hint_root)
-
-        ll.setOnTouchListener { _: View?, _: MotionEvent? ->
+        supportHintBinding.supportPhyphoxHintRoot.setOnTouchListener { _: View?, _: MotionEvent? ->
             if (popupWindow != null) popupWindow!!.dismiss()
             true
         }
 
         popupWindow!!.setOnDismissListener { popupWindow = null }
-
-        val root = findViewById<View>(R.id.rootExperimentList)
-        root.post {
+        binding.rootExperimentList.post {
             try {
                 popupWindow!!.showAtLocation(
-                    root,
+                    binding.rootExperimentList,
                     Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
                     0,
                     0,
@@ -692,31 +684,23 @@ class ExperimentListActivity : AppCompatActivity() {
                     }
                 }
 
-                val builder = AlertDialog.Builder(this)
-                val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-                val view = inflater.inflate(R.layout.open_multipe_dialog, null)
-                builder.setView(view).setPositiveButton(
-                    R.string.open_save_all,
-                ) { dialog: DialogInterface?, _: Int ->
-                    zipRepository.saveExperimentsToMainList(ExperimentListEnvironment(this))
-                    experimentRepository!!.loadAndShowMainExperimentList(this)
-                    dialog!!.dismiss()
-                }.setNegativeButton(
-                    R.string.cancel,
-                ) { dialog: DialogInterface?, _: Int -> dialog!!.dismiss() }
+                val builder =
+                    AlertDialog.Builder(this).setTitle(R.string.open_zip_title).setView(openMultipleDialogBinding.root)
+                        .setPositiveButton(R.string.open_save_all) { dialog: DialogInterface, _: Int ->
+                            zipRepository.saveExperimentsToMainList(ExperimentListEnvironment(this))
+                            experimentRepository.loadAndShowMainExperimentList(this)
+                            dialog.dismiss()
+                        }.setNegativeButton(R.string.cancel) { dialog: DialogInterface, _: Int ->
+                            dialog.dismiss()
+                        }
                 val dialog = builder.create()
 
-                (view.findViewById<View?>(R.id.open_multiple_dialog_instructions) as TextView).setText(
-                    R.string.open_zip_dialog_instructions,
+                openMultipleDialogBinding.openMultipleDialogInstructions.setText(R.string.open_zip_dialog_instructions)
+                zipRepository.addExperimentCategoriesToLinearLayout(
+                    /* target = */ this.openMultipleDialogBinding.openMultipleDialogList,
+                    /* res = */ this.getResources(),
                 )
-
-                val catList = view.findViewById<View?>(R.id.open_multiple_dialog_list) as LinearLayout
-
-                dialog.setTitle(getResources().getString(R.string.open_zip_title))
-
-                zipRepository.addExperimentCategoriesToLinearLayout(catList, this.getResources())
-
                 dialog.show()
             }
         } else {
@@ -991,11 +975,7 @@ class ExperimentListActivity : AppCompatActivity() {
                 val index = data[11].toInt()
                 val count = data[12].toInt()
 
-                if (
-                    (currentQRcrc32 >= 0 && currentQRcrc32 != crc32) ||
-                    (currentQRsize >= 0 && count != currentQRsize) ||
-                    (currentQRsize in 0..index)
-                ) {
+                if ((currentQRcrc32 >= 0 && currentQRcrc32 != crc32) || (currentQRsize >= 0 && count != currentQRsize) || (currentQRsize in 0..index)) {
                     showQRScanError(getString(R.string.newExperimentQRcrcMismatch), true)
                     currentQRsize = -1
                     currentQRcrc32 = -1
@@ -1129,26 +1109,21 @@ class ExperimentListActivity : AppCompatActivity() {
             return
         }
 
-        val builder = AlertDialog.Builder(parent)
-        val inflater = parent.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
-        val view = inflater.inflate(R.layout.open_multipe_dialog, null)
-        builder.setView(view)
-
-        val bleRepository = ExperimentRepository()
+        val builder =
+            AlertDialog.Builder(parent).setTitle(parent.getResources().getString(R.string.open_bluetooth_assets_title))
+                .setView(openMultipleDialogBinding.root).setNegativeButton(
+                    R.string.cancel,
+                ) { dialog: DialogInterface?, _: Int -> dialog!!.dismiss() }
 
         if (!experiments.isEmpty()) {
             builder.setPositiveButton(
                 R.string.open_save_all,
             ) { dialog, _ ->
-                bleRepository.saveExperimentsToMainList(ExperimentListEnvironment(parent))
-                experimentRepository!!.loadAndShowMainExperimentList(parent)
+                experimentRepository.saveExperimentsToMainList(ExperimentListEnvironment(parent))
+                experimentRepository.loadAndShowMainExperimentList(parent)
                 dialog.dismiss()
             }
         }
-        builder.setNegativeButton(
-            R.string.cancel,
-        ) { dialog: DialogInterface?, _: Int -> dialog!!.dismiss() }
 
         var instructions = ""
         if (!experiments.isEmpty()) {
@@ -1166,9 +1141,8 @@ class ExperimentListActivity : AppCompatActivity() {
         }
         val dialog = builder.create()
 
-        (view.findViewById<View?>(R.id.open_multiple_dialog_instructions) as TextView).text = instructions
+        openMultipleDialogBinding.openMultipleDialogInstructions.text = instructions
 
-        dialog.setTitle(parent.getResources().getString(R.string.open_bluetooth_assets_title))
 
         val assetManager = parent.assets
         for (file in experiments) {
@@ -1181,7 +1155,7 @@ class ExperimentListActivity : AppCompatActivity() {
                     ExperimentListEnvironment(parent),
                 )
                 if (shortInfo != null) {
-                    bleRepository.addExperiment(shortInfo, this)
+                    experimentRepository.addExperiment(shortInfo, this)
                 }
                 input.close()
             } catch (_: IOException) {
@@ -1197,10 +1171,11 @@ class ExperimentListActivity : AppCompatActivity() {
             }
         }
 
-        val parentLayout = view.findViewById<LinearLayout>(R.id.open_multiple_dialog_list)
-        bleRepository.setPreselectedBluetoothAddress(device.address)
-        bleRepository.addExperimentCategoriesToLinearLayout(parentLayout, this.getResources())
-
+        experimentRepository.setPreselectedBluetoothAddress(device.address)
+        experimentRepository.addExperimentCategoriesToLinearLayout(
+            /* target = */ openMultipleDialogBinding.openMultipleDialogList,
+            /* res = */ this.getResources(),
+        )
         dialog.show()
     }
 
@@ -1258,27 +1233,18 @@ class ExperimentListActivity : AppCompatActivity() {
     private fun displayDoNotDamageYourPhone(): Boolean {
         //Use the app theme and create an AlertDialog-builder
         val ctw = ContextThemeWrapper(this, R.style.Theme_Phyphox_DayNight)
-        val adb = AlertDialog.Builder(ctw)
-        val adbInflater = ctw.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val warningLayout = adbInflater.inflate(R.layout.donotshowagain, null)
+        val adb =
+            AlertDialog.Builder(ctw).setView(doNotShowaAgainBinding.root).setTitle(R.string.warning).setPositiveButton(
+                    getText(R.string.ok),
+                ) { _, _ -> //User clicked ok. Did the user decide to skip future warnings?
+                    var skipWarning = false
+                    if (doNotShowaAgainBinding.donotshowagain.isChecked) skipWarning = true
 
-        //This reference is used to address a do-not-show-again checkbox within the dialog
-        val dontShowAgain = warningLayout.findViewById<View?>(R.id.donotshowagain) as CheckBox
-
-        //Setup AlertDialog builder
-        adb.setView(warningLayout)
-        adb.setTitle(R.string.warning)
-        adb.setPositiveButton(
-            getText(R.string.ok),
-        ) { _, _ -> //User clicked ok. Did the user decide to skip future warnings?
-            var skipWarning = false
-            if (dontShowAgain.isChecked) skipWarning = true
-
-            //Store user decision
-            getSharedPreferences(Const.PREFS_NAME, 0).edit {
-                putBoolean("skipWarning", skipWarning)
-            }
-        }
+                    //Store user decision
+                    getSharedPreferences(Const.PREFS_NAME, 0).edit {
+                        putBoolean("skipWarning", skipWarning)
+                    }
+                }
 
         //Check preferences if the user does not want to see warnings
         val settings = getSharedPreferences(Const.PREFS_NAME, 0)
@@ -1292,26 +1258,16 @@ class ExperimentListActivity : AppCompatActivity() {
     }
 
     //This displays a rather complex dialog to allow users to set up a simple experiment
-    private fun openSimpleExperimentConfigurationDialog(c: Context?) {
+    private fun openSimpleExperimentConfigurationDialog(context: Context?) {
         val ctw = ContextThemeWrapper(this, R.style.Theme_Phyphox_DayNight)
-        val neDialog = AlertDialog.Builder(ctw)
-        val neInflater = ctw.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val neLayout = neInflater.inflate(R.layout.new_experiment, null)
-
-        neDialog.setView(neLayout)
-        neDialog.setTitle(R.string.newExperiment)
-        neDialog.setPositiveButton(
-            getText(R.string.ok),
-        ) { _: DialogInterface?, _: Int ->
-            //Here we have to create the experiment definition file
-            val creator = SimpleExperimentCreator(c, neLayout)
-            creator.generateAndOpenSimpleExperiment()
-        }
-        neDialog.setNegativeButton(
-            getText(R.string.cancel),
-        ) { _: DialogInterface?, _: Int -> }
-
-        neDialog.show()
+        val newExperimentBinding = NewExperimentBinding.inflate(layoutInflater)
+        AlertDialog.Builder(ctw).setView(newExperimentBinding.root).setTitle(R.string.newExperiment).setPositiveButton(
+                getText(R.string.ok),
+            ) { _: DialogInterface?, _: Int ->
+                val creator = SimpleExperimentCreator(context, newExperimentBinding.root)
+                creator.generateAndOpenSimpleExperiment()
+            }.setNegativeButton(
+                getText(R.string.cancel),
+            ) { _: DialogInterface?, _: Int -> }.show()
     }
 }
-
