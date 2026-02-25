@@ -49,8 +49,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.zxing.integration.android.IntentIntegrator
+import dagger.hilt.android.AndroidEntryPoint
 import de.rwth_aachen.phyphox.Bluetooth.BluetoothExperimentLoader
 import de.rwth_aachen.phyphox.Bluetooth.BluetoothExperimentLoader.BluetoothExperimentLoaderCallback
 import de.rwth_aachen.phyphox.Bluetooth.BluetoothScanDialog.BluetoothDeviceInfo
@@ -75,6 +75,7 @@ import de.rwth_aachen.phyphox.SettingsActivity.SettingsActivity
 import de.rwth_aachen.phyphox.SettingsActivity.SettingsFragment
 import de.rwth_aachen.phyphox.camera.depth.DepthInput
 import de.rwth_aachen.phyphox.camera.helper.CameraHelper.getCamera2FormattedCaps
+import de.rwth_aachen.phyphox.databinding.ActivityExperimentListBinding
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -85,7 +86,9 @@ import java.util.Locale
 import java.util.UUID
 import java.util.regex.Pattern
 import java.util.zip.CRC32
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ExperimentListActivity : AppCompatActivity() {
 
     var progress: ProgressDialog? = null
@@ -99,19 +102,70 @@ class ExperimentListActivity : AppCompatActivity() {
 
     var popupWindow: PopupWindow? = null
 
-    private var experimentRepository: ExperimentRepository? = null
 
-    var creditsV: ImageView? = null
-    var newExperimentButton: FloatingActionButton? = null
-    var newExperimentBluetooth: FloatingActionButton? = null
-    var newExperimentQR: FloatingActionButton? = null
-    var newExperimentSimple: FloatingActionButton? = null
-    var newExperimentBluetoothLabel: TextView? = null
-    var newExperimentSimpleLabel: TextView? = null
-    var newExperimentQRLabel: TextView? = null
-    var sv: ReportingScrollView? = null
-    var backgroundDimmer: View? = null
 
+    private lateinit var binding: ActivityExperimentListBinding
+
+    @Inject
+    lateinit var experimentRepository: ExperimentRepository
+
+    // region - old click listeners
+    val neocl = View.OnClickListener { _: View? ->
+        if (newExperimentDialogOpen) hideNewExperimentDialog()
+        else showNewExperimentDialog()
+    }
+    val neoclSimple = View.OnClickListener { _: View? ->
+        hideNewExperimentDialog()
+        openSimpleExperimentConfigurationDialog(this)
+    }
+    val neoclBluetooth = View.OnClickListener { _: View? ->
+        hideNewExperimentDialog()
+        val bluetoothNameKeySet = experimentRepository.getBluetoothDeviceNameList().keys
+        val bluetoothUUIDKeySet = experimentRepository.getBluetoothDeviceUUIDList().keys
+        BluetoothScanner(
+            this,
+            bluetoothNameKeySet,
+            bluetoothUUIDKeySet,
+            object : BluetoothScanListener {
+                override fun onBluetoothDeviceFound(result: BluetoothDeviceInfo) {
+                    openBluetoothExperiments(
+                        result.device,
+                        result.uuids,
+                        result.phyphoxService,
+                    )
+                }
+
+                override fun onBluetoothScanError(
+                    msg: String?,
+                    isError: Boolean?,
+                    isFatal: Boolean?,
+                ) {
+                    showBluetoothScanError(
+                        msg = getString(R.string.bt_android_version),
+                        isError = true,
+                        isFatal = true,
+                    )
+                }
+            },
+        ).execute()
+    }
+    val neoclQR = View.OnClickListener { _: View? ->
+        hideNewExperimentDialog()
+        scanQRCode()
+    }
+
+    val onScrollChangedListener: ReportingScrollView.OnScrollChangedListener =
+        ReportingScrollView.OnScrollChangedListener { scrollView, x, y, oldx, oldy ->
+            val bottom = scrollView!!.getChildAt(scrollView.childCount - 1).bottom
+            if (y + 10 > bottom - scrollView.height) {
+                scrollView.setOnScrollChangedListener(null)
+                val settings = getSharedPreferences(Const.PREFS_NAME, 0)
+                settings.edit {
+                    putString("lastSupportHint", Const.phyphoxCatHintRelease)
+                }
+            }
+        }
+    //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val themePreference: String = PreferenceManager.getDefaultSharedPreferences(this).getString(
@@ -120,11 +174,9 @@ class ExperimentListActivity : AppCompatActivity() {
         )!!
         SettingsFragment.setApplicationTheme(themePreference)
 
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_experiment_list)
-        inflateViews()
-
+        binding = ActivityExperimentListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         if (!displayDoNotDamageYourPhone()) { //Show the do-not-damage-your-phone-warning
             showSupportHintIfRequired()
@@ -154,28 +206,13 @@ class ExperimentListActivity : AppCompatActivity() {
 
         setUpOnClickListener()
 
-        experimentRepository = ExperimentRepository()
-
         handleIntent(intent)
-    }
-
-    private fun inflateViews() {
-        creditsV = findViewById(R.id.credits)
-        newExperimentButton = findViewById(R.id.newExperiment)
-
-        newExperimentSimple = findViewById(R.id.newExperimentSimple)
-        newExperimentSimpleLabel = findViewById(R.id.newExperimentSimpleLabel)
-        newExperimentBluetooth = findViewById(R.id.newExperimentBluetooth)
-        newExperimentQR = findViewById(R.id.newExperimentQR)
-        newExperimentBluetoothLabel = findViewById(R.id.newExperimentBluetoothLabel)
-        newExperimentQRLabel = findViewById(R.id.newExperimentQRLabel)
-        backgroundDimmer = findViewById(R.id.experimentListDimmer)
     }
 
 
     override fun onResume() {
         super.onResume()
-        experimentRepository!!.loadAndShowMainExperimentList(this)
+        experimentRepository.loadAndShowMainExperimentList(this)
     }
 
     override fun onUserInteraction() {
@@ -195,80 +232,18 @@ class ExperimentListActivity : AppCompatActivity() {
     }
 
     private fun setUpOnClickListener() {
-        creditsV!!.setOnClickListener {
+        binding.credits.setOnClickListener {
             showPopupMenu(it)
         }
-
-        val neocl = View.OnClickListener { _: View? ->
-            if (newExperimentDialogOpen) hideNewExperimentDialog()
-            else showNewExperimentDialog()
-        }
-
-        newExperimentButton!!.setOnClickListener(neocl)
-        backgroundDimmer!!.setOnClickListener(neocl)
-
-        val neoclSimple = View.OnClickListener { _: View? ->
-            hideNewExperimentDialog()
-            openSimpleExperimentConfigurationDialog(this)
-        }
-
-        newExperimentSimple!!.setOnClickListener(neoclSimple)
-        newExperimentSimpleLabel!!.setOnClickListener(neoclSimple)
-
-        val neoclBluetooth = View.OnClickListener { _: View? ->
-            hideNewExperimentDialog()
-            val bluetoothNameKeySet = experimentRepository!!.getBluetoothDeviceNameList().keys
-            val bluetoothUUIDKeySet = experimentRepository!!.getBluetoothDeviceUUIDList().keys
-            BluetoothScanner(
-                this,
-                bluetoothNameKeySet,
-                bluetoothUUIDKeySet,
-                object : BluetoothScanListener {
-                    override fun onBluetoothDeviceFound(result: BluetoothDeviceInfo) {
-                        openBluetoothExperiments(
-                            result.device,
-                            result.uuids,
-                            result.phyphoxService,
-                        )
-                    }
-
-                    override fun onBluetoothScanError(
-                        msg: String?,
-                        isError: Boolean?,
-                        isFatal: Boolean?,
-                    ) {
-                        showBluetoothScanError(
-                            msg = getString(R.string.bt_android_version),
-                            isError = true,
-                            isFatal = true,
-                        )
-                    }
-                },
-            ).execute()
-        }
-
-        newExperimentBluetooth!!.setOnClickListener(neoclBluetooth)
-        newExperimentBluetoothLabel!!.setOnClickListener(neoclBluetooth)
-
-        val neoclQR = View.OnClickListener { _: View? ->
-            hideNewExperimentDialog()
-            scanQRCode()
-        }
-
-        newExperimentQR!!.setOnClickListener(neoclQR)
-        newExperimentQRLabel!!.setOnClickListener(neoclQR)
-
-        sv = findViewById(R.id.experimentScroller)
-        sv!!.setOnScrollChangedListener { scrollView: ReportingScrollView?, _: Int, y: Int, _: Int, _: Int ->
-            val bottom = scrollView!!.getChildAt(scrollView.childCount - 1).bottom
-            if (y + 10 > bottom - scrollView.height) {
-                scrollView.setOnScrollChangedListener(null)
-                val settings = getSharedPreferences(Const.PREFS_NAME, 0)
-                settings.edit {
-                    putString("lastSupportHint", Const.phyphoxCatHintRelease)
-                }
-            }
-        }
+        binding.newExperiment.setOnClickListener(neocl)
+        binding.experimentListDimmer.setOnClickListener(neocl)
+        binding.newExperimentSimple.setOnClickListener(neoclSimple)
+        binding.newExperimentSimpleLabel.setOnClickListener(neoclSimple)
+        binding.newExperimentBluetooth.setOnClickListener(neoclBluetooth)
+        binding.newExperimentBluetoothLabel.setOnClickListener(neoclBluetooth)
+        binding.newExperimentQR.setOnClickListener(neoclQR)
+        binding.newExperimentQRLabel.setOnClickListener(neoclQR)
+        binding.experimentScroller.setOnScrollChangedListener(onScrollChangedListener)
     }
 
     private fun showPopupMenu(v: View) {
@@ -893,22 +868,22 @@ class ExperimentListActivity : AppCompatActivity() {
         val labelIn = AnimationUtils.loadAnimation(baseContext, R.anim.experiment_list_label_in)
         val fadeDark = AnimationUtils.loadAnimation(baseContext, R.anim.experiment_list_fade_dark)
 
-        newExperimentButton!!.startAnimation(rotate45In)
-        newExperimentSimple!!.startAnimation(fabIn)
-        newExperimentSimpleLabel!!.startAnimation(labelIn)
-        newExperimentBluetooth!!.startAnimation(fabIn)
-        newExperimentBluetoothLabel!!.startAnimation(labelIn)
-        newExperimentQR!!.startAnimation(fabIn)
-        newExperimentQRLabel!!.startAnimation(labelIn)
-        backgroundDimmer!!.startAnimation(fadeDark)
+        binding.newExperiment.startAnimation(rotate45In)
+        binding.newExperimentSimple.startAnimation(fabIn)
+        binding.newExperimentSimpleLabel.startAnimation(labelIn)
+        binding.newExperimentBluetooth.startAnimation(fabIn)
+        binding.newExperimentBluetoothLabel.startAnimation(labelIn)
+        binding.newExperimentQR.startAnimation(fabIn)
+        binding.newExperimentQRLabel.startAnimation(labelIn)
+        binding.experimentListDimmer.startAnimation(fadeDark)
 
-        newExperimentSimple!!.isClickable = true
-        newExperimentSimpleLabel!!.isClickable = true
-        newExperimentBluetooth!!.isClickable = true
-        newExperimentBluetoothLabel!!.isClickable = true
-        newExperimentQR!!.isClickable = true
-        newExperimentQRLabel!!.isClickable = true
-        backgroundDimmer!!.isClickable = true
+        binding.newExperimentSimple.isClickable = true
+        binding.newExperimentSimpleLabel.isClickable = true
+        binding.newExperimentBluetooth.isClickable = true
+        binding.newExperimentBluetoothLabel.isClickable = true
+        binding.newExperimentQR.isClickable = true
+        binding.newExperimentQRLabel.isClickable = true
+        binding.experimentListDimmer.isClickable = true
     }
 
     fun hideNewExperimentDialog() {
@@ -919,22 +894,22 @@ class ExperimentListActivity : AppCompatActivity() {
         val labelOut = AnimationUtils.loadAnimation(baseContext, R.anim.experiment_list_label_out)
         val fadeTransparent = AnimationUtils.loadAnimation(baseContext, R.anim.experiment_list_fade_transparent)
 
-        newExperimentSimple!!.isClickable = false
-        newExperimentSimpleLabel!!.isClickable = false
-        newExperimentBluetooth!!.isClickable = false
-        newExperimentBluetoothLabel!!.isClickable = false
-        newExperimentQR!!.isClickable = false
-        newExperimentQRLabel!!.isClickable = false
-        backgroundDimmer!!.isClickable = false
+        binding.newExperimentSimple.isClickable = false
+        binding.newExperimentSimpleLabel.isClickable = false
+        binding.newExperimentBluetooth.isClickable = false
+        binding.newExperimentBluetoothLabel.isClickable = false
+        binding.newExperimentQR.isClickable = false
+        binding.newExperimentQRLabel.isClickable = false
+        binding.experimentListDimmer.isClickable = false
 
-        newExperimentButton!!.startAnimation(rotate0In)
-        newExperimentSimple!!.startAnimation(fabOut)
-        newExperimentSimpleLabel!!.startAnimation(labelOut)
-        newExperimentBluetooth!!.startAnimation(fabOut)
-        newExperimentBluetoothLabel!!.startAnimation(labelOut)
-        newExperimentQR!!.startAnimation(fabOut)
-        newExperimentQRLabel!!.startAnimation(labelOut)
-        backgroundDimmer!!.startAnimation(fadeTransparent)
+        binding.newExperiment.startAnimation(rotate0In)
+        binding.newExperimentSimple.startAnimation(fabOut)
+        binding.newExperimentSimpleLabel.startAnimation(labelOut)
+        binding.newExperimentBluetooth.startAnimation(fabOut)
+        binding.newExperimentBluetoothLabel.startAnimation(labelOut)
+        binding.newExperimentQR.startAnimation(fabOut)
+        binding.newExperimentQRLabel.startAnimation(labelOut)
+        binding.experimentListDimmer.startAnimation(fadeTransparent)
     }
 
     fun scanQRCode() {
