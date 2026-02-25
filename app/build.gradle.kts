@@ -92,6 +92,7 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
+        viewBinding = true
     }
 
     ndkVersion = "28.0.13004108"
