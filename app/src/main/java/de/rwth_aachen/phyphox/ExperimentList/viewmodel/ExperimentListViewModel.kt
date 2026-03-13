@@ -57,6 +57,7 @@ class ExperimentListDataSourceImpl @Inject constructor(
                 unknownChildHandler =
                     UnknownChildHandler { input, inputKind, descriptor, name, candidates -> emptyList() }
                 autoPolymorphic = true
+                defaultToGenericParser = true
             }
         }
 
