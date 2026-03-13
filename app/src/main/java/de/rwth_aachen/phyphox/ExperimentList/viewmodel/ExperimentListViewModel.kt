@@ -45,7 +45,6 @@ class ExperimentListDataSourceImpl @Inject constructor(
         Log.d("Files", "${phyphoxFiles.size} files found")
     }
 
-    @OptIn(ExperimentalXmlUtilApi::class)
     override suspend fun getExperimentsFromAssets(): Unit = withContext(dispatcher) {
         val assetManager = context.assets
         val streams = assetManager.list("experiments")?.filter { it.endsWith(".phyphox") }?.map { fileName ->
