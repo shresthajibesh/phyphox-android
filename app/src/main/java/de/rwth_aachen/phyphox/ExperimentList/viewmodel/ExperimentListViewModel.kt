@@ -75,7 +75,9 @@ class ExperimentListDataSourceImpl @Inject constructor(
             if (streams.isEmpty()) {
                 Log.d("EXPERIMENTS", "It was empty")
             } else {
-                Log.d("EXPERIMENTS", streams.first().toString())
+                Log.d("EXPERIMENTS", streams.first()?.translations?.translation?.map {
+                    it.locale.trim() +"::"+it.localizedString
+                }?.joinToString("\n") ?: "EMPTY")
             }
         }
 
