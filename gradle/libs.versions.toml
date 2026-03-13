@@ -50,7 +50,6 @@ roboelectric = "4.16.1"
 kotest = "6.1.3"
 
 serialization = "1.10.0"
-xmlutil = "0.91.3"
 gson = "2.13.2"
 
 
@@ -121,7 +120,6 @@ detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version.r
 
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
-pdvrieze-xmlutil = { module = "io.github.pdvrieze.xmlutil:serialization",version.ref="xmlutil"}
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
