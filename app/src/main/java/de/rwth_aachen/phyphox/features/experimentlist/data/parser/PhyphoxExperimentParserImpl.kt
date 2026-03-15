@@ -50,7 +50,7 @@ class PhyphoxExperimentParserImpl @Inject constructor(
 
         val links = mutableListOf<Link>()
         var translations = emptyList<Translation>()
-        val dataContainers = mutableListOf<Container>()
+        var dataContainers = emptyList<Container>()
         val experimentInput = mutableListOf<ExperimentInput>()
 
         val childrenParserMapping = mapOf(
@@ -60,7 +60,7 @@ class PhyphoxExperimentParserImpl @Inject constructor(
             TAG_CATEGORY to { category = parser.readText() },
             TAG_LINK to { linksParser.parse(parser)?.let { links.add(it) } },
             TAG_TRANSLATIONS to { translations = translationsParser.parse(parser) },
-            TAG_DATA_CONTAINERS to { containersParser.parse(parser)?.let { dataContainers.add(it) } },
+            TAG_DATA_CONTAINERS to { dataContainers = containersParser.parse(parser)},
             TAG_INPUT to { inputParser.parse(parser)?.let { experimentInput.add(it) } },
         )
         parser.readImmediateChildren(childrenParserMapping)
@@ -94,7 +94,7 @@ class PhyphoxExperimentParserImpl @Inject constructor(
         const val TAG_DESCRIPTION = "description"
 
         const val TAG_DATA_CONTAINERS = "data-containers"
-        const val TAG_CONTAINER = "container"
+
         const val TAG_INPUT = "input"
         const val TAG_SENSOR = "sensor"
         const val TAG_OUTPUT = "output"
@@ -113,7 +113,7 @@ class PhyphoxExperimentParserImpl @Inject constructor(
 
         const val ATTRIBUTE_LOCALE = "locale"
 
-        const val ATTRIBUTE_SIZE = "size"
+
         const val ATTRIBUTE_TYPE = "type"
         const val ATTRIBUTE_COMPONENT = "component"
         const val ATTRIBUTE_TIME_ON_X = "timeOnX"
