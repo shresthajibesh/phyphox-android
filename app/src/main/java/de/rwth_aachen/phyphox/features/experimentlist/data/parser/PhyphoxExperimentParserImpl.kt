@@ -39,13 +39,14 @@ class PhyphoxExperimentParserImpl @Inject constructor(
 
     private fun readPhyphox(parser: XmlPullParser): PhyphoxExperimentX {
         parser.require(XmlPullParser.START_TAG, null, TAG_PHYPOX)
-        val version = parser.getAttributeValue(null, ATTRIBUTE_VERSION)
+        val version = parser.attr(ATTRIBUTE_VERSION) ?: "1"
         val locale = parser.attr(ATTRIBUTE_LOCALE)
 
         var icon: Icon? = null
         var title: String? = null
+        var description: String? = null
         var category: String? = null
-        var links: List<Link> = emptyList()
+        val links = mutableListOf<Link>()
         var translations: List<Translation> = emptyList()
         var dataContainers: List<Container> = emptyList()
         var experimentInput: List<ExperimentInput> = emptyList()
@@ -53,8 +54,9 @@ class PhyphoxExperimentParserImpl @Inject constructor(
         val childrenParserMapping = mapOf(
             TAG_ICON to { icon = iconParser.parse(parser) },
             TAG_TITLE to { title = readTitle(parser) },
+            TAG_DESCRIPTION to { description = readDescription(parser) },
             TAG_CATEGORY to { category = readCategory(parser) },
-            TAG_LINK to { links = linksParser.parse(parser) },
+            TAG_LINK to { linksParser.parse(parser)?.let { links.add(it) } },
             TAG_TRANSLATIONS to { translations = translationsParser.parse(parser) },
             TAG_DATA_CONTAINERS to { dataContainers = containersParser.parse(parser) },
             TAG_INPUT to { experimentInput = inputParser.parse(parser) },
@@ -65,6 +67,7 @@ class PhyphoxExperimentParserImpl @Inject constructor(
             locale = locale,
             icon = icon,
             title = title,
+            description = description,
             category = category,
             links = links,
             translations = translations,
@@ -78,6 +81,10 @@ class PhyphoxExperimentParserImpl @Inject constructor(
     }
 
     private fun readCategory(parser: XmlPullParser): String? {
+        return parser.nextText()
+    }
+
+    private fun readDescription(parser: XmlPullParser): String? {
         return parser.nextText()
     }
 
@@ -109,7 +116,7 @@ class PhyphoxExperimentParserImpl @Inject constructor(
 
         const val ATTRIBUTE_VERSION = "version"
 
-        const val ATTRIBUTE_LABEL = "label"
+
         const val ATTRIBUTE_LOCALE = "locale"
         const val ATTRIBUTE_ORIGINAL = "original"
         const val ATTRIBUTE_SIZE = "size"

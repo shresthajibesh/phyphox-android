@@ -6,6 +6,7 @@ data class PhyphoxExperimentX(
     val locale: String? = null,
     val title: String? = null,
     val category: String? = null,
+    val description: String? = null,
     val icon: Icon? = null,
     val links: List<Link> = emptyList(),
     val translations: List<Translation> = emptyList(),

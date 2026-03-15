@@ -34,8 +34,9 @@ fun <T> XmlPullParser.readChildren(
     return results
 }
 
+
 fun XmlPullParser.readImmediateChildren(
-    handlers: Map<String, () -> Unit>
+    handlers: Map<String, () -> Any?>
 ) {
     while (next() != XmlPullParser.END_TAG) {
         if (eventType != XmlPullParser.START_TAG) continue

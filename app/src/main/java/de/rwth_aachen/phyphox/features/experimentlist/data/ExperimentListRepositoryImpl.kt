@@ -1,6 +1,5 @@
 package de.rwth_aachen.phyphox.features.experimentlist.data
 
-import android.util.Log
 import de.rwth_aachen.phyphox.features.experimentlist.data.parser.PhyphoxExperimentParser
 import de.rwth_aachen.phyphox.features.experimentlist.domain.data.AssetsExperimentListDataSource
 import de.rwth_aachen.phyphox.features.experimentlist.domain.data.ExperimentListRepository
@@ -24,7 +23,6 @@ class ExperimentListRepositoryImpl @Inject constructor(
 
     override suspend fun loadExperimentsFromAssets() = withContext(dispatcher) {
         val results = assetsExperimentListDataSource.getExperimentsFromAssets()
-            .subList(0,1)
             .parallelMap(4) { inputStream ->
                 inputStream.use {
                     phyphoxExperimentParser.parse(it)
