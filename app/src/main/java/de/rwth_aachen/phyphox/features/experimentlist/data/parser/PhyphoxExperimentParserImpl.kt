@@ -20,7 +20,7 @@ class ExperimentIconParser @Inject constructor() : XmlParser<XmlPullParser, Icon
         return try {
             Icon(
                 format = input.attr(ATTRIBUTE_FORMAT),
-                value = input.text,
+                value = input.nextText(),
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -63,7 +63,7 @@ class PhyphoxExperimentParserImpl @Inject constructor(
         var experimentInput: List<ExperimentInput> = emptyList()
 
         val childrenParserMapping = mapOf(
-            TAG_ICON to { icon = readIcon(parser) },
+            TAG_ICON to { icon = iconParser.parse(parser) },
             TAG_TITLE to { title = readTitle(parser) },
             TAG_CATEGORY to { category = readCategory(parser) },
             TAG_LINK to { links = readLinks(parser) },
