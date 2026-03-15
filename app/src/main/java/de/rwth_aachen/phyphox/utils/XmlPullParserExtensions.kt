@@ -43,3 +43,7 @@ fun XmlPullParser.readImmediateChildren(
         handlers[name]?.invoke() ?: skip()
     }
 }
+
+fun XmlPullParser.readText(): String? {
+    return nextText()
+}
