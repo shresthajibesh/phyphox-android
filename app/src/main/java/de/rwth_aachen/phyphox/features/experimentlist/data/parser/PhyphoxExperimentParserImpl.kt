@@ -1,37 +1,25 @@
 package de.rwth_aachen.phyphox.features.experimentlist.data.parser
 
 import android.util.Xml
-import de.rwth_aachen.phyphox.features.experimentlist.data.parser.PhyphoxExperimentParserImpl.Companion.ATTRIBUTE_FORMAT
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Container
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.ExperimentInput
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Icon
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Link
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperimentX
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Translation
-import de.rwth_aachen.phyphox.utils.XmlParser
 import de.rwth_aachen.phyphox.utils.attr
 import de.rwth_aachen.phyphox.utils.readImmediateChildren
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
 import javax.inject.Inject
 
-class ExperimentIconParser @Inject constructor() : XmlParser<XmlPullParser, Icon?> {
-    override fun parse(input: XmlPullParser): Icon? {
-        return try {
-            Icon(
-                format = input.attr(ATTRIBUTE_FORMAT),
-                value = input.nextText(),
-            )
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-}
 
 class PhyphoxExperimentParserImpl @Inject constructor(
-    val iconParser:ExperimentIconParser
+    val iconParser: ExperimentIconParser,
+    val linksParser: ExperimentLinksParser,
+    val translationsParser: ExperimentTranslationsParser,
+    val containersParser: ExperimentDataContainersParser,
+    val inputParser: ExperimentInputParser,
 ) : PhyphoxExperimentParser {
 
     override fun parse(input: InputStream): PhyphoxExperimentX {
@@ -44,7 +32,7 @@ class PhyphoxExperimentParserImpl @Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             return PhyphoxExperimentX("1")
-        }finally {
+        } finally {
             input.close()
         }
     }
@@ -66,10 +54,10 @@ class PhyphoxExperimentParserImpl @Inject constructor(
             TAG_ICON to { icon = iconParser.parse(parser) },
             TAG_TITLE to { title = readTitle(parser) },
             TAG_CATEGORY to { category = readCategory(parser) },
-            TAG_LINK to { links = readLinks(parser) },
-            TAG_TRANSLATIONS to { translations = readTranslations(parser) },
-            TAG_DATA_CONTAINERS to { dataContainers = readContainers(parser) },
-            TAG_INPUT to { experimentInput = readInput(parser) },
+            TAG_LINK to { links = linksParser.parse(parser) },
+            TAG_TRANSLATIONS to { translations = translationsParser.parse(parser) },
+            TAG_DATA_CONTAINERS to { dataContainers = containersParser.parse(parser) },
+            TAG_INPUT to { experimentInput = inputParser.parse(parser) },
         )
         parser.readImmediateChildren(childrenParserMapping)
         return PhyphoxExperimentX(
@@ -85,34 +73,12 @@ class PhyphoxExperimentParserImpl @Inject constructor(
         )
     }
 
-    private fun readIcon(parser: XmlPullParser): Icon {
-        return Icon(
-            format = parser.attr(ATTRIBUTE_FORMAT),
-            value = parser.nextText(),
-        )
-    }
     private fun readTitle(parser: XmlPullParser): String? {
         return parser.nextText()
     }
 
     private fun readCategory(parser: XmlPullParser): String? {
         return parser.nextText()
-    }
-
-    private fun readLinks(parser: XmlPullParser): List<Link> {
-        return emptyList()
-    }
-
-    private fun readTranslations(parser: XmlPullParser): List<Translation> {
-        return emptyList()
-    }
-
-    private fun readContainers(parser: XmlPullParser): List<Container> {
-        return emptyList()
-    }
-
-    private fun readInput(parser: XmlPullParser): List<ExperimentInput> {
-        return emptyList()
     }
 
 
@@ -142,7 +108,7 @@ class PhyphoxExperimentParserImpl @Inject constructor(
         const val TAG_DATA = "data"
 
         const val ATTRIBUTE_VERSION = "version"
-        const val ATTRIBUTE_FORMAT = "format"
+
         const val ATTRIBUTE_LABEL = "label"
         const val ATTRIBUTE_LOCALE = "locale"
         const val ATTRIBUTE_ORIGINAL = "original"
