@@ -7,8 +7,10 @@ data class PhyphoxExperimentX(
     val title: String? = null,
     val category: String? = null,
     val icon: Icon? = null,
-    val link: Link? = null,
-    val translations: Translations? = null,
-    val dataContainers: DataContainers? = null,
-    val input: Input? = null,
+    val links: List<Link> = emptyList(),
+    val translations: List<Translation> = emptyList(),
+    val dataContainers: List<Container> = emptyList(),
+    val experimentInputs: List<ExperimentInput> = emptyList(),
+//    val views = mutableListOf<View>()
+//    val exports = mutableListOf<ExportSet>()
 )

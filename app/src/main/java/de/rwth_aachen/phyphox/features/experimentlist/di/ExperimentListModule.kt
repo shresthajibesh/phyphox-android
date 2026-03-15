@@ -7,6 +7,8 @@ import dagger.hilt.components.SingletonComponent
 import de.rwth_aachen.phyphox.features.experimentlist.data.ExperimentListRepositoryImpl
 import de.rwth_aachen.phyphox.features.experimentlist.data.localio.AssetsExperimentListDataSourceImpl
 import de.rwth_aachen.phyphox.features.experimentlist.data.localio.FilesExperimentListDataSourceImpl
+import de.rwth_aachen.phyphox.features.experimentlist.data.parser.PhyphoxExperimentParser
+import de.rwth_aachen.phyphox.features.experimentlist.data.parser.PhyphoxExperimentParserImpl
 import de.rwth_aachen.phyphox.features.experimentlist.domain.data.AssetsExperimentListDataSource
 import de.rwth_aachen.phyphox.features.experimentlist.domain.data.ExperimentListRepository
 import de.rwth_aachen.phyphox.features.experimentlist.domain.data.FilesExperimentListDataSource
@@ -29,4 +31,9 @@ abstract class ExperimentListModule {
     abstract fun bindExperimentListRepository(
         source: ExperimentListRepositoryImpl,
     ): ExperimentListRepository
+
+    @Binds
+    abstract fun bindPhyphoxExperimentParser(
+        source: PhyphoxExperimentParserImpl,
+    ): PhyphoxExperimentParser
 }
