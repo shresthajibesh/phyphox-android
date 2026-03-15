@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.ExperimentList.domain.model
+package de.rwth_aachen.phyphox.features.experimentlist.domain.model
 
 
 data class PhyphoxExperimentX(

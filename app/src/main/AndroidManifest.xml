@@ -33,7 +33,7 @@
         android:usesCleartextTraffic="true"><!-- While not recommended, there are plenty of use cases for phyphox on local networks where unencrypted communication is not unreasonable. -->
 
         <activity
-            android:name="de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity"
+            android:name="de.rwth_aachen.phyphox.features.experimentlist.presentation.ExperimentListActivity"
             android:exported="true"
             android:theme="@style/Theme.Phyphox.DayNight"
             android:configChanges="keyboardHidden|orientation|screenSize">
@@ -88,18 +88,18 @@
             android:name="de.rwth_aachen.phyphox.Experiment"
             android:label="@string/title_activity_experiment"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:parentActivityName="de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity">
+            android:parentActivityName="de.rwth_aachen.phyphox.features.experimentlist.presentation.ExperimentListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity" />
+                android:value="de.rwth_aachen.phyphox.features.experimentlist.presentation.ExperimentListActivity" />
         </activity>
         <activity
             android:name="de.rwth_aachen.phyphox.SettingsActivity.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName="de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity">
+            android:parentActivityName="de.rwth_aachen.phyphox.features.experimentlist.presentation.ExperimentListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity" />
+                android:value="de.rwth_aachen.phyphox.features.experimentlist.presentation.ExperimentListActivity" />
         </activity>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"

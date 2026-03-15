@@ -1,4 +1,4 @@
-package de.rwth_aachen.phyphox.ExperimentList
+package de.rwth_aachen.phyphox.features.experimentlist.presentation
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -31,7 +31,7 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager.BadTokenException
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.PopupWindow
@@ -49,20 +49,17 @@ import androidx.preference.PreferenceManager
 import com.google.zxing.integration.android.IntentIntegrator
 import dagger.hilt.android.AndroidEntryPoint
 import de.rwth_aachen.phyphox.Bluetooth.BluetoothExperimentLoader
-import de.rwth_aachen.phyphox.Bluetooth.BluetoothExperimentLoader.BluetoothExperimentLoaderCallback
-import de.rwth_aachen.phyphox.Bluetooth.BluetoothScanDialog.BluetoothDeviceInfo
+import de.rwth_aachen.phyphox.Bluetooth.BluetoothScanDialog
 import de.rwth_aachen.phyphox.Experiment
 import de.rwth_aachen.phyphox.ExperimentList.datasource.AssetExperimentLoader
 import de.rwth_aachen.phyphox.ExperimentList.datasource.ExperimentRepository
 import de.rwth_aachen.phyphox.ExperimentList.handler.BluetoothScanner
-import de.rwth_aachen.phyphox.ExperimentList.handler.BluetoothScanner.BluetoothScanListener
 import de.rwth_aachen.phyphox.ExperimentList.handler.CopyIntentHandler
 import de.rwth_aachen.phyphox.ExperimentList.handler.SimpleExperimentCreator
 import de.rwth_aachen.phyphox.ExperimentList.handler.ZipIntentHandler
 import de.rwth_aachen.phyphox.ExperimentList.model.Const
 import de.rwth_aachen.phyphox.ExperimentList.model.ExperimentListEnvironment
 import de.rwth_aachen.phyphox.ExperimentList.model.ExperimentLoadInfoData
-import de.rwth_aachen.phyphox.ExperimentList.viewmodel.ExperimentListViewModel
 import de.rwth_aachen.phyphox.Helper.Helper
 import de.rwth_aachen.phyphox.Helper.ReportingScrollView
 import de.rwth_aachen.phyphox.Helper.WindowInsetHelper
@@ -72,13 +69,14 @@ import de.rwth_aachen.phyphox.SensorInput
 import de.rwth_aachen.phyphox.SettingsActivity.SettingsActivity
 import de.rwth_aachen.phyphox.SettingsActivity.SettingsFragment
 import de.rwth_aachen.phyphox.camera.depth.DepthInput
-import de.rwth_aachen.phyphox.camera.helper.CameraHelper.getCamera2FormattedCaps
+import de.rwth_aachen.phyphox.camera.helper.CameraHelper
 import de.rwth_aachen.phyphox.databinding.ActivityExperimentListBinding
 import de.rwth_aachen.phyphox.databinding.DonotshowagainBinding
 import de.rwth_aachen.phyphox.databinding.LayoutCreditsBinding
 import de.rwth_aachen.phyphox.databinding.NewExperimentBinding
 import de.rwth_aachen.phyphox.databinding.OpenMultipeDialogBinding
 import de.rwth_aachen.phyphox.databinding.SupportPhyphoxHintBinding
+import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.ExperimentListViewModel
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -90,7 +88,6 @@ import java.util.UUID
 import java.util.regex.Pattern
 import java.util.zip.CRC32
 import javax.inject.Inject
-import kotlin.getValue
 
 @AndroidEntryPoint
 class ExperimentListActivity : AppCompatActivity() {
@@ -129,8 +126,8 @@ class ExperimentListActivity : AppCompatActivity() {
             this,
             bluetoothNameKeySet,
             bluetoothUUIDKeySet,
-            object : BluetoothScanListener {
-                override fun onBluetoothDeviceFound(result: BluetoothDeviceInfo) {
+            object : BluetoothScanner.BluetoothScanListener {
+                override fun onBluetoothDeviceFound(result: BluetoothScanDialog.BluetoothDeviceInfo) {
                     openBluetoothExperiments(
                         result.device,
                         result.uuids,
@@ -263,7 +260,8 @@ class ExperimentListActivity : AppCompatActivity() {
     }
 
     private fun showPopupMenu(v: View) {
-        val wrapper: Context = ContextThemeWrapper(this@ExperimentListActivity, R.style.Theme_Phyphox_DayNight)
+        val wrapper: Context =
+            ContextThemeWrapper(this@ExperimentListActivity, R.style.Theme_Phyphox_DayNight)
         val popup = PopupMenu(wrapper, v)
         popup.setOnMenuItemClickListener { item: MenuItem? ->
             when (item?.itemId) {
@@ -489,7 +487,7 @@ class ExperimentListActivity : AppCompatActivity() {
         sb.append("<br /><br />")
 
         sb.append("<b>Camera 2 API</b><br />")
-        sb.append(getCamera2FormattedCaps(false))
+        sb.append(CameraHelper.getCamera2FormattedCaps(false))
         sb.append("</font>")
 
         val text = Html.fromHtml(sb.toString())
@@ -594,7 +592,7 @@ class ExperimentListActivity : AppCompatActivity() {
                     0,
                     0,
                 )
-            } catch (_: BadTokenException) {
+            } catch (_: WindowManager.BadTokenException) {
                 Log.e(
                     "showHint",
                     "Bad token when showing hint. This is not unusual when app is rotating while showing the hint.",
@@ -718,7 +716,7 @@ class ExperimentListActivity : AppCompatActivity() {
         if (bluetoothExperimentLoader == null) {
             bluetoothExperimentLoader = BluetoothExperimentLoader(
                 baseContext,
-                object : BluetoothExperimentLoaderCallback {
+                object : BluetoothExperimentLoader.BluetoothExperimentLoaderCallback {
                     override fun updateProgress(transferred: Int, total: Int) {
                         parent.runOnUiThread {
                             if (total > 0) {
@@ -1201,8 +1199,8 @@ class ExperimentListActivity : AppCompatActivity() {
                     parent,
                     bluetoothNameKeySet,
                     bluetoothUUIDKeySet,
-                    object : BluetoothScanListener {
-                        override fun onBluetoothDeviceFound(result: BluetoothDeviceInfo) {
+                    object : BluetoothScanner.BluetoothScanListener {
+                        override fun onBluetoothDeviceFound(result: BluetoothScanDialog.BluetoothDeviceInfo) {
                             openBluetoothExperiments(
                                 result.device,
                                 result.uuids,

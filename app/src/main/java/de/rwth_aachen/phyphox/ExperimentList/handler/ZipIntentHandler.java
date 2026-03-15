@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity;
+import de.rwth_aachen.phyphox.features.experimentlist.presentation.ExperimentListActivity;
 import de.rwth_aachen.phyphox.PhyphoxFile;
 
 //This asyncTask extracts a zip file to a temporary directory

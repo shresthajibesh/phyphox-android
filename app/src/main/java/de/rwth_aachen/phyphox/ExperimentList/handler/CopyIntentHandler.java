@@ -12,7 +12,7 @@ import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 import de.rwth_aachen.phyphox.Experiment;
-import de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity;
+import de.rwth_aachen.phyphox.features.experimentlist.presentation.ExperimentListActivity;
 import de.rwth_aachen.phyphox.PhyphoxFile;
 
 //This asyncTask stores the content of a data in a temporary file

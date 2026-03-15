@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import de.rwth_aachen.phyphox.ExperimentList.di.ExperimentListModule
+import de.rwth_aachen.phyphox.features.experimentlist.di.ExperimentListModule
 import de.rwth_aachen.phyphox.common.camera.di.CommonCameraModule
 import de.rwth_aachen.phyphox.libs.CoroutinesModule
 
