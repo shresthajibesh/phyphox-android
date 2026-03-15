@@ -12,13 +12,11 @@ class ExperimentListViewModel @Inject constructor(
     private val loadExperimentsFromAssets: LoadExperimentsFromAssetsUseCase
 ) : ViewModel() {
 
-    init {
+    fun ld() {
         loadData()
     }
 
-    fun ld() {}
-
     private fun loadData() = viewModelScope.launch {
-        loadExperimentsFromAssets
+        loadExperimentsFromAssets()
     }
 }

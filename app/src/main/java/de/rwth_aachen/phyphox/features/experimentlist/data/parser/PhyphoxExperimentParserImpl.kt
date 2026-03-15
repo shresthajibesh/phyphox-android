@@ -1,19 +1,38 @@
 package de.rwth_aachen.phyphox.features.experimentlist.data.parser
 
 import android.util.Xml
+import de.rwth_aachen.phyphox.features.experimentlist.data.parser.PhyphoxExperimentParserImpl.Companion.ATTRIBUTE_FORMAT
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Container
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.ExperimentInput
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Icon
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Link
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperimentX
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Translation
+import de.rwth_aachen.phyphox.utils.XmlParser
 import de.rwth_aachen.phyphox.utils.attr
 import de.rwth_aachen.phyphox.utils.readImmediateChildren
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
 import javax.inject.Inject
 
-class PhyphoxExperimentParserImpl @Inject constructor() : PhyphoxExperimentParser {
+class ExperimentIconParser @Inject constructor() : XmlParser<XmlPullParser, Icon?> {
+    override fun parse(input: XmlPullParser): Icon? {
+        return try {
+            Icon(
+                format = input.attr(ATTRIBUTE_FORMAT),
+                value = input.text,
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+}
+
+class PhyphoxExperimentParserImpl @Inject constructor(
+    val iconParser:ExperimentIconParser
+) : PhyphoxExperimentParser {
 
     override fun parse(input: InputStream): PhyphoxExperimentX {
 
@@ -25,6 +44,8 @@ class PhyphoxExperimentParserImpl @Inject constructor() : PhyphoxExperimentParse
         } catch (e: Exception) {
             e.printStackTrace()
             return PhyphoxExperimentX("1")
+        }finally {
+            input.close()
         }
     }
 
@@ -64,16 +85,18 @@ class PhyphoxExperimentParserImpl @Inject constructor() : PhyphoxExperimentParse
         )
     }
 
-    private fun readIcon(parser: XmlPullParser): Icon? {
-        return null
+    private fun readIcon(parser: XmlPullParser): Icon {
+        return Icon(
+            format = parser.attr(ATTRIBUTE_FORMAT),
+            value = parser.nextText(),
+        )
     }
-
     private fun readTitle(parser: XmlPullParser): String? {
-        return null
+        return parser.nextText()
     }
 
     private fun readCategory(parser: XmlPullParser): String? {
-        return null
+        return parser.nextText()
     }
 
     private fun readLinks(parser: XmlPullParser): List<Link> {
@@ -83,10 +106,12 @@ class PhyphoxExperimentParserImpl @Inject constructor() : PhyphoxExperimentParse
     private fun readTranslations(parser: XmlPullParser): List<Translation> {
         return emptyList()
     }
+
     private fun readContainers(parser: XmlPullParser): List<Container> {
         return emptyList()
     }
-    private fun readInput(parser: XmlPullParser): List<ExperimentInput>{
+
+    private fun readInput(parser: XmlPullParser): List<ExperimentInput> {
         return emptyList()
     }
 

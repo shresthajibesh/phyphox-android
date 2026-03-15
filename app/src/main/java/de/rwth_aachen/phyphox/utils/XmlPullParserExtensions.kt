@@ -39,10 +39,6 @@ fun XmlPullParser.readImmediateChildren(
 ) {
     while (next() != XmlPullParser.END_TAG) {
         if (eventType != XmlPullParser.START_TAG) continue
-
-        while (next() != XmlPullParser.END_TAG) {
-            if (eventType != XmlPullParser.START_TAG) continue
-            handlers[name]?.invoke() ?: skip()
-        }
+        handlers[name]?.invoke() ?: skip()
     }
 }

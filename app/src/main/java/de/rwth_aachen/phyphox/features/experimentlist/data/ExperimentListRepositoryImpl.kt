@@ -1,5 +1,6 @@
 package de.rwth_aachen.phyphox.features.experimentlist.data
 
+import android.util.Log
 import de.rwth_aachen.phyphox.features.experimentlist.data.parser.PhyphoxExperimentParser
 import de.rwth_aachen.phyphox.features.experimentlist.domain.data.AssetsExperimentListDataSource
 import de.rwth_aachen.phyphox.features.experimentlist.domain.data.ExperimentListRepository
@@ -8,8 +9,9 @@ import de.rwth_aachen.phyphox.libs.IoDispatcher
 import de.rwth_aachen.phyphox.utils.parallelMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ExperimentListRepositoryImpl constructor(
+class ExperimentListRepositoryImpl @Inject constructor(
     @param:IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val assetsExperimentListDataSource: AssetsExperimentListDataSource,
     private val filesExperimentListDataSource: FilesExperimentListDataSource,
@@ -21,10 +23,14 @@ class ExperimentListRepositoryImpl constructor(
     }
 
     override suspend fun loadExperimentsFromAssets() = withContext(dispatcher) {
-        assetsExperimentListDataSource.getExperimentsFromAssets()
+        val results = assetsExperimentListDataSource.getExperimentsFromAssets()
+            .subList(0,1)
             .parallelMap(4) { inputStream ->
-                inputStream.use { phyphoxExperimentParser.parse(it) }
+                inputStream.use {
+                    phyphoxExperimentParser.parse(it)
+                }
             }
+        return@withContext results
     }
 }
 
