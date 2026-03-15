@@ -5,9 +5,9 @@ import de.rwth_aachen.phyphox.utils.XmlParser
 import org.xmlpull.v1.XmlPullParser
 import javax.inject.Inject
 
-class ExperimentInputParser @Inject constructor() : XmlParser<XmlPullParser, List<ExperimentInput>> {
-    override fun parse(input: XmlPullParser): List<ExperimentInput> {
-        return emptyList()
+class ExperimentInputParser @Inject constructor() : XmlParser<XmlPullParser, ExperimentInput?> {
+    override fun parse(input: XmlPullParser): ExperimentInput? {
+        return null
     }
 
     companion object {

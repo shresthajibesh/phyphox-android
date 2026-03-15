@@ -46,10 +46,11 @@ class PhyphoxExperimentParserImpl @Inject constructor(
         var title: String? = null
         var description: String? = null
         var category: String? = null
+
         val links = mutableListOf<Link>()
-        var translations: List<Translation> = emptyList()
-        var dataContainers: List<Container> = emptyList()
-        var experimentInput: List<ExperimentInput> = emptyList()
+        val translations = mutableListOf<Translation>()
+        val dataContainers = mutableListOf<Container>()
+        val experimentInput = mutableListOf<ExperimentInput>()
 
         val childrenParserMapping = mapOf(
             TAG_ICON to { icon = iconParser.parse(parser) },
@@ -57,9 +58,9 @@ class PhyphoxExperimentParserImpl @Inject constructor(
             TAG_DESCRIPTION to { description = readDescription(parser) },
             TAG_CATEGORY to { category = readCategory(parser) },
             TAG_LINK to { linksParser.parse(parser)?.let { links.add(it) } },
-            TAG_TRANSLATIONS to { translations = translationsParser.parse(parser) },
-            TAG_DATA_CONTAINERS to { dataContainers = containersParser.parse(parser) },
-            TAG_INPUT to { experimentInput = inputParser.parse(parser) },
+            TAG_TRANSLATIONS to { translationsParser.parse(parser)?.let { translations.add(it) } },
+            TAG_DATA_CONTAINERS to { containersParser.parse(parser)?.let { dataContainers.add(it) } },
+            TAG_INPUT to { inputParser.parse(parser)?.let { experimentInput.add(it) } },
         )
         parser.readImmediateChildren(childrenParserMapping)
         return PhyphoxExperimentX(
