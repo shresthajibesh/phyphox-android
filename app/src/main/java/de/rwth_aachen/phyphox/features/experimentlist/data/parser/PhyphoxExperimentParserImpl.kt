@@ -9,6 +9,7 @@ import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperi
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Translation
 import de.rwth_aachen.phyphox.utils.attr
 import de.rwth_aachen.phyphox.utils.readImmediateChildren
+import de.rwth_aachen.phyphox.utils.readText
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
 import javax.inject.Inject
@@ -48,17 +49,17 @@ class PhyphoxExperimentParserImpl @Inject constructor(
         var category: String? = null
 
         val links = mutableListOf<Link>()
-        val translations = mutableListOf<Translation>()
+        var translations = emptyList<Translation>()
         val dataContainers = mutableListOf<Container>()
         val experimentInput = mutableListOf<ExperimentInput>()
 
         val childrenParserMapping = mapOf(
             TAG_ICON to { icon = iconParser.parse(parser) },
-            TAG_TITLE to { title = readTitle(parser) },
-            TAG_DESCRIPTION to { description = readDescription(parser) },
-            TAG_CATEGORY to { category = readCategory(parser) },
+            TAG_TITLE to { title = parser.readText() },
+            TAG_DESCRIPTION to { description = parser.readText() },
+            TAG_CATEGORY to { category = parser.readText() },
             TAG_LINK to { linksParser.parse(parser)?.let { links.add(it) } },
-            TAG_TRANSLATIONS to { translationsParser.parse(parser)?.let { translations.add(it) } },
+            TAG_TRANSLATIONS to { translations = translationsParser.parse(parser) },
             TAG_DATA_CONTAINERS to { containersParser.parse(parser)?.let { dataContainers.add(it) } },
             TAG_INPUT to { inputParser.parse(parser)?.let { experimentInput.add(it) } },
         )
@@ -77,17 +78,9 @@ class PhyphoxExperimentParserImpl @Inject constructor(
         )
     }
 
-    private fun readTitle(parser: XmlPullParser): String? {
-        return parser.nextText()
-    }
 
-    private fun readCategory(parser: XmlPullParser): String? {
-        return parser.nextText()
-    }
 
-    private fun readDescription(parser: XmlPullParser): String? {
-        return parser.nextText()
-    }
+
 
 
     companion object {
@@ -95,11 +88,11 @@ class PhyphoxExperimentParserImpl @Inject constructor(
         const val TAG_ICON = "icon"
         const val TAG_LINK = "link"
         const val TAG_TRANSLATIONS = "translations"
-        const val TAG_TRANSLATION = "translation"
+
         const val TAG_TITLE = "title"
         const val TAG_CATEGORY = "category"
         const val TAG_DESCRIPTION = "description"
-        const val TAG_STRING = "string"
+
         const val TAG_DATA_CONTAINERS = "data-containers"
         const val TAG_CONTAINER = "container"
         const val TAG_INPUT = "input"
@@ -119,7 +112,7 @@ class PhyphoxExperimentParserImpl @Inject constructor(
 
 
         const val ATTRIBUTE_LOCALE = "locale"
-        const val ATTRIBUTE_ORIGINAL = "original"
+
         const val ATTRIBUTE_SIZE = "size"
         const val ATTRIBUTE_TYPE = "type"
         const val ATTRIBUTE_COMPONENT = "component"
