@@ -9,7 +9,6 @@ import de.rwth_aachen.phyphox.libs.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import nl.adaptivity.xmlutil.ExperimentalXmlUtilApi
 import javax.inject.Inject
 
 @HiltViewModel
