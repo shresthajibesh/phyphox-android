@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ fun ExperimentListSuccessContent(
     modifier: Modifier = Modifier,
     experiments: List<PhyphoxExperimentX>,
     contentPadding: PaddingValues = PaddingValues(16.dp),
+    onItemClicked:(PhyphoxExperimentX) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -39,7 +41,7 @@ fun ExperimentListSuccessContent(
         contentPadding = contentPadding,
     ) {
         items(experiments) {
-            ExperimentListItem(experiment = it)
+            ExperimentListItem(experiment = it, onItemClicked = onItemClicked)
         }
     }
 }
@@ -48,9 +50,12 @@ fun ExperimentListSuccessContent(
 fun ExperimentListItem(
     modifier: Modifier = Modifier,
     experiment: PhyphoxExperimentX,
+    onItemClicked:(PhyphoxExperimentX) -> Unit
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().clickable(enabled = true){
+            onItemClicked(experiment)
+        },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {

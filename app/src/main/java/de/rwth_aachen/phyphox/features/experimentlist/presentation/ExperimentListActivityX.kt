@@ -1,5 +1,6 @@
 package de.rwth_aachen.phyphox.features.experimentlist.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -46,8 +47,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperimentX
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.ExperimentListErrorContent
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.ExperimentListLoadingContent
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.ExperimentListSuccessContent
@@ -67,15 +70,26 @@ class ExperimentListActivityX : ComponentActivity() {
         setContent {
             PhyphoxTheme(darkTheme = isDarkThemeEnabled()) {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-                ExperimentListActivityScreen(uiState)
+                ExperimentListActivityScreen(uiState) {
+                    //send it to vm
+                    it.links.firstOrNull()?.let { link ->
+                        val intent = Intent(Intent.ACTION_VIEW, link.url.toUri())
+                        intent.resolveActivity(this.packageManager)
+                        startActivity(intent)
+                    }
+                }
             }
         }
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExperimentListActivityScreen(uiState: ExperimentListScreenUiState) {
+fun ExperimentListActivityScreen(
+    uiState: ExperimentListScreenUiState,
+    onItemClicked: (PhyphoxExperimentX) -> Unit,
+) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -106,6 +120,7 @@ fun ExperimentListActivityScreen(uiState: ExperimentListScreenUiState) {
                         top = paddingValues.calculateTopPadding() + 16.dp,
                         bottom = 112.dp, // Padding to avoid content being hidden behind the floating bar
                     ),
+                    onItemClicked = onItemClicked,
                 )
             }
 
