@@ -11,29 +11,34 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperimentX
-import de.rwth_aachen.phyphox.ui.theme.customColors
 
 
 @Composable
 fun ExperimentListSuccessContent(
     modifier: Modifier = Modifier,
     experiments: List<PhyphoxExperimentX>,
-    contentPadding: PaddingValues = PaddingValues(16.dp),
-    onItemClicked:(PhyphoxExperimentX) -> Unit
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    onItemClicked: (PhyphoxExperimentX) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -50,36 +55,47 @@ fun ExperimentListSuccessContent(
 fun ExperimentListItem(
     modifier: Modifier = Modifier,
     experiment: PhyphoxExperimentX,
-    onItemClicked:(PhyphoxExperimentX) -> Unit
+    onItemClicked: (PhyphoxExperimentX) -> Unit,
 ) {
+
     Row(
-        modifier = modifier.fillMaxWidth().clickable(enabled = true){
-            onItemClicked(experiment)
-        },
+        modifier = modifier
+            .clickable(enabled = true) {
+                onItemClicked(experiment)
+            }
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(
+                horizontal = 16.dp,
+                vertical = 8.dp,
+            ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Box(
-            Modifier.size(48.dp)
+            Modifier
+                .size(56.dp)
         ) {
             experiment.icon?.let { icon ->
                 Image(
                     bitmap = decodeBase64(icon.value).asImageBitmap(),
                     contentDescription = "",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer),
-                    modifier = Modifier.size(32.dp).align(Alignment.Center)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
+                    modifier = Modifier
+                        .align(Alignment.Center),
                 )
 
             }
         }
         Column(
             modifier = Modifier,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
         ) {
             Text(
                 text = experiment.title?.trim() ?: "Name Not Found",
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 modifier = Modifier
@@ -88,6 +104,7 @@ fun ExperimentListItem(
                 style = MaterialTheme.typography.labelMedium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
         }

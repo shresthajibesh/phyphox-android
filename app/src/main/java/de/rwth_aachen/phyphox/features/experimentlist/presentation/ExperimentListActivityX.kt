@@ -42,6 +42,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -72,11 +73,11 @@ class ExperimentListActivityX : ComponentActivity() {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 ExperimentListActivityScreen(uiState) {
                     //send it to vm
-                    it.links.firstOrNull()?.let { link ->
-                        val intent = Intent(Intent.ACTION_VIEW, link.url.toUri())
-                        intent.resolveActivity(this.packageManager)
-                        startActivity(intent)
-                    }
+//                    it.links.firstOrNull()?.let { link ->
+//                        val intent = Intent(Intent.ACTION_VIEW, link.url.toUri())
+//                        intent.resolveActivity(this.packageManager)
+//                        startActivity(intent)
+//                    }
                 }
             }
         }
@@ -115,8 +116,6 @@ fun ExperimentListActivityScreen(
                     modifier = contentModifier,
                     experiments = uiState.experiments,
                     contentPadding = PaddingValues(
-                        start = 16.dp,
-                        end = 16.dp,
                         top = paddingValues.calculateTopPadding() + 16.dp,
                         bottom = 112.dp, // Padding to avoid content being hidden behind the floating bar
                     ),
