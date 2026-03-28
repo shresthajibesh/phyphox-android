@@ -1,7 +1,5 @@
 package de.rwth_aachen.phyphox.features.experimentlist.data.parser
 
-import de.rwth_aachen.phyphox.features.experimentlist.data.parser.ExperimentIconParser.Companion.ATTRIBUTE_FORMAT
-import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Icon
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.Link
 import de.rwth_aachen.phyphox.utils.XmlParser
 import de.rwth_aachen.phyphox.utils.attr
