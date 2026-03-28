@@ -28,11 +28,15 @@ import de.rwth_aachen.phyphox.ui.theme.customColors
 
 
 @Composable
-fun ExperimentListSuccessContent(modifier: Modifier = Modifier, experiments: List<PhyphoxExperimentX>) {
+fun ExperimentListSuccessContent(
+    modifier: Modifier = Modifier,
+    experiments: List<PhyphoxExperimentX>,
+    contentPadding: PaddingValues = PaddingValues(16.dp),
+) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = contentPadding,
     ) {
         items(experiments) {
             ExperimentListItem(experiment = it)
