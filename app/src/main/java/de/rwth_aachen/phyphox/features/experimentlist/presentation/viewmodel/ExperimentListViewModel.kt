@@ -11,14 +11,27 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExperimentListViewModel @Inject constructor(
-    private val loadExperimentsFromAssets: LoadExperimentsFromAssetsUseCase
+    private val loadExperimentsFromAssets: LoadExperimentsFromAssetsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ExperimentListScreenUiState>(ExperimentListScreenUiState.Loading)
     val uiState: StateFlow<ExperimentListScreenUiState> = _uiState
 
+    init {
+        loadExperimentsData()
+    }
 
-    private fun loadData() = viewModelScope.launch {
-        loadExperimentsFromAssets()
+    private fun loadExperimentsData() = viewModelScope.launch {
+        loadExperimentsFromAssets().onSuccess { result ->
+            _uiState.value = ExperimentListScreenUiState.Success(
+                result,
+            )
+        }.onFailure {
+            _uiState.value = ExperimentListScreenUiState.Error(
+                it.message ?: "",
+            )
+        }
+
+
     }
 }
