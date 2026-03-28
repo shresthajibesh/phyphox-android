@@ -28,7 +28,7 @@ screengrab = "2.1.1"
 pahoMqtt = "4.4"
 camerax = "1.4.2"
 hilt-android = "2.57.2"
-composeBom = "2025.02.00"
+composeBom = "2026.03.01"
 activityCompose = "1.10.0"
 lifecycleRuntimeCompose = "2.8.7"
 agp = "31.13.2"
@@ -112,13 +112,27 @@ hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-comp
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+
+androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3-adaptive = { group = "androidx.compose.material3.adaptive", name = "adaptive" }
+
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
+androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "material3AdaptiveNav3" }
+
+# Core Navigation 3 libraries
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+
+# Optional add-on libraries
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
 
 #lint
 androidx-lint = { module = "com.android.tools.lint:lint", version.ref = "agp" }
@@ -128,16 +142,6 @@ kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationCore" }
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-
-
-# Core Navigation 3 libraries
-androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
-androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
-
-# Optional add-on libraries
-androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
-androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "material3AdaptiveNav3" }
-
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -150,8 +154,103 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5Plugin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization"}
 
-
-
 [bundles]
-camerax = ["androidx-camera-core", "androidx-camera-camera2", "androidx-camera-lifecycle", "androidx-camera-view"]
-compose = ["androidx-compose-ui", "androidx-compose-ui-graphics", "androidx-compose-ui-tooling-preview", "androidx-compose-material3", "androidx-activity-compose", "androidx-lifecycle-runtime-compose"]
+# ===== Core AndroidX =====
+core = [
+    "androidx-core",
+    "androidx-annotation",
+    "androidx-appcompat",
+    "androidx-appcompat-resources",
+    "androidx-preference",
+    "androidx-fragment",
+    "androidx-fragment-ktx",
+    "androidx-viewpager",
+    "androidx-recyclerview",
+    "androidx-recyclerview-selection"
+]
+
+# ===== UI =====
+ui = [
+    "google-material"
+]
+
+# ===== CameraX =====
+camerax = [
+    "androidx-camera-core",
+    "androidx-camera-camera2",
+    "androidx-camera-lifecycle",
+    "androidx-camera-view"
+]
+
+# ===== Networking & Utilities =====
+networking = [
+    "commons-io",
+    "jlhttp",
+    "paho-mqtt-android",
+    "zxing-android-embedded",
+    "apache-poi",
+    "caverock-androidsvg"
+]
+
+# ===== Dependency Injection (Hilt) =====
+di = [
+    "hilt-android"
+]
+
+# ===== Compose =====
+compose = [
+    "androidx-compose-ui",
+    "androidx-compose-ui-graphics",
+    "androidx-compose-ui-tooling-preview",
+    "androidx-compose-material3",
+    "androidx-activity-compose",
+    "androidx-lifecycle-runtime-compose",
+    "androidx-compose-material-icons-core",
+    "androidx-compose-material-icons-extended",
+    "androidx-compose-material3-adaptive"
+]
+
+compose-debug = [
+    "androidx-compose-ui-tooling",
+    "androidx-compose-ui-test-manifest"
+]
+
+# ===== Navigation =====
+navigation = [
+    "androidx-navigation3-runtime",
+    "androidx-navigation3-ui",
+    "androidx-lifecycle-viewmodel-navigation3",
+    "androidx-material3-adaptive-navigation3"
+]
+
+# ===== Serialization =====
+serialization = [
+    "gson",
+    "kotlinx-serialization-core",
+    "kotlinx-serialization-json"
+]
+
+# ===== Testing =====
+testing = [
+    "junit",
+    "junit-jupiter-api",
+    "junit-jupiter-params",
+    "junit-jupiter-engine",
+    "mockk",
+    "mockk-android",
+    "turbine",
+    "roboelectric",
+    "androidx-test-rules",
+    "androidx-test-ext-junit",
+    "androidx-test-espresso-core",
+    "fastlane-screengrab",
+    "google-truth",
+    "kotest-assertions-core",
+    "kotest-property",
+    "androidx-compose-ui-test-junit4"
+]
+
+# ===== Lint / Analysis =====
+lint = [
+    "detekt-compose"
+]

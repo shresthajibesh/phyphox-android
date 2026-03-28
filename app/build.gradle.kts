@@ -17,11 +17,7 @@ android {
     )
     namespace = "de.rwth_aachen.phyphox"
     testNamespace = "de.rwth_aachen.phyphoxTest"
-    compileSdk {
-        version = release(libs.versions.compileSdk.get().toInt()) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "de.rwth_aachen.phyphox"
@@ -169,47 +165,21 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation(libs.google.material)
-    implementation(libs.androidx.annotation)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.appcompat.resources)
-    implementation(libs.androidx.preference)
-    implementation(libs.androidx.core)
-    implementation(libs.androidx.fragment)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.viewpager)
-    implementation(libs.androidx.recyclerview.selection)
-    implementation(libs.androidx.recyclerview)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.core)
+    implementation(libs.bundles.ui)
     implementation(libs.bundles.camerax)
-    implementation(libs.commons.io)
-    implementation(libs.zxing.android.embedded)
-    implementation(libs.apache.poi)
-    implementation(libs.jlhttp)
-    implementation(libs.caverock.androidsvg)
-    implementation(libs.paho.mqtt.android)
-
-    //hilt
-    implementation(libs.hilt.android)
+    implementation(libs.bundles.networking)
+    implementation(libs.bundles.navigation)
+    implementation(libs.bundles.serialization)
+    implementation(libs.bundles.di)
+    implementation(libs.bundles.compose)
+    debugImplementation(libs.bundles.compose.debug)
+    testImplementation(libs.bundles.testing)
+    androidTestImplementation(libs.bundles.testing)
     ksp(libs.hilt.android.compiler)
 
-    // Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.bundles.compose)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
     detektPlugins(libs.detekt.compose)
-
-    // Compose Nav 3
-    implementation(libs.androidx.navigation3.ui)
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-    implementation(libs.androidx.material3.adaptive.navigation3)
-    implementation(libs.kotlinx.serialization.core)
-
-    //gson + serilization
-    implementation(libs.gson)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.serialization.core)
 
     add("androidTestScreenshotImplementation", libs.junit)
     add("androidTestScreenshotImplementation", libs.fastlane.screengrab)
@@ -217,24 +187,6 @@ dependencies {
     add("androidTestScreenshotImplementation", libs.androidx.test.ext.junit)
     add("androidTestScreenshotImplementation", libs.androidx.test.espresso.core)
 
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    androidTestImplementation(libs.google.truth)
-
-    testImplementation(libs.kotest.assertions.core)
-    testImplementation(libs.kotest.property)
-    testImplementation(libs.junit)
-    testImplementation(libs.google.truth)
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.jupiter.params)
-    testRuntimeOnly(libs.junit.jupiter.engine)
-
-    testImplementation(libs.mockk)
-    androidTestImplementation(libs.mockk)
-    androidTestImplementation(libs.mockk.android)
-
-    testImplementation(libs.turbine)
-    testImplementation(libs.roboelectric)
 }
 
 tasks.register("lintAll") {
