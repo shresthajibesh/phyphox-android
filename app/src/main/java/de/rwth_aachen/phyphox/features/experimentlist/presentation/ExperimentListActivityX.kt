@@ -6,10 +6,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateBounds
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -213,11 +219,16 @@ fun MainBottomAppBar(modifier: Modifier = Modifier) {
                 }
             }
         }
-
         AnimatedVisibility(
             visible = showFab,
-            enter = fadeIn() + expandHorizontally() + expandHorizontally(),
-            exit = fadeOut() + shrinkHorizontally(),
+            enter = scaleIn(
+                initialScale = 0f,           // start from center
+                animationSpec = tween(500)
+            ),
+            exit = scaleOut(
+                targetScale = 0f,           // start from center
+                animationSpec = tween(500)
+            ),
         ) {
             FloatingActionButton(
                 onClick = { /* TODO: Add Experiment action */ },
