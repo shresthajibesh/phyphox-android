@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -198,9 +199,17 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     detektPlugins(libs.detekt.compose)
 
+    // Compose Nav 3
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.material3.adaptive.navigation3)
+    implementation(libs.kotlinx.serialization.core)
+
     //gson + serilization
     implementation(libs.gson)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.core)
 
     add("androidTestScreenshotImplementation", libs.junit)
     add("androidTestScreenshotImplementation", libs.fastlane.screengrab)
