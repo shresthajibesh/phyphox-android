@@ -55,14 +55,14 @@ fun ExperimentListItem(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Box(
-            Modifier
-                .size(48.dp)
+            Modifier.size(48.dp)
         ) {
             experiment.icon?.let { icon ->
                 Image(
                     bitmap = decodeBase64(icon.value).asImageBitmap(),
                     contentDescription = "",
-                    colorFilter = ColorFilter.tint(MaterialTheme.customColors.primary),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimaryContainer),
+                    modifier = Modifier.size(32.dp).align(Alignment.Center)
                 )
 
             }
