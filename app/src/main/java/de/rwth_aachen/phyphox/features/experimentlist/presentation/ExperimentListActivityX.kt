@@ -5,6 +5,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,7 +50,13 @@ class ExperimentListActivityX : ComponentActivity() {
 
 @Composable
 fun ExperimentListActivityScreen(uiState: ExperimentListScreenUiState) {
-    Scaffold { paddingValues ->
+    Scaffold(
+        topBar = {
+        },
+        bottomBar = {
+            MainBottomAppBar()
+        }
+    ) { paddingValues ->
         val modifier = Modifier.padding(paddingValues)
         when (uiState) {
             ExperimentListScreenUiState.Loading -> ExperimentListLoadingContent(modifier)
@@ -46,4 +64,43 @@ fun ExperimentListActivityScreen(uiState: ExperimentListScreenUiState) {
             is ExperimentListScreenUiState.Success -> ExperimentListSuccessContent(modifier, uiState.experiments)
         }
     }
+}
+
+@Composable
+fun MainBottomAppBar(modifier: Modifier = Modifier) {
+    BottomAppBar(
+        modifier = modifier,
+        actions = {
+            IconButton(onClick = { /* do something */ }) {
+                Icon(Icons.Filled.Check, contentDescription = "Localized description")
+            }
+            IconButton(onClick = { /* do something */ }) {
+                Icon(
+                    Icons.Filled.Edit,
+                    contentDescription = "Localized description",
+                )
+            }
+            IconButton(onClick = { /* do something */ }) {
+                Icon(
+                    Icons.Filled.AccountBox,
+                    contentDescription = "Localized description",
+                )
+            }
+            IconButton(onClick = { /* do something */ }) {
+                Icon(
+                    Icons.Filled.Info,
+                    contentDescription = "Localized description",
+                )
+            }
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { /* do something */ },
+                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+            ) {
+                Icon(Icons.Filled.Add, "Localized description")
+            }
+        }
+    )
 }
