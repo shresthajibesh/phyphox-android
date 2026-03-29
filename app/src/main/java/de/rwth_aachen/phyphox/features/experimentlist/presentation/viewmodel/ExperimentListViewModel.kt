@@ -86,7 +86,7 @@ class ExperimentListViewModel @Inject constructor(
     }
 
     //region - userInteraction
-    fun onSettingsClicked() {}
+    fun onMoreClicked() {}
     fun onFilterCloseClicked() {}
     fun onFilterTextChanged(newFilter: String) {
         _filterText.value = newFilter

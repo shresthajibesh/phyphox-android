@@ -15,8 +15,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -73,7 +73,7 @@ class ExperimentListActivityX : ComponentActivity() {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 ExperimentListActivityScreen(
                     uiState = uiState,
-                    onSettingsClicked = viewModel::onSettingsClicked,
+                    onMoreClicked = viewModel::onMoreClicked,
                     onFilterTextChanged = viewModel::onFilterTextChanged,
                     onItemClicked = viewModel::onItemClicked,
                     onFilterCloseClicked = viewModel::onFilterCloseClicked,
@@ -89,7 +89,7 @@ class ExperimentListActivityX : ComponentActivity() {
 @Composable
 fun ExperimentListActivityScreen(
     uiState: ExperimentListScreenUiState,
-    onSettingsClicked: () -> Unit,
+    onMoreClicked: () -> Unit,
     onFilterTextChanged: (String) -> Unit,
     onFilterCloseClicked: () -> Unit,
     onItemClicked: (PhyphoxExperimentX) -> Unit,
@@ -110,7 +110,7 @@ fun ExperimentListActivityScreen(
         },
         bottomBar = {
             MainBottomAppBar(
-                onSettingsClicked = onSettingsClicked,
+                onMoreClicked = onMoreClicked,
                 onDisplayTypeClicked = {
                     showDisplayTypeBottomSheet = true
                 },
@@ -224,7 +224,7 @@ fun MainTopAppBar(
 fun MainBottomAppBar(
     modifier: Modifier = Modifier,
     onNewClicked: () -> Unit,
-    onSettingsClicked: () -> Unit,
+    onMoreClicked: () -> Unit,
     onDisplayTypeClicked: () -> Unit,
     onFilterCloseClicked: () -> Unit,
     onFilterTextChanged: (String) -> Unit,
@@ -310,10 +310,10 @@ fun MainBottomAppBar(
                         Icon(Icons.Default.Add, contentDescription = "Add")
                     }
 
-                    IconButton(onClick = onSettingsClicked) {
+                    IconButton(onClick = onMoreClicked) {
                         Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Settings",
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "More",
                             tint = MaterialTheme.colorScheme.onSecondaryContainer,
                         )
                     }
