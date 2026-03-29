@@ -74,6 +74,7 @@ class ExperimentListActivityX : ComponentActivity() {
                     onSettingsClicked = viewModel::onSettingsClicked,
                     onFilterTextChanged = viewModel::onFilterTextChanged,
                     onItemClicked = viewModel::onItemClicked,
+                    onFilterCloseClicked = viewModel::onFilterCloseClicked
                 )
             }
         }
@@ -87,6 +88,7 @@ fun ExperimentListActivityScreen(
     uiState: ExperimentListScreenUiState,
     onSettingsClicked: () -> Unit,
     onFilterTextChanged: (String) -> Unit,
+    onFilterCloseClicked: () -> Unit,
     onItemClicked: (PhyphoxExperimentX) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -112,6 +114,10 @@ fun ExperimentListActivityScreen(
                 onNewClicked = {
                     showNewExperimentBottomSheet = true
                 },
+                onFilterCloseClicked = {
+                    showFilterBottomSheet = false
+                    onFilterCloseClicked()
+                }
             )
         },
     ) { paddingValues ->
@@ -222,6 +228,7 @@ fun MainBottomAppBar(
     onNewClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
     onFilterClicked: () -> Unit,
+    onFilterCloseClicked: () -> Unit,
     onFilterTextChanged: (String) -> Unit,
 ) {
 
@@ -260,7 +267,12 @@ fun MainBottomAppBar(
                         modifier = Modifier.weight(1f),
                         maxLines = 1,
                     )
-                    IconButton(onClick = { isSearchFieldVisible = !isSearchFieldVisible }) {
+                    IconButton(onClick = {
+                        isSearchFieldVisible = !isSearchFieldVisible
+                        filterText = ""
+                        onFilterTextChanged("")
+                        onFilterCloseClicked()
+                    }) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close Search",

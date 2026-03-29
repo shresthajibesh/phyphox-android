@@ -18,12 +18,26 @@ class ExperimentListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _experimentList = MutableStateFlow<List<PhyphoxExperimentX>>(emptyList())
+    private val _filterText = MutableStateFlow("")
+
+    private val _filteredExperimentList = combine(_experimentList, _filterText) { experimentList, filterText ->
+        if (filterText.isBlank()) {
+            experimentList
+        } else {
+            experimentList.filter {
+                (it.title != null && it.title.contains(filterText, ignoreCase = true)) ||
+                    it.description != null && it.description.contains(filterText, ignoreCase = true) ||
+                    it.category != null && it.category.contains(filterText, ignoreCase = true)
+            }
+        }
+    }
+
     private val _displayType = MutableStateFlow<DisplayType>(DisplayType.List)
     private val _errorMessage = MutableStateFlow<String?>(null)
     private val _isLoading = MutableStateFlow(false)
 
     val uiState = combine(
-        _experimentList,
+        _filteredExperimentList,
         _displayType,
         _errorMessage,
         _isLoading,
@@ -72,9 +86,12 @@ class ExperimentListViewModel @Inject constructor(
     }
 
     //region - userInteraction
-    fun onSettingsClicked(){}
-    fun onFilterClicked(){}
-    fun onFilterTextChanged(newFilter:String){}
-    fun onItemClicked(phyphoxExperimentX: PhyphoxExperimentX){}
+    fun onSettingsClicked() {}
+    fun onFilterCloseClicked() {}
+    fun onFilterTextChanged(newFilter: String) {
+        _filterText.value = newFilter
+    }
+
+    fun onItemClicked(phyphoxExperimentX: PhyphoxExperimentX) {}
     //endregion
 }
