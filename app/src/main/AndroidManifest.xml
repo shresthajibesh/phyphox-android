@@ -33,7 +33,7 @@
         android:usesCleartextTraffic="true"><!-- While not recommended, there are plenty of use cases for phyphox on local networks where unencrypted communication is not unreasonable. -->
 
         <activity
-            android:name="de.rwth_aachen.phyphox.features.experimentlist.presentation.ExperimentListActivityX"
+            android:name="de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity"
             android:exported="true"
             android:theme="@style/Theme.Phyphox.DayNight"
             android:configChanges="keyboardHidden|orientation|screenSize">
