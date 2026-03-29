@@ -13,6 +13,6 @@ sealed interface ExperimentListScreenUiState {
 }
 
 enum class DisplayType(val nameId:Int) {
-    List(R.string.display_type_sheet_list), Grouped(R.string.display_type_sheet_grouped_list)
-
+    List(R.string.display_type_sheet_list),
+    Grouped(R.string.display_type_sheet_grouped_list)
 }
