@@ -5,53 +5,42 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.Science
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -67,6 +56,7 @@ import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.Exp
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.ExperimentListViewModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
 import de.rwth_aachen.phyphox.utils.isDarkThemeEnabled
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ExperimentListActivityX : ComponentActivity() {
@@ -79,14 +69,12 @@ class ExperimentListActivityX : ComponentActivity() {
         setContent {
             PhyphoxTheme(darkTheme = isDarkThemeEnabled()) {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-                ExperimentListActivityScreen(uiState) {
-                    //send it to vm
-//                    it.links.firstOrNull()?.let { link ->
-//                        val intent = Intent(Intent.ACTION_VIEW, link.url.toUri())
-//                        intent.resolveActivity(this.packageManager)
-//                        startActivity(intent)
-//                    }
-                }
+                ExperimentListActivityScreen(
+                    uiState = uiState,
+                    onSettingsClicked = viewModel::onSettingsClicked,
+                    onFilterTextChanged = viewModel::onFilterTextChanged,
+                    onItemClicked = viewModel::onItemClicked,
+                )
             }
         }
     }
@@ -97,9 +85,17 @@ class ExperimentListActivityX : ComponentActivity() {
 @Composable
 fun ExperimentListActivityScreen(
     uiState: ExperimentListScreenUiState,
+    onSettingsClicked: () -> Unit,
+    onFilterTextChanged: (String) -> Unit,
     onItemClicked: (PhyphoxExperimentX) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val coroutineScope = rememberCoroutineScope()
+    val filterSheetState = rememberModalBottomSheetState()
+    var showFilterBottomSheet by remember { mutableStateOf(false) }
+
+    val newExperimentSheetState = rememberModalBottomSheetState()
+    var showNewExperimentBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -107,9 +103,19 @@ fun ExperimentListActivityScreen(
             MainTopAppBar(scrollBehavior = scrollBehavior)
         },
         bottomBar = {
-            MainBottomAppBar()
+            MainBottomAppBar(
+                onSettingsClicked = onSettingsClicked,
+                onFilterClicked = {
+                    showFilterBottomSheet = true
+                },
+                onFilterTextChanged = onFilterTextChanged,
+                onNewClicked = {
+                    showNewExperimentBottomSheet = true
+                },
+            )
         },
     ) { paddingValues ->
+
         when (uiState) {
             ExperimentListScreenUiState.Loading -> ExperimentListLoadingContent(
                 modifier = Modifier.padding(paddingValues),
@@ -127,7 +133,63 @@ fun ExperimentListActivityScreen(
                 onItemClicked = onItemClicked,
             )
         }
+
+        if (showFilterBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showFilterBottomSheet = false
+                },
+                sheetState = filterSheetState,
+            ) {
+                Column {
+                    Text("Hide bottom sheet")
+                    Text("Hide bottom sheet")
+                    Text("Hide bottom sheet")
+                    Text("Hide bottom sheet")
+                    Text("Hide bottom sheet")
+                    Text("Hide bottom sheet")
+                    Text("Hide bottom sheet")
+                    Text("Hide bottom sheet")
+                    Text("Hide bottom sheet")
+                    Text("Hide bottom sheet")
+
+                    Button(
+                        onClick = {
+                            coroutineScope.launch { filterSheetState.hide() }.invokeOnCompletion {
+                                if (!filterSheetState.isVisible) {
+                                    showFilterBottomSheet = false
+                                }
+                            }
+                        },
+                    ) {
+                        Text("Hide bottom sheet")
+                    }
+                }
+            }
+        }
+        if (showNewExperimentBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showNewExperimentBottomSheet = false
+                },
+                sheetState = filterSheetState,
+            ) {
+                // Sheet content
+                Button(
+                    onClick = {
+                        coroutineScope.launch { newExperimentSheetState.hide() }.invokeOnCompletion {
+                            if (!newExperimentSheetState.isVisible) {
+                                showNewExperimentBottomSheet = false
+                            }
+                        }
+                    },
+                ) {
+                    Text("Hide bottom sheet")
+                }
+            }
+        }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -157,8 +219,10 @@ fun MainTopAppBar(
 @Composable
 fun MainBottomAppBar(
     modifier: Modifier = Modifier,
-    onSettingsClicked: () -> Unit = {},
-    onSearchClicked: () -> Unit = {},
+    onNewClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
+    onFilterClicked: () -> Unit,
+    onFilterTextChanged: (String) -> Unit,
 ) {
 
     // Floating Toolbar Group
@@ -169,6 +233,7 @@ fun MainBottomAppBar(
         shadowElevation = 8.dp,
     ) {
         var isSearchFieldVisible by remember { mutableStateOf(false) }
+        var filterText by remember { mutableStateOf("") }
 
 
         Row(
@@ -179,18 +244,21 @@ fun MainBottomAppBar(
 
             AnimatedVisibility(
                 isSearchFieldVisible,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Row(
                     modifier = Modifier.weight(1f),
                     horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End),
                     verticalAlignment = Alignment.CenterVertically,
-                ){
+                ) {
                     TextField(
-                        value = "",
-                        onValueChange = {},
+                        value = filterText,
+                        onValueChange = {
+                            filterText = it
+                            onFilterTextChanged(it)
+                        },
                         modifier = Modifier.weight(1f),
-                        maxLines = 1
+                        maxLines = 1,
                     )
                     IconButton(onClick = { isSearchFieldVisible = !isSearchFieldVisible }) {
                         Icon(
@@ -203,41 +271,41 @@ fun MainBottomAppBar(
             }
 
             AnimatedVisibility(!isSearchFieldVisible) {
-               Row(
-                   horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End),
-                   verticalAlignment = Alignment.CenterVertically,
-               ){
-                   IconButton(onClick = { isSearchFieldVisible = !isSearchFieldVisible }) {
-                       Icon(
-                           imageVector = Icons.Default.Search,
-                           contentDescription = "Search",
-                           tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                       )
-                   }
-                   IconButton(onClick = { /* TODO: Navigate to My Experiments */ }) {
-                       Icon(
-                           imageVector = Icons.Default.FilterList,
-                           contentDescription = "Search",
-                           tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                       )
-                   }
-                   FloatingActionButton(
-                       onClick = { /* TODO: Add Experiment action */ },
-                       containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                       contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                       elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 8.dp),
-                   ) {
-                       Icon(Icons.Default.Add, contentDescription = "Add")
-                   }
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.End),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    IconButton(onClick = { isSearchFieldVisible = !isSearchFieldVisible }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search",
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        )
+                    }
+                    IconButton(onClick = onFilterClicked) {
+                        Icon(
+                            imageVector = Icons.Default.FilterList,
+                            contentDescription = "Search",
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        )
+                    }
+                    FloatingActionButton(
+                        onClick = onNewClicked,
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 8.dp),
+                    ) {
+                        Icon(Icons.Default.Add, contentDescription = "Add")
+                    }
 
-                   IconButton(onClick = { /* TODO: Navigate to Settings */ }) {
-                       Icon(
-                           imageVector = Icons.Default.Settings,
-                           contentDescription = "Settings",
-                           tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                       )
-                   }
-               }
+                    IconButton(onClick = onSettingsClicked) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings",
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        )
+                    }
+                }
             }
         }
     }

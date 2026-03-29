@@ -70,4 +70,11 @@ class ExperimentListViewModel @Inject constructor(
             experimentList.groupBy { it.category ?: "Others" }
         }
     }
+
+    //region - userInteraction
+    fun onSettingsClicked(){}
+    fun onFilterClicked(){}
+    fun onFilterTextChanged(newFilter:String){}
+    fun onItemClicked(phyphoxExperimentX: PhyphoxExperimentX){}
+    //endregion
 }
