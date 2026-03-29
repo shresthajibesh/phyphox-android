@@ -22,7 +22,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -31,14 +30,12 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.camera.core.CameraSelector.LENS_FACING_BACK
 import androidx.camera.core.CameraSelector.LENS_FACING_FRONT
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Visibility
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.slider.Slider
 import com.google.common.util.concurrent.ListenableFuture

@@ -1,6 +1,5 @@
 package de.rwth_aachen.phyphox.camera.model
 
-import android.R
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector.LENS_FACING_BACK

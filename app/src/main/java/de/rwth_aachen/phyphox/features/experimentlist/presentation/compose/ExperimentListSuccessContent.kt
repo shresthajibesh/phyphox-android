@@ -15,28 +15,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperimentX
+import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.DisplayType
 
 
 @Composable
 fun ExperimentListSuccessContent(
     modifier: Modifier = Modifier,
-    experiments: List<PhyphoxExperimentX>,
+    displayType: DisplayType = DisplayType.List,
+    experiments: Map<String, List<PhyphoxExperimentX>>,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onItemClicked: (PhyphoxExperimentX) -> Unit,
 ) {
@@ -45,9 +42,65 @@ fun ExperimentListSuccessContent(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = contentPadding,
     ) {
-        items(experiments) {
-            ExperimentListItem(experiment = it, onItemClicked = onItemClicked)
+        when (displayType) {
+            DisplayType.Grouped -> {
+                groupedListType(
+                    experiments = experiments,
+                    onExperimentClicked = onItemClicked,
+                )
+            }
+
+            DisplayType.List -> {
+                listType(
+                    experiments = experiments,
+                    onExperimentClicked = onItemClicked,
+                )
+            }
         }
+    }
+}
+
+
+fun LazyListScope.groupedListType(
+    experiments: Map<String, List<PhyphoxExperimentX>>,
+    onExperimentClicked: (PhyphoxExperimentX) -> Unit,
+) {
+    experiments.forEach { (category, items) ->
+        stickyHeader(category) {
+            ListHeader(title = category)
+        }
+        items.forEach { experiment ->
+            item(experiment.title) {
+                ExperimentListItem(experiment = experiment, onItemClicked = onExperimentClicked)
+            }
+        }
+    }
+}
+
+fun LazyListScope.listType(
+    experiments: Map<String, List<PhyphoxExperimentX>>,
+    onExperimentClicked: (PhyphoxExperimentX) -> Unit,
+) {
+    experiments.forEach { (_, items) ->
+        items.forEach { experiment ->
+            item(experiment.title) {
+                ExperimentListItem(experiment = experiment, onItemClicked = onExperimentClicked)
+            }
+        }
+    }
+}
+
+@Composable
+fun ListHeader(modifier: Modifier = Modifier, title: String) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surface),
+    ) {
+        Text(
+            text = title,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
@@ -74,7 +127,7 @@ fun ExperimentListItem(
     ) {
         Box(
             Modifier
-                .size(56.dp)
+                .size(56.dp),
         ) {
             experiment.icon?.let { icon ->
                 Image(

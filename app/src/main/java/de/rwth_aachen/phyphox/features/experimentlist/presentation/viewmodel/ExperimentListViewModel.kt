@@ -34,7 +34,7 @@ class ExperimentListViewModel @Inject constructor(
             ExperimentListScreenUiState.Error(errorMessage)
         } else {
             ExperimentListScreenUiState.Success(
-                experiments = experimentList,
+                experiments = categorizeList(experimentList, displayType),
                 displayType = displayType,
             )
         }
@@ -57,6 +57,17 @@ class ExperimentListViewModel @Inject constructor(
         }.onFailure {
             _errorMessage.value = it.message ?: "Unknown Error"
             _isLoading.value = false
+        }
+    }
+
+    private fun categorizeList(
+        experimentList: List<PhyphoxExperimentX>,
+        displayType: DisplayType,
+    ): Map<String, List<PhyphoxExperimentX>> {
+        return if (displayType == DisplayType.List) {
+            mapOf("All" to experimentList)
+        } else {
+            experimentList.groupBy { it.category ?: "Others" }
         }
     }
 }
