@@ -21,7 +21,6 @@ import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.sheet
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.DisplayType
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.ExperimentListScreenUiState
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExperimentListActivityScreen(
