@@ -107,6 +107,7 @@ import de.rwth_aachen.phyphox.SettingsActivity.SettingsActivity;
 import de.rwth_aachen.phyphox.SettingsActivity.SettingsFragment;
 import de.rwth_aachen.phyphox.camera.depth.DepthInput;
 import de.rwth_aachen.phyphox.camera.helper.CameraHelper;
+import de.rwth_aachen.phyphox.features.experimentlist.presentation.ExperimentListActivityX;
 
 public class ExperimentListActivity extends AppCompatActivity {
 
@@ -315,6 +316,11 @@ public class ExperimentListActivity extends AppCompatActivity {
             }
             else if (item.getItemId() == R.id.action_deviceInfo) {
                 openDeviceInfoDialog();
+                return true;
+            }
+            else if(item.getItemId() == R.id.action_experiment_list){
+                Intent intent = new Intent(this, ExperimentListActivityX.class);
+                startActivity(intent);
                 return true;
             }
             else {

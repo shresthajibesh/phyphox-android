@@ -7,4 +7,5 @@
     <item android:id="@+id/action_helpRemote" android:title="@string/remotePhyphoxOrg" android:orderInCategory="5" />
     <item android:id="@+id/action_settings" android:title="@string/settings" android:orderInCategory="6" />
     <item android:id="@+id/action_deviceInfo" android:title="@string/deviceInfo" android:orderInCategory="7" />
+    <item android:id="@+id/action_experiment_list" android:title="@string/experiment_list" android:orderInCategory="8" />
 </menu>
