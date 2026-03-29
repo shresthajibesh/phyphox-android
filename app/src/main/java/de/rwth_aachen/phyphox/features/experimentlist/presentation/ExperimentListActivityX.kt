@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,6 +53,7 @@ import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperi
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.ExperimentListErrorContent
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.ExperimentListLoadingContent
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.ExperimentListSuccessContent
+import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.DisplayType
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.ExperimentListScreenUiState
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.ExperimentListViewModel
 import de.rwth_aachen.phyphox.ui.theme.PhyphoxTheme
@@ -74,7 +76,8 @@ class ExperimentListActivityX : ComponentActivity() {
                     onSettingsClicked = viewModel::onSettingsClicked,
                     onFilterTextChanged = viewModel::onFilterTextChanged,
                     onItemClicked = viewModel::onItemClicked,
-                    onFilterCloseClicked = viewModel::onFilterCloseClicked
+                    onFilterCloseClicked = viewModel::onFilterCloseClicked,
+                    onDisplayTypeSelected = viewModel::onDisplayTypeSelected,
                 )
             }
         }
@@ -90,11 +93,12 @@ fun ExperimentListActivityScreen(
     onFilterTextChanged: (String) -> Unit,
     onFilterCloseClicked: () -> Unit,
     onItemClicked: (PhyphoxExperimentX) -> Unit,
+    onDisplayTypeSelected: (DisplayType) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val coroutineScope = rememberCoroutineScope()
-    val filterSheetState = rememberModalBottomSheetState()
-    var showFilterBottomSheet by remember { mutableStateOf(false) }
+    val displayTypeSheetState = rememberModalBottomSheetState()
+    var showDisplayTypeBottomSheet by remember { mutableStateOf(false) }
 
     val newExperimentSheetState = rememberModalBottomSheetState()
     var showNewExperimentBottomSheet by remember { mutableStateOf(false) }
@@ -107,17 +111,17 @@ fun ExperimentListActivityScreen(
         bottomBar = {
             MainBottomAppBar(
                 onSettingsClicked = onSettingsClicked,
-                onFilterClicked = {
-                    showFilterBottomSheet = true
+                onDisplayTypeClicked = {
+                    showDisplayTypeBottomSheet = true
                 },
                 onFilterTextChanged = onFilterTextChanged,
                 onNewClicked = {
                     showNewExperimentBottomSheet = true
                 },
                 onFilterCloseClicked = {
-                    showFilterBottomSheet = false
+                    showDisplayTypeBottomSheet = false
                     onFilterCloseClicked()
-                }
+                },
             )
         },
     ) { paddingValues ->
@@ -140,35 +144,29 @@ fun ExperimentListActivityScreen(
             )
         }
 
-        if (showFilterBottomSheet) {
+        if (showDisplayTypeBottomSheet) {
             ModalBottomSheet(
                 onDismissRequest = {
-                    showFilterBottomSheet = false
+                    showDisplayTypeBottomSheet = false
                 },
-                sheetState = filterSheetState,
+                sheetState = displayTypeSheetState,
             ) {
                 Column {
-                    Text("Hide bottom sheet")
-                    Text("Hide bottom sheet")
-                    Text("Hide bottom sheet")
-                    Text("Hide bottom sheet")
-                    Text("Hide bottom sheet")
-                    Text("Hide bottom sheet")
-                    Text("Hide bottom sheet")
-                    Text("Hide bottom sheet")
-                    Text("Hide bottom sheet")
-                    Text("Hide bottom sheet")
-
-                    Button(
-                        onClick = {
-                            coroutineScope.launch { filterSheetState.hide() }.invokeOnCompletion {
-                                if (!filterSheetState.isVisible) {
-                                    showFilterBottomSheet = false
+                    DisplayType.entries.forEach { displayType ->
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    coroutineScope.launch { displayTypeSheetState.hide() }.invokeOnCompletion {
+                                        if (!displayTypeSheetState.isVisible) {
+                                            showDisplayTypeBottomSheet = false
+                                        }
+                                        onDisplayTypeSelected(displayType)
+                                    }
                                 }
-                            }
-                        },
-                    ) {
-                        Text("Hide bottom sheet")
+                                .padding(16.dp),
+                            text = stringResource(displayType.nameId),
+                        )
                     }
                 }
             }
@@ -178,7 +176,7 @@ fun ExperimentListActivityScreen(
                 onDismissRequest = {
                     showNewExperimentBottomSheet = false
                 },
-                sheetState = filterSheetState,
+                sheetState = displayTypeSheetState,
             ) {
                 // Sheet content
                 Button(
@@ -227,7 +225,7 @@ fun MainBottomAppBar(
     modifier: Modifier = Modifier,
     onNewClicked: () -> Unit,
     onSettingsClicked: () -> Unit,
-    onFilterClicked: () -> Unit,
+    onDisplayTypeClicked: () -> Unit,
     onFilterCloseClicked: () -> Unit,
     onFilterTextChanged: (String) -> Unit,
 ) {
@@ -267,12 +265,14 @@ fun MainBottomAppBar(
                         modifier = Modifier.weight(1f),
                         maxLines = 1,
                     )
-                    IconButton(onClick = {
-                        isSearchFieldVisible = !isSearchFieldVisible
-                        filterText = ""
-                        onFilterTextChanged("")
-                        onFilterCloseClicked()
-                    }) {
+                    IconButton(
+                        onClick = {
+                            isSearchFieldVisible = !isSearchFieldVisible
+                            filterText = ""
+                            onFilterTextChanged("")
+                            onFilterCloseClicked()
+                        },
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close Search",
@@ -294,7 +294,7 @@ fun MainBottomAppBar(
                             tint = MaterialTheme.colorScheme.onSecondaryContainer,
                         )
                     }
-                    IconButton(onClick = onFilterClicked) {
+                    IconButton(onClick = onDisplayTypeClicked) {
                         Icon(
                             imageVector = Icons.Default.FilterList,
                             contentDescription = "Search",

@@ -93,5 +93,9 @@ class ExperimentListViewModel @Inject constructor(
     }
 
     fun onItemClicked(phyphoxExperimentX: PhyphoxExperimentX) {}
+
+    fun onDisplayTypeSelected(displayType: DisplayType) {
+        _displayType.value = displayType
+    }
     //endregion
 }

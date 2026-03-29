@@ -503,4 +503,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     <string name="empty_string" />
     <string name="experiment_list">Experiment List</string>
     <string name="title_experiment_list">Experiment List</string>
+    <string name="display_type_sheet_list">Ungrouped List</string>
+    <string name="display_type_sheet_grouped_list">Grouped List</string>
 </resources>
