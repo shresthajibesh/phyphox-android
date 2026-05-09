@@ -18,7 +18,6 @@ class ExperimentListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _experimentList = MutableStateFlow<List<PhyphoxExperimentX>>(emptyList())
-
     private val _errorMessage = MutableStateFlow<String?>(null)
     private val _isLoading = MutableStateFlow(false)
 
