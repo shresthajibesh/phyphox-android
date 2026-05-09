@@ -7,16 +7,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperimentX
+import de.rwth_aachen.phyphox.ui.theme.LocalPhyphoxColors
+import de.rwth_aachen.phyphox.ui.theme.PhyphoxColors
+import de.rwth_aachen.phyphox.ui.theme.customColors
 
 
 @Composable
@@ -57,6 +57,7 @@ fun LazyListScope.segmentedList(
         stickyHeader(category) {
             ListHeader(title = category)
         }
+
         items.forEach { experiment ->
             item(experiment.title) {
                 ExperimentListItem(experiment = experiment, onItemClicked = onExperimentClicked)
@@ -68,12 +69,13 @@ fun LazyListScope.segmentedList(
 @Composable
 fun ListHeader(modifier: Modifier = Modifier, title: String) {
     Text(
+        text = title,
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onSurface,
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp),
-        text = title,
-        style = MaterialTheme.typography.titleSmall
+            .padding(start = 16.dp, bottom = 12.dp),
     )
 }
 
@@ -84,57 +86,41 @@ fun ExperimentListItem(
     onItemClicked: (PhyphoxExperimentX) -> Unit,
 ) {
 
-    Row(
-        modifier = modifier
-            .clickable(enabled = true) {
-                onItemClicked(experiment)
-            }
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(
-                horizontal = 16.dp,
-                vertical = 8.dp,
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        Box(
-            Modifier
-                .size(56.dp),
-        ) {
-            experiment.icon?.let { icon ->
-                Image(
-                    bitmap = decodeBase64(icon.value).asImageBitmap(),
-                    contentDescription = "",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
-                    modifier = Modifier
-                        .align(Alignment.Center),
+    ListItem(
+        headlineContent = {
+            Text(
+                text = experiment.title?.trim()?.clean() ?: "Unnamed",
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        },
+        supportingContent = {
+            experiment.description?.let {
+                Text(
+                    text = it.trim().clean(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 2,
                 )
-
             }
-        }
-        Column(
-            modifier = Modifier,
-            verticalArrangement = Arrangement.Top,
-        ) {
-            Text(
-                text = experiment.title?.trim() ?: "Name Not Found",
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 1,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Text(
-                modifier = Modifier
-                    .wrapContentHeight(),
-                text = experiment.description?.trim()?.clean() ?: "Name Not Found",
-                style = MaterialTheme.typography.labelMedium,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+        },
+        leadingContent = {
+            Box(Modifier.size(40.dp)) {
+                experiment.icon?.let { icon ->
+                    Image(
+                        bitmap = decodeBase64(icon.value).asImageBitmap(),
+                        contentDescription = "",
+                        colorFilter = ColorFilter.tint(MaterialTheme.customColors.primary),
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                    )
 
-        }
-    }
+                }
+            }
+        },
+        colors = ListItemDefaults.colors(
+            containerColor = androidx.compose.ui.graphics.Color.Transparent,
+        ),
+        modifier = modifier.clickable { onItemClicked(experiment) },
+    )
 }
 
 fun decodeBase64(input: String): Bitmap {
