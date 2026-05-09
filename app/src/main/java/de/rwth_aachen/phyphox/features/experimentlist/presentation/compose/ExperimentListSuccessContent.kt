@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,12 +32,14 @@ import de.rwth_aachen.phyphox.ui.theme.customColors
 @Composable
 fun ExperimentListSuccessContent(
     modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
     experiments: Map<String, List<PhyphoxExperimentX>>,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onItemClicked: (PhyphoxExperimentX) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
+        state = listState,
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = contentPadding,
     ) {
