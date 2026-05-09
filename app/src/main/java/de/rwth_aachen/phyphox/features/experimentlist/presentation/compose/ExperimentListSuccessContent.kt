@@ -24,8 +24,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperimentX
-import de.rwth_aachen.phyphox.ui.theme.LocalPhyphoxColors
-import de.rwth_aachen.phyphox.ui.theme.PhyphoxColors
 import de.rwth_aachen.phyphox.ui.theme.customColors
 
 

@@ -2,6 +2,7 @@ package de.rwth_aachen.phyphox.features.experimentlist.presentation.compose
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -28,12 +29,19 @@ fun ExperimentListActivityScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val newExperimentSheetState = rememberModalBottomSheetState()
     var showNewExperimentBottomSheet by remember { mutableStateOf(false) }
+    val isNewActionFabVisible = uiState is ExperimentListScreenUiState.Success
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            MainTopAppBar(scrollBehavior = scrollBehavior)
+            MainTopAppBar(
+                scrollBehavior = scrollBehavior,
+                onMoreClicked = onMoreClicked,
+            )
         },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {}) { }
+        }
     ) { paddingValues ->
 
         when (uiState) {

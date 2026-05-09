@@ -1,6 +1,10 @@
 package de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.appbar
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -16,6 +20,7 @@ import de.rwth_aachen.phyphox.R
 @Composable
 fun MainTopAppBar(
     modifier: Modifier = Modifier,
+    onMoreClicked: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     TopAppBar(
@@ -33,5 +38,12 @@ fun MainTopAppBar(
             )
         },
         scrollBehavior = scrollBehavior,
+        actions = {
+            IconButton(
+                onClick = onMoreClicked,
+            ) {
+                Icon(Icons.Filled.MoreVert, contentDescription = "More options")
+            }
+        },
     )
 }
