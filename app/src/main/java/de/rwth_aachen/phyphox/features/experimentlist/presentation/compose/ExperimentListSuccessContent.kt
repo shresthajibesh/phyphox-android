@@ -41,7 +41,7 @@ fun ExperimentListSuccessContent(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = contentPadding,
     ) {
-        groupedListType(
+        segmentedList(
             experiments = experiments,
             onExperimentClicked = onItemClicked,
         )
@@ -49,7 +49,7 @@ fun ExperimentListSuccessContent(
 }
 
 
-fun LazyListScope.groupedListType(
+fun LazyListScope.segmentedList(
     experiments: Map<String, List<PhyphoxExperimentX>>,
     onExperimentClicked: (PhyphoxExperimentX) -> Unit,
 ) {
@@ -67,22 +67,14 @@ fun LazyListScope.groupedListType(
 
 @Composable
 fun ListHeader(modifier: Modifier = Modifier, title: String) {
-    Column(
+    Text(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
-
-    ) {
-        Text(
-            modifier = Modifier.padding(16.dp),
-            text = title,
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.labelMedium
-        )
-        HorizontalDivider(
-            modifier = Modifier.padding(start = 16.dp)
-        )
-    }
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp),
+        text = title,
+        style = MaterialTheme.typography.titleSmall
+    )
 }
 
 @Composable

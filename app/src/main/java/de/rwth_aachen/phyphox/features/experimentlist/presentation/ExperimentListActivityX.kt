@@ -21,7 +21,10 @@ class ExperimentListActivityX : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            PhyphoxTheme(darkTheme = isDarkThemeEnabled()) {
+            PhyphoxTheme(
+                dynamicColor = false,
+                darkTheme = isDarkThemeEnabled()
+            ) {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 ExperimentListActivityScreen(
                     uiState = uiState,
