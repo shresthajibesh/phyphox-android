@@ -1,7 +1,8 @@
 package de.rwth_aachen.phyphox.features.experimentlist.presentation.compose
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -15,9 +16,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -69,7 +68,15 @@ fun ExperimentListActivityScreen(
             )
         },
         floatingActionButton = {
-            AnimatedVisibility(isFabVisible) {
+            AnimatedVisibility(
+                visible = isFabVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { it * 2 },
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { it * 2 },
+                ),
+            ) {
                 FloatingActionButton(
                     onClick = {
                         showNewExperimentBottomSheet = true
@@ -95,7 +102,7 @@ fun ExperimentListActivityScreen(
                 modifier = Modifier.padding(paddingValues),
                 experiments = uiState.experiments,
                 onItemClicked = onItemClicked,
-                listState = listState
+                listState = listState,
             )
         }
 
