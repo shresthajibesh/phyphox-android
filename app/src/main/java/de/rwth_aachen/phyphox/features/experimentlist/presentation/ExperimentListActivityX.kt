@@ -26,9 +26,7 @@ class ExperimentListActivityX : ComponentActivity() {
                 ExperimentListActivityScreen(
                     uiState = uiState,
                     onMoreClicked = viewModel::onMoreClicked,
-                    onFilterTextChanged = viewModel::onFilterTextChanged,
                     onItemClicked = viewModel::onItemClicked,
-                    onFilterCloseClicked = viewModel::onFilterCloseClicked,
                 )
             }
         }

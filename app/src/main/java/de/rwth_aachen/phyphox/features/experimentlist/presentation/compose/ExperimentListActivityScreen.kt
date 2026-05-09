@@ -14,7 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperimentX
-import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.appbar.MainBottomAppBar
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.appbar.MainTopAppBar
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.sheets.NewExperimentBottomSheet
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.ExperimentListScreenUiState
@@ -24,11 +23,9 @@ import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.Exp
 fun ExperimentListActivityScreen(
     uiState: ExperimentListScreenUiState,
     onMoreClicked: () -> Unit,
-    onFilterTextChanged: (String) -> Unit,
-    onFilterCloseClicked: () -> Unit,
     onItemClicked: (PhyphoxExperimentX) -> Unit,
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val newExperimentSheetState = rememberModalBottomSheetState()
     var showNewExperimentBottomSheet by remember { mutableStateOf(false) }
 
@@ -36,18 +33,6 @@ fun ExperimentListActivityScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             MainTopAppBar(scrollBehavior = scrollBehavior)
-        },
-        bottomBar = {
-            MainBottomAppBar(
-                onMoreClicked = onMoreClicked,
-                onFilterTextChanged = onFilterTextChanged,
-                onNewClicked = {
-                    showNewExperimentBottomSheet = true
-                },
-                onFilterCloseClicked = {
-                    onFilterCloseClicked()
-                },
-            )
         },
     ) { paddingValues ->
 
