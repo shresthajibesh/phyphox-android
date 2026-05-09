@@ -16,9 +16,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperimentX
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.appbar.MainBottomAppBar
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.appbar.MainTopAppBar
-import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.sheets.DisplayTypeSheet
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.compose.sheets.NewExperimentBottomSheet
-import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.DisplayType
 import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.ExperimentListScreenUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,13 +27,8 @@ fun ExperimentListActivityScreen(
     onFilterTextChanged: (String) -> Unit,
     onFilterCloseClicked: () -> Unit,
     onItemClicked: (PhyphoxExperimentX) -> Unit,
-    onDisplayTypeSelected: (DisplayType) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-
-    val displayTypeSheetState = rememberModalBottomSheetState()
-    var showDisplayTypeBottomSheet by remember { mutableStateOf(false) }
-
     val newExperimentSheetState = rememberModalBottomSheetState()
     var showNewExperimentBottomSheet by remember { mutableStateOf(false) }
 
@@ -47,15 +40,11 @@ fun ExperimentListActivityScreen(
         bottomBar = {
             MainBottomAppBar(
                 onMoreClicked = onMoreClicked,
-                onDisplayTypeClicked = {
-                    showDisplayTypeBottomSheet = true
-                },
                 onFilterTextChanged = onFilterTextChanged,
                 onNewClicked = {
                     showNewExperimentBottomSheet = true
                 },
                 onFilterCloseClicked = {
-                    showDisplayTypeBottomSheet = false
                     onFilterCloseClicked()
                 },
             )
@@ -75,20 +64,10 @@ fun ExperimentListActivityScreen(
             is ExperimentListScreenUiState.Success -> ExperimentListSuccessContent(
                 modifier = Modifier.padding(paddingValues),
                 experiments = uiState.experiments,
-                displayType = uiState.displayType,
                 onItemClicked = onItemClicked,
             )
         }
 
-        if (showDisplayTypeBottomSheet) {
-            DisplayTypeSheet(
-                sheetStateState = displayTypeSheetState,
-                onDismissRequest = {
-                    showDisplayTypeBottomSheet = false
-                },
-                onDisplayTypeSelected = onDisplayTypeSelected,
-            )
-        }
         if (showNewExperimentBottomSheet) {
             NewExperimentBottomSheet(
                 sheetStateState = newExperimentSheetState,

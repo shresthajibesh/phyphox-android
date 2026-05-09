@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,7 +32,6 @@ fun MainBottomAppBar(
     modifier: Modifier = Modifier,
     onNewClicked: () -> Unit,
     onMoreClicked: () -> Unit,
-    onDisplayTypeClicked: () -> Unit,
     onFilterCloseClicked: () -> Unit,
     onFilterTextChanged: (String) -> Unit,
 ) {
@@ -97,13 +95,6 @@ fun MainBottomAppBar(
                     IconButton(onClick = { isSearchFieldVisible = !isSearchFieldVisible }) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search",
-                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                        )
-                    }
-                    IconButton(onClick = onDisplayTypeClicked) {
-                        Icon(
-                            imageVector = Icons.Default.FilterList,
                             contentDescription = "Search",
                             tint = MaterialTheme.colorScheme.onSecondaryContainer,
                         )

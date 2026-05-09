@@ -27,13 +27,11 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.rwth_aachen.phyphox.features.experimentlist.domain.model.PhyphoxExperimentX
-import de.rwth_aachen.phyphox.features.experimentlist.presentation.viewmodel.DisplayType
 
 
 @Composable
 fun ExperimentListSuccessContent(
     modifier: Modifier = Modifier,
-    displayType: DisplayType = DisplayType.List,
     experiments: Map<String, List<PhyphoxExperimentX>>,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onItemClicked: (PhyphoxExperimentX) -> Unit,
@@ -43,21 +41,10 @@ fun ExperimentListSuccessContent(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = contentPadding,
     ) {
-        when (displayType) {
-            DisplayType.Grouped -> {
-                groupedListType(
-                    experiments = experiments,
-                    onExperimentClicked = onItemClicked,
-                )
-            }
-
-            DisplayType.List -> {
-                listType(
-                    experiments = experiments,
-                    onExperimentClicked = onItemClicked,
-                )
-            }
-        }
+        groupedListType(
+            experiments = experiments,
+            onExperimentClicked = onItemClicked,
+        )
     }
 }
 
@@ -70,19 +57,6 @@ fun LazyListScope.groupedListType(
         stickyHeader(category) {
             ListHeader(title = category)
         }
-        items.forEach { experiment ->
-            item(experiment.title) {
-                ExperimentListItem(experiment = experiment, onItemClicked = onExperimentClicked)
-            }
-        }
-    }
-}
-
-fun LazyListScope.listType(
-    experiments: Map<String, List<PhyphoxExperimentX>>,
-    onExperimentClicked: (PhyphoxExperimentX) -> Unit,
-) {
-    experiments.forEach { (_, items) ->
         items.forEach { experiment ->
             item(experiment.title) {
                 ExperimentListItem(experiment = experiment, onItemClicked = onExperimentClicked)

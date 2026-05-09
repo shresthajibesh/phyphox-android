@@ -32,24 +32,21 @@ class ExperimentListViewModel @Inject constructor(
         }
     }
 
-    private val _displayType = MutableStateFlow<DisplayType>(DisplayType.List)
     private val _errorMessage = MutableStateFlow<String?>(null)
     private val _isLoading = MutableStateFlow(false)
 
     val uiState = combine(
         _filteredExperimentList,
-        _displayType,
         _errorMessage,
         _isLoading,
-    ) { experimentList, displayType, errorMessage, isLoading ->
+    ) { experimentList, errorMessage, isLoading ->
         if (isLoading) {
             ExperimentListScreenUiState.Loading
         } else if (errorMessage != null) {
             ExperimentListScreenUiState.Error(errorMessage)
         } else {
             ExperimentListScreenUiState.Success(
-                experiments = categorizeList(experimentList, displayType),
-                displayType = displayType,
+                experiments = categorizeList(experimentList),
             )
         }
     }.stateIn(
@@ -76,13 +73,8 @@ class ExperimentListViewModel @Inject constructor(
 
     private fun categorizeList(
         experimentList: List<PhyphoxExperimentX>,
-        displayType: DisplayType,
     ): Map<String, List<PhyphoxExperimentX>> {
-        return if (displayType == DisplayType.List) {
-            mapOf("All" to experimentList)
-        } else {
-            experimentList.groupBy { it.category ?: "Others" }
-        }
+        return experimentList.groupBy { it.category ?: "Others" }
     }
 
     //region - userInteraction
@@ -94,8 +86,5 @@ class ExperimentListViewModel @Inject constructor(
 
     fun onItemClicked(phyphoxExperimentX: PhyphoxExperimentX) {}
 
-    fun onDisplayTypeSelected(displayType: DisplayType) {
-        _displayType.value = displayType
-    }
     //endregion
 }

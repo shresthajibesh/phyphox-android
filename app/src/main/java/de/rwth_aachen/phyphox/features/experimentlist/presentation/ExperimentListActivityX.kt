@@ -29,7 +29,6 @@ class ExperimentListActivityX : ComponentActivity() {
                     onFilterTextChanged = viewModel::onFilterTextChanged,
                     onItemClicked = viewModel::onItemClicked,
                     onFilterCloseClicked = viewModel::onFilterCloseClicked,
-                    onDisplayTypeSelected = viewModel::onDisplayTypeSelected,
                 )
             }
         }
