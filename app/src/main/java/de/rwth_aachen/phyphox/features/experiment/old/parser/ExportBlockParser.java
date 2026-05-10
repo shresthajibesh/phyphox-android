@@ -10,9 +10,9 @@ import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
-public class exportBlockParser extends XmlBlockParser {
+public class ExportBlockParser extends XmlBlockParser {
 
-        exportBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+        ExportBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
@@ -21,7 +21,7 @@ public class exportBlockParser extends XmlBlockParser {
             switch (tag.toLowerCase()) {
                 case "set": //An export set. These just group some dataBuffers to be exported as a set
                     DataExport.ExportSet set = experiment.exporter.new ExportSet(xpp.getAttributeValue(XmlPullParser.NO_NAMESPACE, "name")); //Create the set with the given name
-                    (new setBlockParser(xpp, experiment, parent, set)).process(); //Parse the information within
+                    (new SetBlockParser(xpp, experiment, parent, set)).process(); //Parse the information within
                     experiment.exporter.addSet(set); //Add the set
                 break;
                 default:

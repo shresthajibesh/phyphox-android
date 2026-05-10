@@ -10,11 +10,11 @@ import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
-public class setBlockParser extends XmlBlockParser {
+public class SetBlockParser extends XmlBlockParser {
         private DataExport.ExportSet set;
 
         //This constructor takes an additional argument: The export set to be filled
-        setBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, DataExport.ExportSet set) {
+        SetBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, DataExport.ExportSet set) {
             super(xpp, experiment, parent);
             this.set = set;
         }

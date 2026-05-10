@@ -19,9 +19,9 @@ import de.rwth_aachen.phyphox.NetworkConnection.Mqtt.MqttJson;
 import de.rwth_aachen.phyphox.NetworkConnection.Mqtt.MqttTlsCsv;
 import de.rwth_aachen.phyphox.NetworkConnection.Mqtt.MqttTlsJson;
 
-public class networkBlockParser extends XmlBlockParser {
+public class NetworkBlockParser extends XmlBlockParser {
 
-        networkBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+        NetworkBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
@@ -136,7 +136,7 @@ public class networkBlockParser extends XmlBlockParser {
                     Map<String, NetworkConnection.NetworkReceivableData> receive = new HashMap<>();
 
 
-                    (new networkConnectionBlockParser(xpp, experiment, parent, send, receive)).process();
+                    (new NetworkConnectionBlockParser(xpp, experiment, parent, send, receive)).process();
 
                     experiment.networkConnections.add(new NetworkConnection(id, privacyURL, address, discovery, autoConnect, service, conversion, send, receive, interval, parent));
 

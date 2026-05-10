@@ -1,7 +1,5 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
-import android.os.Build;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -18,9 +16,9 @@ import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
-public class outputBlockParser extends XmlBlockParser {
+public class OutputBlockParser extends XmlBlockParser {
 
-        outputBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+        OutputBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
@@ -59,7 +57,7 @@ public class outputBlockParser extends XmlBlockParser {
 
                         Vector<DataInput> inputs = new Vector<>();
                         Vector<Bluetooth.CharacteristicData> characteristics = new Vector<>();
-                        (new bluetoothIoBlockParser(xpp, experiment, parent, null, inputs, characteristics)).process();
+                        (new BluetoothIoBlockParser(xpp, experiment, parent, null, inputs, characteristics)).process();
                         BluetoothOutput b = new BluetoothOutput(idString, nameFilter, addressFilter, uuidFilter, autoConnect, parent, parent, inputs, characteristics);
                         if (mtu > 0)
                             b.requestMTU = mtu;

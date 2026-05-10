@@ -12,9 +12,9 @@ import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
-public class translationsBlockParser extends XmlBlockParser {
+public class TranslationsBlockParser extends XmlBlockParser {
 
-        translationsBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+        TranslationsBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
@@ -26,7 +26,7 @@ public class translationsBlockParser extends XmlBlockParser {
                     int thisLaguageRating = Helper.getLanguageRating(parent.getResources(), thisLocale);
                     if (thisLaguageRating > languageRating) { //Check if the language matches better than previous ones...
                         languageRating = thisLaguageRating;
-                        (new translationBlockParser(xpp, experiment, parent)).process(); //Jepp, use it!
+                        (new TranslationBlockParser(xpp, experiment, parent)).process(); //Jepp, use it!
                     } else
                         (new XmlBlockParser(xpp, experiment, parent)).process(); //Nope. Use the empty block parser to skip it
                     break;

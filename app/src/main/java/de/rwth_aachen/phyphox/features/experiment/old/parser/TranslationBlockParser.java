@@ -11,9 +11,9 @@ import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
-public class translationBlockParser extends XmlBlockParser {
+public class TranslationBlockParser extends XmlBlockParser {
 
-        translationBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+        TranslationBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 

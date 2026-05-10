@@ -21,7 +21,7 @@ import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
-public class bluetoothIoBlockParser extends XmlBlockParser {
+public class BluetoothIoBlockParser extends XmlBlockParser {
         protected static Class conversionsInput = (new ConversionsInput()).getClass();
         protected static Class conversionsOutput = (new ConversionsOutput()).getClass();
         protected static Class conversionsConfig = (new ConversionsConfig()).getClass();
@@ -30,7 +30,7 @@ public class bluetoothIoBlockParser extends XmlBlockParser {
         Vector<Bluetooth.CharacteristicData> characteristics; // characteristics of the bluetooth input / output
         HashSet<UUID> characteristicsWithExtraTime; // uuids of all characteristics that have extra=time to make sure they can't have it twice
 
-        bluetoothIoBlockParser (XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, Vector<DataOutput> outputList, Vector<DataInput> inputList, Vector<Bluetooth.CharacteristicData> characteristics) {
+        BluetoothIoBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, Vector<DataOutput> outputList, Vector<DataInput> inputList, Vector<Bluetooth.CharacteristicData> characteristics) {
             super(xpp, experiment, parent);
             this.outputList = outputList;
             this.inputList = inputList;

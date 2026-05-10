@@ -10,9 +10,9 @@ import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
-public class viewsBlockParser extends XmlBlockParser {
+public class ViewsBlockParser extends XmlBlockParser {
 
-        viewsBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+        ViewsBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
@@ -22,7 +22,7 @@ public class viewsBlockParser extends XmlBlockParser {
                 case "view": //A view defines an arangement of elements displayed to the user
                     ExpView newView = new ExpView(); //Create a new view
                     newView.name = getTranslatedAttribute("label"); //Fill its name
-                    (new viewBlockParser(xpp, experiment, parent, newView)).process(); //And load its elements
+                    (new ViewBlockParser(xpp, experiment, parent, newView)).process(); //And load its elements
                     if (newView.name != null && newView.elements.size() > 0) //We will only add it if it has a name and at least a single view
                         experiment.experimentViews.add(newView);
                     else {

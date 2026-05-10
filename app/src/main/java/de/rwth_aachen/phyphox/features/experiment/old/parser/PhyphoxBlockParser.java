@@ -9,9 +9,9 @@ import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
-public class phyphoxBlockParser extends XmlBlockParser {
+public class PhyphoxBlockParser extends XmlBlockParser {
 
-        public phyphoxBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+        public PhyphoxBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
@@ -48,22 +48,22 @@ public class phyphoxBlockParser extends XmlBlockParser {
                     experiment.category = experiment.baseCategory;
                     break;
                 case "translations": //A translations block may containing multiple translation-blocks
-                    (new translationsBlockParser(xpp, experiment, parent)).process();
+                    (new TranslationsBlockParser(xpp, experiment, parent)).process();
                     break;
                 case "data-containers": //The data-containers block defines all buffers used in this experiment
-                    (new dataContainersBlockParser(xpp, experiment, parent)).process();
+                    (new DataContainersBlockParser(xpp, experiment, parent)).process();
                     break;
                 case "events": //The events block stores events and their timestamps
-                    (new eventsBlockParser(xpp, experiment, parent)).process();
+                    (new EventsBlockParser(xpp, experiment, parent)).process();
                     break;
                 case "views": //A Views block may contain multiple view-blocks
-                    (new viewsBlockParser(xpp, experiment, parent)).process();
+                    (new ViewsBlockParser(xpp, experiment, parent)).process();
                     break;
                 case "input": //Holds inputs like sensors or the microphone
-                    (new inputBlockParser(xpp, experiment, parent)).process();
+                    (new InputBlockParser(xpp, experiment, parent)).process();
                     break;
                 case "network": //Holds inputs like sensors or the microphone
-                    (new networkBlockParser(xpp, experiment, parent)).process();
+                    (new NetworkBlockParser(xpp, experiment, parent)).process();
                     break;
                 case "analysis": //Holds a number of math modules which will be executed in the order they occur
                     experiment.analysisSleep = getDoubleAttribute("sleep", 0.0); //Time between executions
@@ -95,13 +95,13 @@ public class phyphoxBlockParser extends XmlBlockParser {
                     experiment.timedRun = getBooleanAttribute("timedRun", false);
                     experiment.timedRunStartDelay = getDoubleAttribute("timedRunStartDelay", 3.0);
                     experiment.timedRunStopDelay = getDoubleAttribute("timedRunStopDelay", 10.0);
-                    (new analysisBlockParser(xpp, experiment, parent)).process();
+                    (new AnalysisBlockParser(xpp, experiment, parent)).process();
                     break;
                 case "output": //Holds outputs like the speaker
-                    (new outputBlockParser(xpp, experiment, parent)).process();
+                    (new OutputBlockParser(xpp, experiment, parent)).process();
                     break;
                 case "export": //Holds multiple set-blocks, which in turn describe which buffer should be exported as a set
-                    (new exportBlockParser(xpp, experiment, parent)).process();
+                    (new ExportBlockParser(xpp, experiment, parent)).process();
                     break;
                 default: //Unknown tag,,,
                     throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());

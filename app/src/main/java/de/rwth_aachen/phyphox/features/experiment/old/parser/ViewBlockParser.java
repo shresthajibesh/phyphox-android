@@ -26,7 +26,7 @@ import de.rwth_aachen.phyphox.camera.model.ShowCameraControls;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
-public class viewBlockParser extends XmlBlockParser {
+public class ViewBlockParser extends XmlBlockParser {
         private ExpView newView;
 
         GraphView.scaleMode parseScaleMode(String attribute) {
@@ -46,7 +46,7 @@ public class viewBlockParser extends XmlBlockParser {
         }
 
         //The viewBlockParser takes an additional argument, which is the expView instance it should fill
-        viewBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, ExpView newView) {
+        ViewBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, ExpView newView) {
             super(xpp, experiment, parent);
             this.newView = newView;
         }
@@ -69,16 +69,16 @@ public class viewBlockParser extends XmlBlockParser {
                     String positiveUnit = getTranslatedAttribute("positiveUnit");
                     String negativeUnit = getTranslatedAttribute("negativeUnit");
                     //Allowed input/output configuration
-                    Vector<ioBlockParser.AdditionalTag> ats = new Vector<>();
-                    ioBlockParser.ioMapping[] inputMapping = {
-                            new ioBlockParser.ioMapping() {{name = "in"; asRequired = false; minCount = 1; maxCount = 1; valueAllowed = false;}}
+                    Vector<IoBlockParser.AdditionalTag> ats = new Vector<>();
+                    IoBlockParser.ioMapping[] inputMapping = {
+                            new IoBlockParser.ioMapping() {{name = "in"; asRequired = false; minCount = 1; maxCount = 1; valueAllowed = false;}}
                     };
-                    (new ioBlockParser(xpp, experiment, parent, inputs, null, inputMapping, null, null, ats)).process(); //Load inputs and outputs
+                    (new IoBlockParser(xpp, experiment, parent, inputs, null, inputMapping, null, null, ats)).process(); //Load inputs and outputs
 
                     Vector<String> inStrings = new Vector<>();
                     inStrings.add(inputs.get(0).buffer.name);
                     ExpView.valueElement ve = newView.new valueElement(label, visibility,null, inStrings, parent.getResources()); //Only a value input
-                    for (ioBlockParser.AdditionalTag at : ats) {
+                    for (IoBlockParser.AdditionalTag at : ats) {
                         if (at.name.equals("input"))
                             continue;
                         if (!at.name.equals("map")) {
@@ -229,19 +229,19 @@ public class viewBlockParser extends XmlBlockParser {
                     boolean followX = getBooleanAttribute("followX", false);
 
                     //Allowed input/output configuration
-                    Vector<ioBlockParser.AdditionalTag> ats = new Vector<>();
-                    ioBlockParser.ioMapping[] inputMapping = {
-                            new ioBlockParser.ioMapping() {{name = "y"; asRequired = false; minCount = 1; maxCount = 0; valueAllowed = false; repeatableOffset = 0;}},
-                            new ioBlockParser.ioMapping() {{name = "x"; asRequired = true; minCount = 0; maxCount = 0; valueAllowed = false; repeatableOffset = 1;}},
-                            new ioBlockParser.ioMapping() {{name = "z"; asRequired = true; minCount = 0; maxCount = 0; valueAllowed = false; repeatableOffset = 2;}}
+                    Vector<IoBlockParser.AdditionalTag> ats = new Vector<>();
+                    IoBlockParser.ioMapping[] inputMapping = {
+                            new IoBlockParser.ioMapping() {{name = "y"; asRequired = false; minCount = 1; maxCount = 0; valueAllowed = false; repeatableOffset = 0;}},
+                            new IoBlockParser.ioMapping() {{name = "x"; asRequired = true; minCount = 0; maxCount = 0; valueAllowed = false; repeatableOffset = 1;}},
+                            new IoBlockParser.ioMapping() {{name = "z"; asRequired = true; minCount = 0; maxCount = 0; valueAllowed = false; repeatableOffset = 2;}}
                     };
 
-                    ioBlockParser.ioMapping[] outputMapping = {
-                            new ioBlockParser.ioMapping() {{ name = "slope"; asRequired = false; minCount = 0; maxCount = 0; valueAllowed = false; repeatableOffset = 0;}},
-                            new ioBlockParser.ioMapping() {{ name = "intercept"; asRequired = false; minCount = 0; maxCount = 0; valueAllowed = false; repeatableOffset = 0;}}
+                    IoBlockParser.ioMapping[] outputMapping = {
+                            new IoBlockParser.ioMapping() {{ name = "slope"; asRequired = false; minCount = 0; maxCount = 0; valueAllowed = false; repeatableOffset = 0;}},
+                            new IoBlockParser.ioMapping() {{ name = "intercept"; asRequired = false; minCount = 0; maxCount = 0; valueAllowed = false; repeatableOffset = 0;}}
                     };
 
-                    (new ioBlockParser(xpp, experiment, parent, inputs, outputs, inputMapping, outputMapping, "axis", ats)).process(); //Load inputs and outputs
+                    (new IoBlockParser(xpp, experiment, parent, inputs, outputs, inputMapping, outputMapping, "axis", ats)).process(); //Load inputs and outputs
 
                     Vector<String> inStrings = new Vector<>();
                     for (int i = 0; i < inputs.size(); i++) {
@@ -250,7 +250,7 @@ public class viewBlockParser extends XmlBlockParser {
                             if (inputs.get(i) != null) {
                                 inStrings.add(inputs.get(i).buffer.name);
                                 inStrings.add(null);
-                                ioBlockParser.AdditionalTag at = new ioBlockParser.AdditionalTag();
+                                IoBlockParser.AdditionalTag at = new IoBlockParser.AdditionalTag();
                                 at.name = ats.get(i).name;
                                 at.attributes.put("style", "mapZ");
                                 ats.add(i+1, at);
@@ -315,7 +315,7 @@ public class viewBlockParser extends XmlBlockParser {
                         }
                     }
                     for (int i = 0; i < ats.size(); i++) {
-                        ioBlockParser.AdditionalTag at = ats.get(i);
+                        IoBlockParser.AdditionalTag at = ats.get(i);
                         if (at == null)
                             continue;
                         if (!at.name.equals("input") && !at.name.equals("output") ) {
@@ -364,10 +364,10 @@ public class viewBlockParser extends XmlBlockParser {
                     double max = getDoubleAttribute("max", Double.POSITIVE_INFINITY);
 
                     //Allowed input/output configuration
-                    ioBlockParser.ioMapping[] outputMapping = {
-                            new ioBlockParser.ioMapping() {{name = "out"; asRequired = false; minCount = 1; maxCount = 1; }}
+                    IoBlockParser.ioMapping[] outputMapping = {
+                            new IoBlockParser.ioMapping() {{name = "out"; asRequired = false; minCount = 1; maxCount = 1; }}
                     };
-                    (new ioBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, null)).process(); //Load inputs and outputs
+                    (new IoBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, null)).process(); //Load inputs and outputs
 
                     ExpView.editElement ie = newView.new editElement(label, visibility, outputs.get(0).buffer.name, null, parent.getResources()); //Ouput only
                     ie.setUnit(unit); //A unit displayed next to the input box
@@ -383,14 +383,14 @@ public class viewBlockParser extends XmlBlockParser {
                 case "button": { //The edit element can take input from the user
                     String dynamicBuffer = getStringAttribute("dynamicLabel");
                     //Allowed input/output configuration
-                    Vector<ioBlockParser.AdditionalTag> ats = new Vector<>();
-                    ioBlockParser.ioMapping[] inputMapping = {
-                            new ioBlockParser.ioMapping() {{name = "in"; asRequired = false; minCount = 0; maxCount = 0; valueAllowed = true; emptyAllowed = true; repeatableOffset = 0;}},
+                    Vector<IoBlockParser.AdditionalTag> ats = new Vector<>();
+                    IoBlockParser.ioMapping[] inputMapping = {
+                            new IoBlockParser.ioMapping() {{name = "in"; asRequired = false; minCount = 0; maxCount = 0; valueAllowed = true; emptyAllowed = true; repeatableOffset = 0;}},
                     };
-                    ioBlockParser.ioMapping[] outputMapping = {
-                            new ioBlockParser.ioMapping() {{name = "out"; asRequired = false; minCount = 0; maxCount = 0; repeatableOffset = 0;}}
+                    IoBlockParser.ioMapping[] outputMapping = {
+                            new IoBlockParser.ioMapping() {{name = "out"; asRequired = false; minCount = 0; maxCount = 0; repeatableOffset = 0;}}
                     };
-                    (new ioBlockParser(xpp, experiment, parent, inputs, outputs, inputMapping, outputMapping, null, ats)).process(); //Load inputs and outputs
+                    (new IoBlockParser(xpp, experiment, parent, inputs, outputs, inputMapping, outputMapping, null, ats)).process(); //Load inputs and outputs
 
                     Vector<String> inStrings = new Vector<>();
                     if (dynamicBuffer != null)
@@ -399,7 +399,7 @@ public class viewBlockParser extends XmlBlockParser {
                     ExpView.buttonElement be = newView.new buttonElement(label, visibility, null, inStrings, parent.getResources()); //This one is user-event driven and does not regularly read or write values
                     be.setIO(inputs, outputs);
                     Vector<String> triggers = new Vector<>();
-                    for (ioBlockParser.AdditionalTag at : ats) {
+                    for (IoBlockParser.AdditionalTag at : ats) {
                         if (at.name.equals("input"))
                             continue;
                         if (at.name.equals("output"))
@@ -529,10 +529,10 @@ public class viewBlockParser extends XmlBlockParser {
                     double defaultValue = getDoubleAttribute("default", 0.0);
 
                     //Allowed input/output configuration
-                    ioBlockParser.ioMapping[] outputMapping = {
-                            new ioBlockParser.ioMapping() {{name = "out"; asRequired = false; minCount = 1; maxCount = 1; }}
+                    IoBlockParser.ioMapping[] outputMapping = {
+                            new IoBlockParser.ioMapping() {{name = "out"; asRequired = false; minCount = 1; maxCount = 1; }}
                     };
-                    (new ioBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, null)).process(); //Load inputs and outputs
+                    (new IoBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, null)).process(); //Load inputs and outputs
 
 
                     ExpView.toggleElement toggleElement = newView.new toggleElement(label, visibility, outputs.get(0).buffer.name, null, parent.getResources());
@@ -545,17 +545,17 @@ public class viewBlockParser extends XmlBlockParser {
                     double defaultValue = getDoubleAttribute("default", 0.0);
                     RGB color = getColorAttribute("color", new RGB(parent.getResources().getColor(R.color.phyphox_white_100)));
 
-                    Vector<ioBlockParser.AdditionalTag> ats = new Vector<>();
+                    Vector<IoBlockParser.AdditionalTag> ats = new Vector<>();
                     //Allowed output configuration
-                    ioBlockParser.ioMapping[] outputMapping = {
-                            new ioBlockParser.ioMapping() {{name = "out"; asRequired = false; minCount = 1; maxCount = 1; }}
+                    IoBlockParser.ioMapping[] outputMapping = {
+                            new IoBlockParser.ioMapping() {{name = "out"; asRequired = false; minCount = 1; maxCount = 1; }}
                     };
-                    (new ioBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, null, ats)).process(); //Load inputs and outputs
+                    (new IoBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, null, ats)).process(); //Load inputs and outputs
 
                     ExpView.dropDownElement dropDownElement = newView.new dropDownElement(label, visibility, outputs.get(0).buffer.name, null, parent.getResources());
                     dropDownElement.setDefaultValue(defaultValue);
                     dropDownElement.setColor(color);
-                    for(ioBlockParser.AdditionalTag at: ats){
+                    for(IoBlockParser.AdditionalTag at: ats){
                         if(at.name.equals("output")){
                             continue;
                         }
@@ -592,17 +592,17 @@ public class viewBlockParser extends XmlBlockParser {
 
                     Vector<String> outStrings = new Vector<>();
                     if(sliderType == ExpView.SliderType.Normal){
-                        ioBlockParser.ioMapping[] outputMapping = {
-                                new ioBlockParser.ioMapping() {{name = "out"; asRequired = false; minCount = 1; maxCount = 1; }}
+                        IoBlockParser.ioMapping[] outputMapping = {
+                                new IoBlockParser.ioMapping() {{name = "out"; asRequired = false; minCount = 1; maxCount = 1; }}
                         };
-                        (new ioBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, null)).process(); //Load inputs and outputs
+                        (new IoBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, null)).process(); //Load inputs and outputs
                         outStrings.add(outputs.get(0).buffer.name);
                     } else {
-                        ioBlockParser.ioMapping[] outputMapping = {
-                                new ioBlockParser.ioMapping() {{name = "lowerValue"; asRequired = false; minCount = 1; maxCount = 1; }},
-                                new ioBlockParser.ioMapping() {{name = "upperValue"; asRequired = false; minCount = 1; maxCount = 1; }}
+                        IoBlockParser.ioMapping[] outputMapping = {
+                                new IoBlockParser.ioMapping() {{name = "lowerValue"; asRequired = false; minCount = 1; maxCount = 1; }},
+                                new IoBlockParser.ioMapping() {{name = "upperValue"; asRequired = false; minCount = 1; maxCount = 1; }}
                         };
-                        (new ioBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, "value")).process(); //Load inputs and outputs
+                        (new IoBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, "value")).process(); //Load inputs and outputs
 
                         outStrings.add(outputs.get(0).buffer.name);
                         outStrings.add(outputs.get(1).buffer.name);

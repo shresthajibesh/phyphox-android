@@ -10,9 +10,9 @@ import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
-public class eventsBlockParser extends XmlBlockParser {
+public class EventsBlockParser extends XmlBlockParser {
 
-        eventsBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+        EventsBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 

@@ -22,10 +22,9 @@ import de.rwth_aachen.phyphox.ExpView;
 import de.rwth_aachen.phyphox.Helper.Helper;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
-import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.model.PhyphoxStream;
-import de.rwth_aachen.phyphox.features.experiment.old.parser.phyphoxBlockParser;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.PhyphoxBlockParser;
 
 //This AsyncTask will load a phyphoxExperiment from an intent and return it by passing it to
 //onExperimentLoaded of the activity given in the constructor.
@@ -97,7 +96,7 @@ public class LoadXMLAsyncTask extends AsyncTask<String, Void, PhyphoxExperiment>
                             String globalLocale = xpp.getAttributeValue(XmlPullParser.NO_NAMESPACE, "locale");
                             languageRating = Helper.getLanguageRating(parent.get().getResources(), globalLocale);
                         }
-                        (new phyphoxBlockParser(xpp, experiment, parent.get())).process();
+                        (new PhyphoxBlockParser(xpp, experiment, parent.get())).process();
                     }
                     eventType = xpp.next();
                 }
