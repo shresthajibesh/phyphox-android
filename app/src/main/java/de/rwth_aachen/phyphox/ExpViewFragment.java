@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 
 public class ExpViewFragment extends Fragment {
     private static final String ARG_INDEX = "index";
@@ -30,7 +30,7 @@ public class ExpViewFragment extends Fragment {
 
     //Apply zoom to all graphs on the current page.
     public void applyZoom(double min, double max, boolean follow, String unit, String buffer, boolean yAxis, boolean absoluteTime) {
-        for (ExpView.expViewElement element : ((Experiment) getActivity()).experiment.experimentViews.elementAt(index).elements) {
+        for (ExpView.expViewElement element : ((ExperimentActivity) getActivity()).experiment.experimentViews.elementAt(index).elements) {
             if (element.getClass() == ExpView.graphElement.class) {
                 ExpView.graphElement ge = (ExpView.graphElement)element;
                 ge.applyZoom(min, max, follow, unit, buffer, yAxis, absoluteTime);
@@ -66,7 +66,7 @@ public class ExpViewFragment extends Fragment {
         }
         LinearLayout ll = (LinearLayout)root.findViewById(R.id.experimentView);
         ll.setLayoutTransition(layoutTransition);
-        for (ExpView.expViewElement element : ((Experiment) getActivity()).experiment.experimentViews.elementAt(index).elements) {
+        for (ExpView.expViewElement element : ((ExperimentActivity) getActivity()).experiment.experimentViews.elementAt(index).elements) {
             if (element == caller) {
                 element.maximize();
             } else {
@@ -91,7 +91,7 @@ public class ExpViewFragment extends Fragment {
         }
         LinearLayout ll = (LinearLayout)root.findViewById(R.id.experimentView);
         ll.setLayoutTransition(layoutTransition);
-        for (ExpView.expViewElement element : ((Experiment) getActivity()).experiment.experimentViews.elementAt(index).elements) {
+        for (ExpView.expViewElement element : ((ExperimentActivity) getActivity()).experiment.experimentViews.elementAt(index).elements) {
             element.restore();
         }
         ll.setLayoutTransition(null);
@@ -117,8 +117,8 @@ public class ExpViewFragment extends Fragment {
         if (root == null)
             return;
         LinearLayout ll = (LinearLayout)root.findViewById(R.id.experimentView);
-        if (((Experiment)getActivity()).experiment != null && ((Experiment)getActivity()).experiment.experimentViews.size() > index) {
-            for (ExpView.expViewElement element : ((Experiment) getActivity()).experiment.experimentViews.elementAt(index).elements) {
+        if (((ExperimentActivity)getActivity()).experiment != null && ((ExperimentActivity)getActivity()).experiment.experimentViews.size() > index) {
+            for (ExpView.expViewElement element : ((ExperimentActivity) getActivity()).experiment.experimentViews.elementAt(index).elements) {
                 element.destroyView();
             }
         }
@@ -127,22 +127,22 @@ public class ExpViewFragment extends Fragment {
         root.setFillViewport(false);
         hasExclusive = false;
 
-        if (((Experiment)getActivity()).experiment != null && ((Experiment)getActivity()).experiment.experimentViews.size() > index) {
-            for (ExpView.expViewElement element : ((Experiment) getActivity()).experiment.experimentViews.elementAt(index).elements) {
-                element.createView(ll, getContext(), getResources(), this, ((Experiment) getActivity()).experiment);
+        if (((ExperimentActivity)getActivity()).experiment != null && ((ExperimentActivity)getActivity()).experiment.experimentViews.size() > index) {
+            for (ExpView.expViewElement element : ((ExperimentActivity) getActivity()).experiment.experimentViews.elementAt(index).elements) {
+                element.createView(ll, getContext(), getResources(), this, ((ExperimentActivity) getActivity()).experiment);
             }
         }
 
-        if (((Experiment)getActivity()).experiment != null)
-            ((Experiment) getActivity()).experiment.updateViews(index, true);
+        if (((ExperimentActivity)getActivity()).experiment != null)
+            ((ExperimentActivity) getActivity()).experiment.updateViews(index, true);
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser) {
-            if (getActivity() != null && ((Experiment)getActivity()).experiment != null)
-                ((Experiment) getActivity()).experiment.updateViews(index, true);
+            if (getActivity() != null && ((ExperimentActivity)getActivity()).experiment != null)
+                ((ExperimentActivity) getActivity()).experiment.updateViews(index, true);
         } else {
             leaveExclusive();
         }
@@ -175,8 +175,8 @@ public class ExpViewFragment extends Fragment {
 
     public void onPause() {
         super.onPause();
-        if (((Experiment)getActivity()).experiment != null && ((Experiment)getActivity()).experiment.experimentViews.size() > index) {
-            for (ExpView.expViewElement element : ((Experiment) getActivity()).experiment.experimentViews.elementAt(index).elements) {
+        if (((ExperimentActivity)getActivity()).experiment != null && ((ExperimentActivity)getActivity()).experiment.experimentViews.size() > index) {
+            for (ExpView.expViewElement element : ((ExperimentActivity) getActivity()).experiment.experimentViews.elementAt(index).elements) {
                 element.destroyView();
             }
         }
@@ -191,9 +191,9 @@ public class ExpViewFragment extends Fragment {
         LinearLayout ll = (LinearLayout)root.findViewById(R.id.experimentView);
         ll.removeAllViews();
 
-        if (((Experiment)getActivity()).experiment != null && ((Experiment)getActivity()).experiment.experimentViews.size() > index) {
-            for (ExpView.expViewElement element : ((Experiment) getActivity()).experiment.experimentViews.elementAt(index).elements) {
-                element.onFragmentStop(((Experiment) getActivity()).experiment);
+        if (((ExperimentActivity)getActivity()).experiment != null && ((ExperimentActivity)getActivity()).experiment.experimentViews.size() > index) {
+            for (ExpView.expViewElement element : ((ExperimentActivity) getActivity()).experiment.experimentViews.elementAt(index).elements) {
+                element.onFragmentStop(((ExperimentActivity) getActivity()).experiment);
             }
         }
 

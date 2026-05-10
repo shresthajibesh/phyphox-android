@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="0dp"
-    tools:context="de.rwth_aachen.phyphox.features.experiment.Experiment"
+    tools:context="de.rwth_aachen.phyphox.features.experiment.ExperimentActivity"
     android:clickable="false"
     android:id="@+id/rootLayout">
 

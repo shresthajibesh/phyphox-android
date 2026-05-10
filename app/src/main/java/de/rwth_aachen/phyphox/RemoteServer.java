@@ -47,7 +47,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.Vector;
 
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 
 //RemoteServer implements a web interface to remote control the experiment and receive the data
 
@@ -59,7 +59,7 @@ public class RemoteServer {
     ExecutorService executor;
     static int httpServerPort = 8080; //We have to pick a high port number. We may not use 80...
     Context context; //Resource reference for comfortable access
-    Experiment callActivity; //Reference to the parent activity. Needed to provide its status on the webinterface
+    ExperimentActivity callActivity; //Reference to the parent activity. Needed to provide its status on the webinterface
 
     public String sessionID = "";
 
@@ -318,7 +318,7 @@ public class RemoteServer {
     }
 
     //The constructor takes the experiment to control and the activity of which we need to show/control the status
-    public RemoteServer(PhyphoxExperiment experiment, Experiment callActivity, String sessionID) {
+    public RemoteServer(PhyphoxExperiment experiment, ExperimentActivity callActivity, String sessionID) {
         this.experiment = experiment;
         this.callActivity = callActivity;
         this.context = callActivity;
@@ -330,7 +330,7 @@ public class RemoteServer {
         this.sessionID = sessionID;
     }
 
-    public RemoteServer(PhyphoxExperiment experiment, Experiment callActivity) {
+    public RemoteServer(PhyphoxExperiment experiment, ExperimentActivity callActivity) {
         this(experiment, callActivity, String.format("%06x", (System.nanoTime() & 0xffffff)));
     }
 

@@ -12,7 +12,7 @@ import de.rwth_aachen.phyphox.NetworkConnection.NetworkConversion;
 import de.rwth_aachen.phyphox.NetworkConnection.NetworkDiscovery;
 import de.rwth_aachen.phyphox.NetworkConnection.NetworkService;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 import de.rwth_aachen.phyphox.NetworkConnection.Mqtt.MqttCsv;
 import de.rwth_aachen.phyphox.NetworkConnection.Mqtt.MqttJson;
@@ -21,7 +21,7 @@ import de.rwth_aachen.phyphox.NetworkConnection.Mqtt.MqttTlsJson;
 
 public class NetworkBlockParser extends XmlBlockParser {
 
-        NetworkBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+        NetworkBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, ExperimentActivity parent) {
             super(xpp, experiment, parent);
         }
 

@@ -21,7 +21,7 @@ import de.rwth_aachen.phyphox.DataBuffer;
 import de.rwth_aachen.phyphox.ExpView;
 import de.rwth_aachen.phyphox.Helper.Helper;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.model.PhyphoxStream;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.PhyphoxBlockParser;
@@ -30,11 +30,11 @@ import de.rwth_aachen.phyphox.features.experiment.old.parser.PhyphoxBlockParser;
 //onExperimentLoaded of the activity given in the constructor.
 public class LoadXMLAsyncTask extends AsyncTask<String, Void, PhyphoxExperiment> {
         private Intent intent;
-        private WeakReference<Experiment> parent;
+        private WeakReference<ExperimentActivity> parent;
 
-        public LoadXMLAsyncTask(Intent intent, Experiment parent) {
+        public LoadXMLAsyncTask(Intent intent, ExperimentActivity parent) {
             this.intent = intent;
-            this.parent = new WeakReference<Experiment>(parent);
+            this.parent = new WeakReference<ExperimentActivity>(parent);
         }
 
         //Load the file from the intent

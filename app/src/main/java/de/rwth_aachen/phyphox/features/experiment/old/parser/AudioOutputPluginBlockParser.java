@@ -9,7 +9,7 @@ import de.rwth_aachen.phyphox.AudioOutput;
 import de.rwth_aachen.phyphox.DataBuffer;
 import de.rwth_aachen.phyphox.DataInput;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
 public class AudioOutputPluginBlockParser extends XmlBlockParser {
@@ -17,7 +17,7 @@ public class AudioOutputPluginBlockParser extends XmlBlockParser {
         AudioOutput.AudioOutputPlugin currentPlugin = null;
         int level = 0;
 
-        AudioOutputPluginBlockParser (XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, AudioOutput audioOutput) {
+        AudioOutputPluginBlockParser (XmlPullParser xpp, PhyphoxExperiment experiment, ExperimentActivity parent, AudioOutput audioOutput) {
             super(xpp, experiment, parent);
             this.audioOutput = audioOutput;
         }

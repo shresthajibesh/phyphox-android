@@ -9,11 +9,11 @@ import java.io.IOException;
 
 import de.rwth_aachen.phyphox.Helper.RGB;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
 public class XmlBlockParser {
-        protected Experiment parent; //For some elements we need access to the parent activity
+        protected ExperimentActivity parent; //For some elements we need access to the parent activity
         private String tag; //The tag of the block that should be handled by this parser
         private int rootDepth; //The depth of the base of the block handled by this parser
         protected XmlPullParser xpp; //The pull parser used handed to this parser
@@ -22,7 +22,7 @@ public class XmlBlockParser {
         private boolean textAdvanced;
 
         //The constructor takes the tag, and the experiment to fill
-        public XmlBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+        public XmlBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, ExperimentActivity parent) {
             this.xpp = xpp;
             this.experiment = experiment;
             this.parent = parent;

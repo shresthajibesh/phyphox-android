@@ -23,7 +23,7 @@ import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.SpectroscopyCalibrationManager;
 import de.rwth_aachen.phyphox.camera.model.ShowCameraControls;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
 public class ViewBlockParser extends XmlBlockParser {
@@ -46,7 +46,7 @@ public class ViewBlockParser extends XmlBlockParser {
         }
 
         //The viewBlockParser takes an additional argument, which is the expView instance it should fill
-        ViewBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, ExpView newView) {
+        ViewBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, ExperimentActivity parent, ExpView newView) {
             super(xpp, experiment, parent);
             this.newView = newView;
         }

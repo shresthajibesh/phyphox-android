@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context="de.rwth_aachen.phyphox.features.experiment.Experiment">
+    xmlns:tools="http://schemas.android.com/tools" tools:context="de.rwth_aachen.phyphox.features.experiment.ExperimentActivity">
     <item android:id="@+id/timer" android:title="0s"
         android:orderInCategory="1" app:showAsAction="always" />
     <item android:id="@+id/action_timed_play" android:title="@string/timed_start" android:icon="@drawable/timed_play"

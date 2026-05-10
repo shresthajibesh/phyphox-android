@@ -112,7 +112,6 @@ import de.rwth_aachen.phyphox.ExperimentTimeReference;
 import de.rwth_aachen.phyphox.Helper.DataExportUtility;
 import de.rwth_aachen.phyphox.Helper.WindowInsetHelper;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
 import de.rwth_aachen.phyphox.features.experiment.old.async.CopyXMLTask;
 import de.rwth_aachen.phyphox.features.experiment.old.async.LoadXMLAsyncTask;
 import de.rwth_aachen.phyphox.R;
@@ -125,7 +124,7 @@ import de.rwth_aachen.phyphox.NetworkConnection.NetworkConnection;
 
 // Experiments are performed in this activity, which reacts to various intents.
 // The intent has to provide a *.phyphox file which defines the experiment
-public class Experiment extends AppCompatActivity implements View.OnClickListener,
+public class ExperimentActivity extends AppCompatActivity implements View.OnClickListener,
         NetworkConnection.ScanDialogDismissedDelegate,
         NetworkConnection.NetworkConnectionDataPolicyInfoDelegate, UpdateConnectedDeviceDelegate{
 
@@ -457,8 +456,8 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
                     .setTitle(R.string.save_locally)
                     .setPositiveButton(R.string.save_locally_button, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            progress = ProgressDialog.show(Experiment.this, res.getString(R.string.loadingTitle), res.getString(R.string.loadingText), true);
-                            new CopyXMLTask(intent, Experiment.this).execute();
+                            progress = ProgressDialog.show(ExperimentActivity.this, res.getString(R.string.loadingTitle), res.getString(R.string.loadingText), true);
+                            new CopyXMLTask(intent, ExperimentActivity.this).execute();
                             saveLocallyDismissed = true;
                             experiment.isLocal = true;
                             showInitialDialogs();
@@ -734,7 +733,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
                 isBluetoothConnectionSuccessful = false;
                 // connect all bluetooth devices with an asyncTask
                 final Bluetooth.ConnectBluetoothTask btTask = new Bluetooth.ConnectBluetoothTask();
-                btTask.progress = ProgressDialog.show(Experiment.this, getResources().getString(R.string.loadingTitle), getResources().getString(R.string.loadingBluetoothConnectionText), true);
+                btTask.progress = ProgressDialog.show(ExperimentActivity.this, getResources().getString(R.string.loadingTitle), getResources().getString(R.string.loadingBluetoothConnectionText), true);
 
                 // define onSuccess
                 btTask.onSuccess = () -> {
@@ -751,7 +750,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
                 };
 
                 // set attributes of errorDialog
-                Bluetooth.errorDialog.context = Experiment.this;
+                Bluetooth.errorDialog.context = ExperimentActivity.this;
                 Bluetooth.errorDialog.cancel = () -> btTask.progress.dismiss();
                 Bluetooth.errorDialog.tryAgain = () -> {
                     // start a new task with the same attributes
@@ -1448,7 +1447,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
                 stopMeasurement(); // stop experiment
                 // show an error dialog
                 Bluetooth.errorDialog.message = e.getMessage();
-                Bluetooth.errorDialog.context = Experiment.this;
+                Bluetooth.errorDialog.context = ExperimentActivity.this;
                 // try to connect the bluetooth devices again when the user clicks "try again"
                 Bluetooth.errorDialog.tryAgain = new Runnable() {
                   @Override
@@ -1548,7 +1547,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
             if (notConnectedDevice != null) {
                 // show an error dialog
                 Bluetooth.errorDialog.message = getResources().getString(R.string.bt_exception_no_connection)+Bluetooth.BluetoothException.getMessage(notConnectedDevice);
-                Bluetooth.errorDialog.context = Experiment.this;
+                Bluetooth.errorDialog.context = ExperimentActivity.this;
                 // try to connect the bluetooth devices again when the user clicks "try again"
                 Bluetooth.errorDialog.tryAgain = new Runnable() {
                     @Override
@@ -2062,7 +2061,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onSuccess() {
                         updateUIForProgress(false, buttonShare);
-                        DataExportUtility.startPhyphoxFileSharing(Experiment.this, file);
+                        DataExportUtility.startPhyphoxFileSharing(ExperimentActivity.this, file);
                         bottomSheetDialog.dismiss();
                     }
 
@@ -2090,7 +2089,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onSuccess() {
                         updateUIForProgress(false, buttonDownload);
-                        DataExportUtility.createFileInDownloads(file, filename, MIME_TYPE_PHYPHOX, Experiment.this);
+                        DataExportUtility.createFileInDownloads(file, filename, MIME_TYPE_PHYPHOX, ExperimentActivity.this);
                         bottomSheetDialog.dismiss();
                     }
 

@@ -12,7 +12,7 @@ import de.rwth_aachen.phyphox.DataBuffer;
 import de.rwth_aachen.phyphox.DataInput;
 import de.rwth_aachen.phyphox.DataOutput;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
 public class IoBlockParser extends XmlBlockParser {
@@ -41,11 +41,11 @@ public class IoBlockParser extends XmlBlockParser {
         ioMapping[] outputMapping;
         String mappingAttribute;
 
-        IoBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, Vector<DataInput> inputList, Vector<DataOutput> outputList, ioMapping[] inputMapping, ioMapping[] outputMapping, String mappingAttribute) {
+        IoBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, ExperimentActivity parent, Vector<DataInput> inputList, Vector<DataOutput> outputList, ioMapping[] inputMapping, ioMapping[] outputMapping, String mappingAttribute) {
             this(xpp, experiment, parent, inputList, outputList, inputMapping, outputMapping, mappingAttribute, null);
         }
 
-        IoBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, Vector<DataInput> inputList, Vector<DataOutput> outputList, ioMapping[] inputMapping, ioMapping[] outputMapping, String mappingAttribute, Vector<AdditionalTag> additionalTags) {
+        IoBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, ExperimentActivity parent, Vector<DataInput> inputList, Vector<DataOutput> outputList, ioMapping[] inputMapping, ioMapping[] outputMapping, String mappingAttribute, Vector<AdditionalTag> additionalTags) {
             super(xpp, experiment, parent);
             this.inputList = inputList;
             this.outputList = outputList;

@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import de.rwth_aachen.phyphox.Helper.Helper;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.model.PhyphoxStream;
 
@@ -22,12 +22,12 @@ import de.rwth_aachen.phyphox.features.experiment.old.parser.model.PhyphoxStream
 //It calls onCopyXMLCompleted of the activity given in the constructor when it's done.
 public  class CopyXMLTask extends AsyncTask<String, Void, String> {
         private Intent intent; //The intent to read from
-        private WeakReference<Experiment> parent; //The calling Activity
+        private WeakReference<ExperimentActivity> parent; //The calling Activity
 
         //The constructor takes the intent to copy from and the parent activity to call back when finished.
-        public CopyXMLTask(Intent intent, Experiment parent) {
+        public CopyXMLTask(Intent intent, ExperimentActivity parent) {
             this.intent = intent;
-            this.parent = new WeakReference<Experiment>(parent);
+            this.parent = new WeakReference<ExperimentActivity>(parent);
         }
 
         //Copying is done on a second thread...

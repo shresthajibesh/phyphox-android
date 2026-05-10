@@ -7,14 +7,14 @@ import java.io.IOException;
 
 import de.rwth_aachen.phyphox.DataExport;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
 public class SetBlockParser extends XmlBlockParser {
         private DataExport.ExportSet set;
 
         //This constructor takes an additional argument: The export set to be filled
-        SetBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, DataExport.ExportSet set) {
+        SetBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, ExperimentActivity parent, DataExport.ExportSet set) {
             super(xpp, experiment, parent);
             this.set = set;
         }

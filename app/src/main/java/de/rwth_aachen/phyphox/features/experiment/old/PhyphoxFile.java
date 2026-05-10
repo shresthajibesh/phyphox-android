@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.CRC32;
 
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.model.PhyphoxStream;
 
 //phyphoxFile implements the loading of an experiment from a *.phyphox file as well as the copying
@@ -39,7 +39,7 @@ public abstract class PhyphoxFile {
     public static int languageRating = 0; //If we find a locale, it replaces previous translations as long as it has a higher rating than the previous one.
 
     //Simple helper to return either the translated term or the original one, if no translation could be found
-    public static String translate(String input, Experiment parent) {
+    public static String translate(String input, ExperimentActivity parent) {
         if (input == null)
             return null;
         if (translation.containsKey(input.trim()))

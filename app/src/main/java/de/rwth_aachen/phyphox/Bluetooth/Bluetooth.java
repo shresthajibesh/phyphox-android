@@ -41,7 +41,7 @@ import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.ExperimentTimeReference;
 import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
@@ -556,7 +556,7 @@ public class Bluetooth implements Serializable {
                 isExecuting = false;
             }
 
-            if(Experiment.isBluetoothConnectionSuccessful && updateRssi()){
+            if(ExperimentActivity.isBluetoothConnectionSuccessful && updateRssi()){
                 add(new ReadRemoteRssi(gatt));
             }
 
@@ -610,7 +610,7 @@ public class Bluetooth implements Serializable {
             super.onReadRemoteRssi(gatt, rssi, status);
 
             ArrayList<ConnectedDeviceInfo> updatedList = getUpdatedList(connectedDeviceInfoArrayList, gatt.getDevice().getAddress(), rssi);
-            Experiment.updateConnectedDeviceDelegate.updateConnectedDevice(updatedList);
+            ExperimentActivity.updateConnectedDeviceDelegate.updateConnectedDevice(updatedList);
 
             if (batteryLevelCharacteristic != null) {
                 add(new ReadCommand(btGatt, batteryLevelCharacteristic));

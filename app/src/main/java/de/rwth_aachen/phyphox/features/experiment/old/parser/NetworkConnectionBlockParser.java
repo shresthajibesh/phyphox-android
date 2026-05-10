@@ -11,14 +11,14 @@ import de.rwth_aachen.phyphox.DataBuffer;
 import de.rwth_aachen.phyphox.Metadata;
 import de.rwth_aachen.phyphox.NetworkConnection.NetworkConnection;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
 public class NetworkConnectionBlockParser extends XmlBlockParser {
         Map<String, NetworkConnection.NetworkSendableData> send;
         Map<String, NetworkConnection.NetworkReceivableData> receive;
 
-        NetworkConnectionBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent, Map<String, NetworkConnection.NetworkSendableData> send, Map<String, NetworkConnection.NetworkReceivableData> receive) {
+        NetworkConnectionBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, ExperimentActivity parent, Map<String, NetworkConnection.NetworkSendableData> send, Map<String, NetworkConnection.NetworkReceivableData> receive) {
             super(xpp, experiment, parent);
             this.send = send;
             this.receive = receive;

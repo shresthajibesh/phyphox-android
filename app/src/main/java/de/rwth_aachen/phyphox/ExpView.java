@@ -76,7 +76,7 @@ import de.rwth_aachen.phyphox.NetworkConnection.NetworkConnection;
 import de.rwth_aachen.phyphox.NetworkConnection.NetworkService;
 import de.rwth_aachen.phyphox.camera.model.CameraSettingLevel;
 import de.rwth_aachen.phyphox.camera.model.ShowCameraControls;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 
 // expView implements experiment views, which are collections of displays and graphs that form a
 // specific way to show the results of an element.
@@ -1814,7 +1814,7 @@ public class ExpView implements Serializable{
                 interactiveGV.setInterceptBuffer(experiment.getBuffer(outputs.get(1)));
             }
 
-            if (act instanceof Experiment) {
+            if (act instanceof ExperimentActivity) {
                 DataExport dataExport = new DataExport(experiment);
 
                 DataExport.ExportSet set = dataExport.new ExportSet(this.label);

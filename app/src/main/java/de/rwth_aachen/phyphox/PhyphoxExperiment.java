@@ -53,7 +53,7 @@ import de.rwth_aachen.phyphox.Bluetooth.BluetoothOutput;
 import de.rwth_aachen.phyphox.camera.CameraInput;
 import de.rwth_aachen.phyphox.camera.depth.DepthInput;
 import de.rwth_aachen.phyphox.NetworkConnection.NetworkConnection;
-import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.ExperimentActivity;
 
 //This class holds all the information that makes up an experiment
 //There are also some functions that the experiment should perform
@@ -522,7 +522,7 @@ public class PhyphoxExperiment implements Serializable, ExperimentTimeReference.
 
     }
 
-    public void writeStateFileAsync(String customTitle, OutputStream os, Experiment.WriteStateFileCallback writeStateFileCallback){
+    public void writeStateFileAsync(String customTitle, OutputStream os, ExperimentActivity.WriteStateFileCallback writeStateFileCallback){
 
         ExecutorService stateWriterExecutor = Executors.newSingleThreadExecutor();
 
