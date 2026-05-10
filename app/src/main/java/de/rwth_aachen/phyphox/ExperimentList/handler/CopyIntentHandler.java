@@ -11,7 +11,7 @@ import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
-import de.rwth_aachen.phyphox.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity;
 import de.rwth_aachen.phyphox.PhyphoxFile;
 

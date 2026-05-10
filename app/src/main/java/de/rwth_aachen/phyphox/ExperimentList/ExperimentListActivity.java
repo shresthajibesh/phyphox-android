@@ -48,7 +48,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -57,9 +56,6 @@ import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -87,7 +83,7 @@ import java.util.zip.CRC32;
 
 import de.rwth_aachen.phyphox.Bluetooth.BluetoothExperimentLoader;
 import de.rwth_aachen.phyphox.Bluetooth.BluetoothScanDialog;
-import de.rwth_aachen.phyphox.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.ExperimentList.datasource.AssetExperimentLoader;
 import de.rwth_aachen.phyphox.ExperimentList.handler.BluetoothScanner;
 import de.rwth_aachen.phyphox.ExperimentList.handler.CopyIntentHandler;

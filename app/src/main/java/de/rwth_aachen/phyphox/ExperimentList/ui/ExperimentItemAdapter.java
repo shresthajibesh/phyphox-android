@@ -8,40 +8,29 @@ import static de.rwth_aachen.phyphox.ExperimentList.model.Const.EXPERIMENT_XML;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.core.app.ShareCompat;
-import androidx.core.content.FileProvider;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
-import de.rwth_aachen.phyphox.BuildConfig;
 import de.rwth_aachen.phyphox.Helper.DataExportUtility;
-import de.rwth_aachen.phyphox.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.ExperimentList.datasource.ExperimentRepository;
 import de.rwth_aachen.phyphox.ExperimentList.model.ExperimentShortInfo;
 import de.rwth_aachen.phyphox.Helper.Helper;

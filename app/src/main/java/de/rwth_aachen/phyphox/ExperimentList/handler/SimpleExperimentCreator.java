@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import de.rwth_aachen.phyphox.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.R;
 
 public class SimpleExperimentCreator {

@@ -43,7 +43,6 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
@@ -77,6 +76,7 @@ import de.rwth_aachen.phyphox.NetworkConnection.NetworkConnection;
 import de.rwth_aachen.phyphox.NetworkConnection.NetworkService;
 import de.rwth_aachen.phyphox.camera.model.CameraSettingLevel;
 import de.rwth_aachen.phyphox.camera.model.ShowCameraControls;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
 
 // expView implements experiment views, which are collections of displays and graphs that form a
 // specific way to show the results of an element.

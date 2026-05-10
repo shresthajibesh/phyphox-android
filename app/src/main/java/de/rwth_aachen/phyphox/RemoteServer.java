@@ -47,7 +47,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.Vector;
 
-import kotlin.reflect.KVisibility;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
 
 //RemoteServer implements a web interface to remote control the experiment and receive the data
 

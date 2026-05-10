@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Vector;
 
 import de.rwth_aachen.phyphox.BuildConfig;
-import de.rwth_aachen.phyphox.Experiment;
 import de.rwth_aachen.phyphox.R;
 
 public class DataExportUtility{

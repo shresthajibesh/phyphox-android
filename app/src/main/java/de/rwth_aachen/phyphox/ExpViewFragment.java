@@ -10,9 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
 
 public class ExpViewFragment extends Fragment {
     private static final String ARG_INDEX = "index";
