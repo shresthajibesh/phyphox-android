@@ -35,8 +35,8 @@ public abstract class PhyphoxFile {
     public final static String phyphoxFileVersion = "1.19";
 
     //translation maps any term for which a suitable translation is found to the current locale or, as fallback, to English
-    private static Map<String, String> translation = new HashMap<>();
-    private static int languageRating = 0; //If we find a locale, it replaces previous translations as long as it has a higher rating than the previous one.
+    public static Map<String, String> translation = new HashMap<>();
+    public static int languageRating = 0; //If we find a locale, it replaces previous translations as long as it has a higher rating than the previous one.
 
     //Simple helper to return either the translated term or the original one, if no translation could be found
     public static String translate(String input, Experiment parent) {

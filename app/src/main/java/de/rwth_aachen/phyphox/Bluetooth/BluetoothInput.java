@@ -23,13 +23,12 @@ import java.util.concurrent.locks.Lock;
 import de.rwth_aachen.phyphox.ExperimentTimeReference;
 import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.DataOutput;
-import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
 
 /**
  * The BluetoothInput class encapsulates an input to Bluetooth devices.
  */
-@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class BluetoothInput extends Bluetooth {
 
     /**
@@ -84,10 +83,10 @@ public class BluetoothInput extends Bluetooth {
      * @param lock             lock to write data to the buffers
      * @param context          context
      * @param characteristics  list of all characteristics the object should be able to operate on
-     * @throws PhyphoxFile.phyphoxFileException if the value for rate is invalid.
+     * @throws PhyphoxFileException if the value for rate is invalid.
      */
     public BluetoothInput(String idString, String deviceName, String deviceAddress, String mode, UUID uuidFilter, boolean autoConnect, double rate, boolean subscribeOnStart, Vector<DataOutput> buffers, Lock lock, Activity activity, Context context, Vector<CharacteristicData> characteristics, ExperimentTimeReference experimentTimeReference)
-            throws PhyphoxFile.phyphoxFileException {
+            throws PhyphoxFileException {
 
         super(idString, deviceName, deviceAddress, uuidFilter, autoConnect, activity, context, characteristics);
 
@@ -95,7 +94,7 @@ public class BluetoothInput extends Bluetooth {
         this.subscribeOnStart = subscribeOnStart;
 
         if (mode.equals("poll") && rate < 0) {
-            throw new PhyphoxFile.phyphoxFileException(context.getResources().getString(R.string.bt_exception_rate));
+            throw new PhyphoxFileException(context.getResources().getString(R.string.bt_exception_rate));
         }
 
         this.dataLock = lock;

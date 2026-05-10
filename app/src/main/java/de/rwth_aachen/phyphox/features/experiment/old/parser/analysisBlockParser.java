@@ -1,13 +1,27 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
-private static class analysisBlockParser extends XmlBlockParser {
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.Vector;
+
+import de.rwth_aachen.phyphox.Analysis;
+import de.rwth_aachen.phyphox.DataInput;
+import de.rwth_aachen.phyphox.DataOutput;
+import de.rwth_aachen.phyphox.FormulaParser;
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+
+public class analysisBlockParser extends XmlBlockParser {
 
         analysisBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
         @Override
-        protected void processStartTag(String tag) throws XmlPullParserException, phyphoxFileException, IOException {
+        protected void processStartTag(String tag) throws XmlPullParserException, PhyphoxFileException, IOException {
 
             Vector<Analysis.AnalysisModule.CycleRange> cycles = new Vector<>();
             String cyclesStr = getStringAttribute("cycles");
@@ -19,7 +33,7 @@ private static class analysisBlockParser extends XmlBlockParser {
                             int value = Integer.parseInt(cycleParts[0]);
                             cycles.add(new Analysis.AnalysisModule.CycleRange(value, value));
                         } catch (Exception e) {
-                            throw new phyphoxFileException("Invalid cycles attribute "+cyclesStr+".", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Invalid cycles attribute "+cyclesStr+".", xpp.getLineNumber());
                         }
                     } else if (cycleParts.length == 2) {
                         try {
@@ -34,10 +48,10 @@ private static class analysisBlockParser extends XmlBlockParser {
                                 stop = Integer.parseInt(cycleParts[1]);
                             cycles.add(new Analysis.AnalysisModule.CycleRange(start, stop));
                         } catch (Exception e) {
-                            throw new phyphoxFileException("Invalid cycles attribute "+cyclesStr+".", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Invalid cycles attribute "+cyclesStr+".", xpp.getLineNumber());
                         }
                     } else {
-                        throw new phyphoxFileException("Invalid cycles attribute "+cyclesStr+".", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Invalid cycles attribute "+cyclesStr+".", xpp.getLineNumber());
                     }
                 }
             }
@@ -91,11 +105,11 @@ private static class analysisBlockParser extends XmlBlockParser {
                     (new ioBlockParser(xpp, experiment, parent, inputs, outputs, inputMapping, outputMapping, "as")).process(); //Load inputs and outputs
 
                     if (formula == null)
-                        throw new phyphoxFileException("Formula module needs a formula.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Formula module needs a formula.", xpp.getLineNumber());
                     try {
                         experiment.analysis.add(new Analysis.formulaAM(experiment, inputs, outputs, formula));
                     } catch (FormulaParser.FormulaException e) {
-                        throw new phyphoxFileException("Formula error: " + e.getMessage(), xpp.getLineNumber());
+                        throw new PhyphoxFileException("Formula error: " + e.getMessage(), xpp.getLineNumber());
                     }
                 } break;
                 case "count": { //Absolute value
@@ -507,7 +521,7 @@ private static class analysisBlockParser extends XmlBlockParser {
                                         break;
                         case "average": zMode = Analysis.mapAM.ZMode.average;
                                         break;
-                        default:        throw new phyphoxFileException("Unknown zMode " + zModeStr, xpp.getLineNumber());
+                        default:        throw new PhyphoxFileException("Unknown zMode " + zModeStr, xpp.getLineNumber());
                     }
 
                     ioBlockParser.ioMapping[] inputMapping = {
@@ -696,7 +710,7 @@ private static class analysisBlockParser extends XmlBlockParser {
                             break;
                         case "linear":   method = Analysis.interpolateAM.InterpolationMethod.linear;
                             break;
-                        default:        throw new phyphoxFileException("Unknown interpolation methode " + interpolationMethodStr, xpp.getLineNumber());
+                        default:        throw new PhyphoxFileException("Unknown interpolation methode " + interpolationMethodStr, xpp.getLineNumber());
                     }
 
                     ioBlockParser.ioMapping[] inputMapping = {
@@ -805,7 +819,7 @@ private static class analysisBlockParser extends XmlBlockParser {
                     try {
                         triggerMode = Analysis.eventstreamAM.TriggerMode.valueOf(triggerModeStr);
                     } catch (Exception e) {
-                        throw new phyphoxFileException("Unknown trigger mode " + triggerModeStr, xpp.getLineNumber());
+                        throw new PhyphoxFileException("Unknown trigger mode " + triggerModeStr, xpp.getLineNumber());
                     }
 
                     ioBlockParser.ioMapping[] inputMapping = {
@@ -855,7 +869,7 @@ private static class analysisBlockParser extends XmlBlockParser {
                     experiment.analysis.add(new Analysis.splitAM(experiment, inputs, outputs));
                 } break;
                 default: //Unknown tag...
-                    throw new phyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
+                    throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
             }
             experiment.analysis.lastElement().setCycles(cycles);
         }

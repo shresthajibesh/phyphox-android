@@ -15,6 +15,7 @@ import java.util.zip.ZipInputStream;
 
 import de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity;
 import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.model.PhyphoxStream;
 
 //This asyncTask extracts a zip file to a temporary directory
 //When it's done, it either opens a single phyphox file or asks the user how to handle multiple phyphox files
@@ -37,9 +38,9 @@ public class ZipIntentHandler extends AsyncTask<String, Void, String> {
 
     //Copying is done on a second thread...
     protected String doInBackground(String... params) {
-        PhyphoxFile.PhyphoxStream phyphoxStream = PhyphoxFile.openXMLInputStream(intent, parent.get());
-        if (!phyphoxStream.errorMessage.isEmpty()) {
-            return phyphoxStream.errorMessage;
+        PhyphoxStream phyphoxStream = PhyphoxFile.openXMLInputStream(intent, parent.get());
+        if (!phyphoxStream.getErrorMessage().isEmpty()) {
+            return phyphoxStream.getErrorMessage();
         }
 
         //Copy the input stream to a random file name
@@ -51,7 +52,7 @@ public class ZipIntentHandler extends AsyncTask<String, Void, String> {
             if (!tempPath.mkdirs())
                 return "Could not create temporary directory to extract zip file.";
 
-            ZipInputStream zis = new ZipInputStream(phyphoxStream.inputStream);
+            ZipInputStream zis = new ZipInputStream(phyphoxStream.getInputStream());
 
             ZipEntry entry;
             byte[] buffer = new byte[2048];

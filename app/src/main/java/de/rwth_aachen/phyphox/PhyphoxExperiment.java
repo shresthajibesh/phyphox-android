@@ -58,23 +58,23 @@ import de.rwth_aachen.phyphox.features.experiment.Experiment;
 //This class holds all the information that makes up an experiment
 //There are also some functions that the experiment should perform
 public class PhyphoxExperiment implements Serializable, ExperimentTimeReference.Listener {
-    int versionMinor;
-    int versionMajor;
+    public int versionMinor;
+    public int versionMajor;
 
-    boolean loaded = false; //Set to true if this instance holds a successfully loaded experiment
-    boolean isLocal; //Set to true if this experiment was loaded from a local file. (if false, the experiment can be added to the library)
-    byte[] source = null; //This holds the original source file
-    Set<String> resources = new ArraySet<>();
-    String resourceFolder = null;
-    long crc32 = 0;
-    String message = ""; //Holds error messages
-    String title = ""; //The title of this experiment
-    String baseTitle = ""; //The title of this experiment without translations
-    String stateTitle = ""; //The title of this experiment
-    String category = ""; //The category of this experiment
-    String baseCategory = ""; //The category of this experiment without translations
-    String icon = ""; //The icon. This is either a base64-encoded drawable (typically png) or (if its length is 3 or less characters) it is a short form which should be used in a simple generated logo (like "gyr" for gyroscope). (The experiment list will use the first three characters of the title if this is completely empty)
-    String description = "There is no description available for this experiment."; //A long text, explaining details about the experiment
+    public boolean loaded = false; //Set to true if this instance holds a successfully loaded experiment
+    public boolean isLocal; //Set to true if this experiment was loaded from a local file. (if false, the experiment can be added to the library)
+    public byte[] source = null; //This holds the original source file
+    public Set<String> resources = new ArraySet<>();
+    public String resourceFolder = null;
+    public long crc32 = 0;
+    public String message = ""; //Holds error messages
+    public String title = ""; //The title of this experiment
+    public String baseTitle = ""; //The title of this experiment without translations
+    public String stateTitle = ""; //The title of this experiment
+    public String category = ""; //The category of this experiment
+    public String baseCategory = ""; //The category of this experiment without translations
+    public String icon = ""; //The icon. This is either a base64-encoded drawable (typically png) or (if its length is 3 or less characters) it is a short form which should be used in a simple generated logo (like "gyr" for gyroscope). (The experiment list will use the first three characters of the title if this is completely empty)
+    public String description = "There is no description available for this experiment."; //A long text, explaining details about the experiment
     public Map<String, String> links = new LinkedHashMap<>(); //This contains links to external documentation or similar stuff
     public Map<String, String> highlightedLinks = new LinkedHashMap<>(); //This contains highlighted (= showing up in the menu) links to external documentation or similar stuff
     public Vector<ExpView> experimentViews = new Vector<>(); //Instances of the experiment views (see expView.java) that define the views for this experiment
@@ -90,45 +90,45 @@ public class PhyphoxExperiment implements Serializable, ExperimentTimeReference.
     public Vector<Analysis.AnalysisModule> analysis = new Vector<>(); //Instances of analysisModules (see analysis.java) that define all the mathematical processes in this experiment
     public Lock dataLock = new ReentrantLock();
 
-    double analysisSleep = 0.; //Pause between analysis cycles. At 0 analysis is done as fast as possible.
-    DataBuffer analysisDynamicSleep = null;
-    double lastAnalysis = 0.0; //This variable holds the system time of the moment the last analysis process finished. This is necessary for experiments, which do analysis after given intervals
-    double analysisTime; //This variable holds the experiment time of the moment the current analysis process started.
-    double analysisLinearTime; //Same with the current system time
-    boolean analysisOnUserInput = false; //Do the data analysis only if there is fresh input from the user.
-    boolean newUserInput = true; //Will be set to true if the user changed any values
-    DataBuffer requireFill = null; //Observe this buffer and only execute analysis cycle if this buffer has enough values
-    int requireFillThreshold = 1; //Threshold fore 'requireBuffer'
-    DataBuffer requireFillDynamic = null; //Instead of using the threshold, use the last value of another buffer to control 'requireFill'
-    boolean newData = true; //Will be set to true if we have fresh data to present
-    boolean recordingUsed = true; //This keeps track, whether the recorded data has been used, so the next call reading from the mic can clear the old data first
+    public double analysisSleep = 0.; //Pause between analysis cycles. At 0 analysis is done as fast as possible.
+    public DataBuffer analysisDynamicSleep = null;
+    public double lastAnalysis = 0.0; //This variable holds the system time of the moment the last analysis process finished. This is necessary for experiments, which do analysis after given intervals
+    public double analysisTime; //This variable holds the experiment time of the moment the current analysis process started.
+    public double analysisLinearTime; //Same with the current system time
+    public boolean analysisOnUserInput = false; //Do the data analysis only if there is fresh input from the user.
+    public boolean newUserInput = true; //Will be set to true if the user changed any values
+    public DataBuffer requireFill = null; //Observe this buffer and only execute analysis cycle if this buffer has enough values
+    public int requireFillThreshold = 1; //Threshold fore 'requireBuffer'
+    public DataBuffer requireFillDynamic = null; //Instead of using the threshold, use the last value of another buffer to control 'requireFill'
+    public boolean newData = true; //Will be set to true if we have fresh data to present
+    public boolean recordingUsed = true; //This keeps track, whether the recorded data has been used, so the next call reading from the mic can clear the old data first
 
-    int cycle = 0; //Keeps track of the current cycle for the cycles attribute of analysis modules
+    public int cycle = 0; //Keeps track of the current cycle for the cycles attribute of analysis modules
 
-    boolean timedRun = false; //Timed run enabled?
-    double timedRunStartDelay = 3.; //Start delay for timed runs
-    double timedRunStopDelay = 10.; //Stop delay for timed runs
+    public boolean timedRun = false; //Timed run enabled?
+    public double timedRunStartDelay = 3.; //Start delay for timed runs
+    public double timedRunStopDelay = 10.; //Stop delay for timed runs
 
     //Audio output is handled in its own class, which will be instantiated by the file parser if required
     public AudioOutput audioOutput = null;
 
     //Parameters for audio record
-    transient AudioRecord audioRecord = null; //Instance of AudioRecord. Not used if null.
-    String micOutput; //The key name of the buffer which receives the data from audio recording.
-    String micRateOutput; //The key name of the buffer which receives the sample rate of audio recording.
-    int micRate = 48000; //The recording rate in Hz
-    int micBufferSize = 0; //The size of the recording buffer
-    int minBufferSize = 0; //The minimum buffer size requested by the device
-    boolean appendAudioInput = false; //Append audio input on start of analysis cycle instead of replacing old data
-    boolean forceAudioRecordingCompatibilityFormat = false; //Some Xiaomi device do not properly work with ENCODING_PCM_FLOAT if the Google Assistent voice trigger is enabled. This forces the use of the good old 16bit int format
+    public transient AudioRecord audioRecord = null; //Instance of AudioRecord. Not used if null.
+    public String micOutput; //The key name of the buffer which receives the data from audio recording.
+    public String micRateOutput; //The key name of the buffer which receives the sample rate of audio recording.
+    public int micRate = 48000; //The recording rate in Hz
+    public int micBufferSize = 0; //The size of the recording buffer
+    public int minBufferSize = 0; //The minimum buffer size requested by the device
+    public boolean appendAudioInput = false; //Append audio input on start of analysis cycle instead of replacing old data
+    public boolean forceAudioRecordingCompatibilityFormat = false; //Some Xiaomi device do not properly work with ENCODING_PCM_FLOAT if the Google Assistent voice trigger is enabled. This forces the use of the good old 16bit int format
 
     //Network connections
-    List<NetworkConnection> networkConnections = new ArrayList<>();
+    public List<NetworkConnection> networkConnections = new ArrayList<>();
 
     public DataExport exporter; //An instance of the DataExport class for exporting functionality (see DataExport.java)
 
     //The constructor will just instantiate the DataExport. Everything else will be set directly by the phyphoxFile loading function (see phyphoxFile.java)
-    PhyphoxExperiment() {
+    public PhyphoxExperiment() {
         exporter = new DataExport(this);
         experimentTimeReference = new ExperimentTimeReference(this);
     }

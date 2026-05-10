@@ -1,15 +1,31 @@
 package de.rwth_aachen.phyphox.features.experiment.old.async;
 
 import static de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile.openXMLInputStream;
+import static de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile.languageRating;
+import static de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile.phyphoxFileVersion;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 
+import android.util.Xml;
+
+import de.rwth_aachen.phyphox.DataBuffer;
+import de.rwth_aachen.phyphox.ExpView;
+import de.rwth_aachen.phyphox.Helper.Helper;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.model.PhyphoxStream;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.phyphoxBlockParser;
 
 //This AsyncTask will load a phyphoxExperiment from an intent and return it by passing it to
 //onExperimentLoaded of the activity given in the constructor.
@@ -28,19 +44,19 @@ public class LoadXMLAsyncTask extends AsyncTask<String, Void, PhyphoxExperiment>
             PhyphoxExperiment experiment = new PhyphoxExperiment();
 
             //Open the input stream (see above)
-            PhyphoxFile.PhyphoxStream input = openXMLInputStream(intent, parent.get());
-            if (input.inputStream == null) { //If this failed, abort and relay the error message
-                experiment.message = input.errorMessage;
+            PhyphoxStream input = openXMLInputStream(intent, parent.get());
+            if (input.getInputStream() == null) { //If this failed, abort and relay the error message
+                experiment.message = input.getErrorMessage();
                 return experiment;
             }
 
-            experiment.isLocal = input.isLocal; //The experiment needs to know if it is local
-            experiment.source = input.source;
-            experiment.crc32 = input.crc32;
-            experiment.resourceFolder = input.resourceFolder;
+            experiment.isLocal = input.isLocal(); //The experiment needs to know if it is local
+            experiment.source = input.getSource();
+            experiment.crc32 = input.getCrc32();
+            experiment.resourceFolder = input.getResourceFolder();
             try {
                 //Setup the pull parser
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input.inputStream));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input.getInputStream()));
 
                 XmlPullParser xpp = Xml.newPullParser();
                 xpp.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
@@ -88,7 +104,7 @@ public class LoadXMLAsyncTask extends AsyncTask<String, Void, PhyphoxExperiment>
             } catch (XmlPullParserException e) { //Catch pullparser errors
                 experiment.message = "XML Error in line "+ e.getLineNumber() +": " + e.getMessage();
                 return experiment;
-            } catch (phyphoxFileException e) { //Catch our own errors
+            } catch (PhyphoxFileException e) { //Catch our own errors
                 experiment.message = e.getMessage();
                 return experiment;
             } catch (IOException e) { //Catch IO errors

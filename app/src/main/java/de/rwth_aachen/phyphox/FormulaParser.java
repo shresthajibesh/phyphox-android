@@ -5,7 +5,7 @@ import java.util.Vector;
 public class FormulaParser {
     Source base = null;
 
-    class FormulaException extends Exception {
+    public class FormulaException extends Exception {
         FormulaException() {
 
         }

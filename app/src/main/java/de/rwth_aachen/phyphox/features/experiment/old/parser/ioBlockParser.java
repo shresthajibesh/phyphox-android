@@ -1,12 +1,21 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-private static class ioBlockParser extends XmlBlockParser {
+import de.rwth_aachen.phyphox.DataBuffer;
+import de.rwth_aachen.phyphox.DataInput;
+import de.rwth_aachen.phyphox.DataOutput;
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+
+public class ioBlockParser extends XmlBlockParser {
 
         public static class ioMapping {
             String name;
@@ -47,7 +56,7 @@ private static class ioBlockParser extends XmlBlockParser {
         }
 
         @Override
-        protected void processStartTag(String tag) throws IOException, XmlPullParserException, phyphoxFileException {
+        protected void processStartTag(String tag) throws IOException, XmlPullParserException, PhyphoxFileException {
             int targetIndex = -1; //This will hold the index of the inputList or outputList entry, that should be mapped to the given buffer
             int mappingIndex = -1; //This will hold the index of the inputMapping or outputMapping, that holds the rules for this mapping
             String mapping;
@@ -69,7 +78,7 @@ private static class ioBlockParser extends XmlBlockParser {
             switch (tag.toLowerCase()) {
                 case "input":   //Input tag
                     if (inputMapping == null) //We did not even expect inputs here...
-                        throw new phyphoxFileException("No input expected.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("No input expected.", xpp.getLineNumber());
 
                     //Check the type
                     String type = getStringAttribute("type");
@@ -89,7 +98,7 @@ private static class ioBlockParser extends XmlBlockParser {
                         }
 
                         if (targetIndex < 0) //No mapping found at all
-                            throw new phyphoxFileException("Could not find mapping for input \""+mapping+"\".", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Could not find mapping for input \""+mapping+"\".", xpp.getLineNumber());
 
                         //Increase the inputList if necessary
                         if (targetIndex >= inputList.size())
@@ -114,7 +123,7 @@ private static class ioBlockParser extends XmlBlockParser {
                                 }
                             } else {
                                 //Already set and not repeatable.
-                                throw new phyphoxFileException("The input \""+mapping+"\" has already been defined.", xpp.getLineNumber());
+                                throw new PhyphoxFileException("The input \""+mapping+"\" has already been defined.", xpp.getLineNumber());
                             }
                         }
                     } else {
@@ -158,7 +167,7 @@ private static class ioBlockParser extends XmlBlockParser {
                                 }
                                 mappingIndex = firstRepeatable + repeatIndex;
                             } else //Not found and no repeatables. Let's complain.
-                                throw new phyphoxFileException("The non-mapped input from buffer " + getText() + " could not be matched.", xpp.getLineNumber());
+                                throw new PhyphoxFileException("The non-mapped input from buffer " + getText() + " could not be matched.", xpp.getLineNumber());
                         }
                     }
 
@@ -174,11 +183,11 @@ private static class ioBlockParser extends XmlBlockParser {
                             try {
                                 value = Double.valueOf(getText());
                             } catch (NumberFormatException e) {
-                                throw new phyphoxFileException("Invalid number format.", xpp.getLineNumber());
+                                throw new PhyphoxFileException("Invalid number format.", xpp.getLineNumber());
                             }
                             inputList.set(targetIndex, new DataInput(value));
                         } else {
-                            throw new phyphoxFileException("Value-type not allowed for input \""+inputMapping[mappingIndex].name+"\".", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Value-type not allowed for input \""+inputMapping[mappingIndex].name+"\".", xpp.getLineNumber());
                         }
                     } else if (type.equals("buffer")) {
 
@@ -192,7 +201,7 @@ private static class ioBlockParser extends XmlBlockParser {
                             at.content = bufferName;
                         DataBuffer buffer = experiment.getBuffer(bufferName);
                         if (buffer == null)
-                            throw new phyphoxFileException("Buffer \""+bufferName+"\" not defined.", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Buffer \""+bufferName+"\" not defined.", xpp.getLineNumber());
                         else {
                             inputList.set(targetIndex, new DataInput(buffer, keep));
                         }
@@ -201,16 +210,16 @@ private static class ioBlockParser extends XmlBlockParser {
                         if (inputMapping[mappingIndex].emptyAllowed) {
                             inputList.set(targetIndex, new DataInput());
                         } else {
-                            throw new phyphoxFileException("Value-type not allowed for input \""+inputMapping[mappingIndex].name+"\".", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Value-type not allowed for input \""+inputMapping[mappingIndex].name+"\".", xpp.getLineNumber());
                         }
                     } else {
-                        throw new phyphoxFileException("Unknown input type \""+type+"\".", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Unknown input type \""+type+"\".", xpp.getLineNumber());
                     }
 
                     break;
                 case "output":
                     if (outputMapping == null)
-                        throw new phyphoxFileException("No output expected.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("No output expected.", xpp.getLineNumber());
 
                     //Check the type
                     boolean clearBeforeWrite = getBooleanAttribute("clear", true); //Deprecated
@@ -225,7 +234,7 @@ private static class ioBlockParser extends XmlBlockParser {
                             }
                         }
                         if (targetIndex < 0)
-                            throw new phyphoxFileException("Could not find mapping for output \""+mapping+"\".", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Could not find mapping for output \""+mapping+"\".", xpp.getLineNumber());
                         if (targetIndex >= outputList.size())
                             outputList.setSize(targetIndex+1);
                         if (outputList.get(targetIndex) != null) {
@@ -239,7 +248,7 @@ private static class ioBlockParser extends XmlBlockParser {
                                         outputList.setSize(targetIndex+1);
                                 }
                             } else {
-                                throw new phyphoxFileException("The output \""+mapping+"\" has already been defined.", xpp.getLineNumber());
+                                throw new PhyphoxFileException("The output \""+mapping+"\" has already been defined.", xpp.getLineNumber());
                             }
                         }
                     } else {
@@ -275,7 +284,7 @@ private static class ioBlockParser extends XmlBlockParser {
                                 }
                                 mappingIndex = firstRepeatable + repeatIndex;
                             } else
-                                throw new phyphoxFileException("The non-mapped output could not be matched.", xpp.getLineNumber());
+                                throw new PhyphoxFileException("The non-mapped output could not be matched.", xpp.getLineNumber());
                         }
                     }
 
@@ -289,14 +298,14 @@ private static class ioBlockParser extends XmlBlockParser {
                         at.content = bufferName;
                     DataBuffer buffer = experiment.getBuffer(bufferName);
                     if (buffer == null)
-                        throw new phyphoxFileException("Buffer \""+bufferName+"\" not defined.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Buffer \""+bufferName+"\" not defined.", xpp.getLineNumber());
                     else {
                         outputList.set(targetIndex, new DataOutput(buffer, append));
                     }
                     break;
                 default: //Unknown tag...
                     if (additionalTags == null)
-                        throw new phyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
+                        throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
                     at.content = getText();
             }
             if (additionalTags != null) {
@@ -310,22 +319,22 @@ private static class ioBlockParser extends XmlBlockParser {
         }
 
         @Override
-        protected void done() throws phyphoxFileException {
+        protected void done() throws PhyphoxFileException {
             //Check if the number of inputs and outputs are valid
             if (inputMapping != null) {
                 for (int i = 0; i < inputMapping.length; i++) {
                     if ((inputMapping[i].maxCount > 0 && inputMapping[i].count > inputMapping[i].maxCount))
-                        throw new phyphoxFileException("A maximum of " + inputMapping[i].maxCount + " inputs was expected for " + inputMapping[i].name + " but " + inputMapping[i].count + " were found.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("A maximum of " + inputMapping[i].maxCount + " inputs was expected for " + inputMapping[i].name + " but " + inputMapping[i].count + " were found.", xpp.getLineNumber());
                     if (inputMapping[i].count < inputMapping[i].minCount)
-                        throw new phyphoxFileException("A minimum of " + inputMapping[i].minCount + " inputs was expected for " + inputMapping[i].name + " but " + inputMapping[i].count + " were found.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("A minimum of " + inputMapping[i].minCount + " inputs was expected for " + inputMapping[i].name + " but " + inputMapping[i].count + " were found.", xpp.getLineNumber());
                 }
             }
             if (outputMapping != null) {
                 for (int i = 0; i < outputMapping.length; i++) {
                     if ((outputMapping[i].maxCount > 0 && outputMapping[i].count > outputMapping[i].maxCount))
-                        throw new phyphoxFileException("A maximum of " + outputMapping[i].maxCount + " outputs was expected for " + outputMapping[i].name + " but " + outputMapping[i].count + " were found.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("A maximum of " + outputMapping[i].maxCount + " outputs was expected for " + outputMapping[i].name + " but " + outputMapping[i].count + " were found.", xpp.getLineNumber());
                     if (outputMapping[i].count < outputMapping[i].minCount)
-                        throw new phyphoxFileException("A minimum of " + outputMapping[i].minCount + " outputs was expected for " + outputMapping[i].name + " but " + outputMapping[i].count + " were found.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("A minimum of " + outputMapping[i].minCount + " outputs was expected for " + outputMapping[i].name + " but " + outputMapping[i].count + " were found.", xpp.getLineNumber());
                 }
             }
         }

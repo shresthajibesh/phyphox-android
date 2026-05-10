@@ -1,15 +1,23 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
-import de.rwth_aachen.phyphox.features.experiment.old.async.setBlockParser;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
-private static class exportBlockParser extends XmlBlockParser {
+import java.io.IOException;
+
+import de.rwth_aachen.phyphox.DataExport;
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+
+public class exportBlockParser extends XmlBlockParser {
 
         exportBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
         @Override
-        protected void processStartTag(String tag) throws XmlPullParserException, IOException, phyphoxFileException {
+        protected void processStartTag(String tag) throws XmlPullParserException, IOException, PhyphoxFileException {
             switch (tag.toLowerCase()) {
                 case "set": //An export set. These just group some dataBuffers to be exported as a set
                     DataExport.ExportSet set = experiment.exporter.new ExportSet(xpp.getAttributeValue(XmlPullParser.NO_NAMESPACE, "name")); //Create the set with the given name
@@ -17,7 +25,7 @@ private static class exportBlockParser extends XmlBlockParser {
                     experiment.exporter.addSet(set); //Add the set
                 break;
                 default:
-                    throw new phyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
+                    throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
             }
         }
 

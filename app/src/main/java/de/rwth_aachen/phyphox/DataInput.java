@@ -36,7 +36,7 @@ public class DataInput implements Serializable {
         this.value = value;
     }
 
-    protected DataInput() {
+    public DataInput() {
         this.isBuffer = false;
         this.isEmpty = true;
     }

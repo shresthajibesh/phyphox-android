@@ -16,7 +16,7 @@ public class DataOutput implements Serializable {
     }
 
     //Constructor with specified clear attribute
-    protected DataOutput(DataBuffer buffer, boolean append) {
+    public DataOutput(DataBuffer buffer, boolean append) {
         this.append = append;
         this.buffer = buffer;
     }

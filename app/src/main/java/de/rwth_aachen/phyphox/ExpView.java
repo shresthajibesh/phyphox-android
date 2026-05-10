@@ -115,7 +115,7 @@ public class ExpView implements Serializable{
         protected String label; //Each element has a label. Usually naming the data shown
         protected String visibility; //Elements can have visibility buffer name, which be shown and hidden as per the buffer value.
         protected float labelSize; //Size of the label
-        protected String valueOutput; //User input will be directed to this output, so the experiment can write it to a dataBuffer
+        public String valueOutput; //User input will be directed to this output, so the experiment can write it to a dataBuffer
         protected Vector<String> inputs;
         protected Vector<String> outputs;
         protected boolean needsUpdate = true;
@@ -128,7 +128,7 @@ public class ExpView implements Serializable{
 
         DataBuffer visibilityBuffer = null;
         //Constructor takes the label, any buffer name that should be used an a reference to the resources
-        protected expViewElement(String label, String visibility,  String valueOutput, Vector<String> inputs, Resources res) {
+        public expViewElement(String label, String visibility,  String valueOutput, Vector<String> inputs, Resources res) {
             this.label = label;
             this.visibility = visibility;
             this.labelSize = res.getDimension(R.dimen.label_font);
@@ -144,7 +144,7 @@ public class ExpView implements Serializable{
         }
 
         // Same as the above Constructor, only change is that it accepts output vector
-        protected expViewElement(String label, String visibility ,Vector<String> valueOutputs, Vector<String> inputs, Resources res) {
+        public expViewElement(String label, String visibility ,Vector<String> valueOutputs, Vector<String> inputs, Resources res) {
             this.label = label;
             this.visibility = visibility;
             this.labelSize = res.getDimension(R.dimen.label_font);
@@ -338,7 +338,7 @@ public class ExpView implements Serializable{
             }
         }
 
-        protected void onViewSelected(boolean parentViewIsVisible) {
+        public void onViewSelected(boolean parentViewIsVisible) {
 
         }
 
@@ -425,7 +425,7 @@ public class ExpView implements Serializable{
 
         //Constructor takes the same arguments as the expViewElement constructor
         //It sets a precision of 2 with fixed point notation as default and creates the formatter
-        valueElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
+        public valueElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
             super(label, visibility, valueOutput, inputs, res);
             this.scientificNotation = false;
             this.precision = 2;
@@ -957,7 +957,7 @@ public class ExpView implements Serializable{
 
 
         //No special constructor. Just some defaults.
-        editElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
+        public editElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
             super(label, visibility, valueOutput, inputs, res);
             this.label = label;
             this.unit = "";
@@ -965,17 +965,17 @@ public class ExpView implements Serializable{
         }
 
         //Interface to set the conversion factor
-        protected void setFactor(double factor) {
+        public void setFactor(double factor) {
             this.factor = factor;
         }
 
         //Interface to set a default value
-        protected void setDefaultValue(double v) {
+        public void setDefaultValue(double v) {
             this.defaultValue = v;
         }
 
         //Interface to set the unit string
-        protected void setUnit(String unit) {
+        public void setUnit(String unit) {
             if (unit == null || unit.equals(""))
                 this.unit = "";
             else
@@ -983,22 +983,22 @@ public class ExpView implements Serializable{
         }
 
         //Interface to allow signed values
-        protected void setSigned(boolean signed) {
+        public void setSigned(boolean signed) {
             this.signed = signed;
         }
 
         //Interface to allow non-integer values
-        protected void setDecimal(boolean decimal) {
+        public void setDecimal(boolean decimal) {
             this.decimal = decimal;
         }
 
         //Interface to set limits
-        protected void setLimits(double min, double max) {
+        public void setLimits(double min, double max) {
             this.min = min;
             this.max = max;
         }
 
-        protected void setEditable(boolean editable){
+        public void setEditable(boolean editable){
             this.editable = editable;
         }
 
@@ -1263,33 +1263,33 @@ public class ExpView implements Serializable{
         private DataBuffer dynamicBuffer;
         MaterialButton b;
 
-        protected class ButtonMapping {
-            Double min = Double.NEGATIVE_INFINITY;
-            Double max = Double.POSITIVE_INFINITY;
+        public class ButtonMapping {
+            public Double min = Double.NEGATIVE_INFINITY;
+            public Double max = Double.POSITIVE_INFINITY;
             String str;
 
-            protected ButtonMapping(String str) {
+            public ButtonMapping(String str) {
                 this.str = str;
             }
         }
 
         protected Vector<ButtonMapping> mappings = new Vector<>();
 
-        protected void addMapping(ButtonMapping mapping) {
+        public void addMapping(ButtonMapping mapping) {
             this.mappings.add(mapping);
         }
 
         //No special constructor.
-        buttonElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
+        public buttonElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
             super(label, visibility, valueOutput, inputs, res);
         }
 
-        protected void setIO(Vector<DataInput> inputs, Vector<DataOutput> outputs) {
+        public void setIO(Vector<DataInput> inputs, Vector<DataOutput> outputs) {
             this.inputs = inputs;
             this.outputs = outputs;
         }
 
-        protected void setTriggers(Vector<String> triggers) {
+        public void setTriggers(Vector<String> triggers) {
             this.triggers = triggers;
         }
 
@@ -1579,7 +1579,7 @@ public class ExpView implements Serializable{
         final String warningText;
 
         //Quite usual constructor...
-        graphElement(String label, String visibility, Vector<String> valueOutputs, Vector<String> inputs, Resources res) {
+        public graphElement(String label, String visibility, Vector<String> valueOutputs, Vector<String> inputs, Resources res) {
             super(label, visibility, valueOutputs, inputs, res);
             this.self = this;
 
@@ -1604,28 +1604,28 @@ public class ExpView implements Serializable{
         }
 
         //Interface to change the height of the graph
-        protected void setAspectRatio(double aspectRatio) {
+        public void setAspectRatio(double aspectRatio) {
             this.aspectRatio = aspectRatio;
         }
 
-        protected void setLineWidth(double lineWidth, int i) {
+        public void setLineWidth(double lineWidth, int i) {
             this.lineWidth.set(i, lineWidth);
             if (gv != null)
                 gv.setLineWidth(lineWidth, i);
         }
 
-        protected void setLineWidth(double lineWidth) {
+        public void setLineWidth(double lineWidth) {
             for (int i = 0; i < nCurves || i < historyLength; i++)
                 setLineWidth(lineWidth, i);
         }
 
-        protected void setColor(RGB color, int i, Resources res) {
+        public void setColor(RGB color, int i, Resources res) {
             this.color.set(i, color);
             if (gv != null)
                 gv.setColor(color.autoLightColor(res).intColor(), i);
         }
 
-        protected void setColor(RGB color, Resources res) {
+        public void setColor(RGB color, Resources res) {
             for (int i = 0; i < nCurves || i < historyLength; i++) {
                 setColor(color, i, res);
             }
@@ -1636,36 +1636,36 @@ public class ExpView implements Serializable{
                 gv.setColor(this.color.get(i).autoLightColor(res).intColor(), i);
         }
 
-        protected void setStyle(GraphView.Style style, int i) {
+        public void setStyle(GraphView.Style style, int i) {
             this.style.set(i, style);
             if (gv != null)
                 gv.setStyle(style, i);
         }
 
         //Interface to switch between points and lines
-        protected void setStyle(GraphView.Style style) {
+        public void setStyle(GraphView.Style style) {
             for (int i = 0; i < nCurves || i < historyLength; i++)
                 setStyle(style, i);
         }
 
-        protected void setColorScale(Vector<Integer> scale) {
+        public void setColorScale(Vector<Integer> scale) {
             this.colorScale = scale;
             if (gv != null)
                 gv.setColorScale(scale);
         }
 
-        protected void setMapWidth(int width, int i) {
+        public void setMapWidth(int width, int i) {
             this.mapWidth.set(i, width);
             if (gv != null)
                 gv.setMapWidth(width, i);
         }
 
-        protected void setMapWidth(int width) {
+        public void setMapWidth(int width) {
             for (int i = 0; i < nCurves || i < historyLength; i++)
                 setMapWidth(width, i);
         }
 
-        protected  void setShowColorScale(boolean showColorScale){
+        public void setShowColorScale(boolean showColorScale){
             this.showColorScale = showColorScale;
         }
 
@@ -1706,7 +1706,7 @@ public class ExpView implements Serializable{
         }
 
         //Interface to set a history length
-        protected void setHistoryLength(int hl) {
+        public void setHistoryLength(int hl) {
             this.historyLength = hl;
             if (gv != null)
                 gv.setHistoryLength(hl);
@@ -1717,7 +1717,7 @@ public class ExpView implements Serializable{
         }
 
         //Interface to set the axis labels.
-        protected void setLabel(String labelX, String labelY, String labelZ, String unitX, String unitY, String unitZ, String unitYX) {
+        public void setLabel(String labelX, String labelY, String labelZ, String unitX, String unitY, String unitZ, String unitYX) {
             this.labelX = labelX;
             this.labelY = labelY;
             this.labelZ = labelZ;
@@ -1729,7 +1729,7 @@ public class ExpView implements Serializable{
                 gv.setLabel(labelX, labelY, labelZ, unitX, unitY, unitZ, unitYX);
         }
 
-        protected void setTimeAxes(boolean timeOnX, boolean timeOnY, boolean absoluteTime, boolean linearTime, boolean hideTimeMarkers) {
+        public void setTimeAxes(boolean timeOnX, boolean timeOnY, boolean absoluteTime, boolean linearTime, boolean hideTimeMarkers) {
             this.timeOnX = timeOnX;
             this.timeOnY = timeOnY;
             this.absoluteTime = absoluteTime;
@@ -1737,31 +1737,31 @@ public class ExpView implements Serializable{
             this.hideTimeMarkers = hideTimeMarkers;
         }
 
-        protected void setSuppressScientificNotation(boolean suppressScientificNotation) {
+        public void setSuppressScientificNotation(boolean suppressScientificNotation) {
             this.suppressScientificNotation = suppressScientificNotation;
         }
 
         //Interface to set log scales
-        protected void setLogScale(boolean logX, boolean logY, boolean logZ) {
+        public void setLogScale(boolean logX, boolean logY, boolean logZ) {
             this.logX = logX;
             this.logY = logY;
             this.logZ = logZ;
         }
 
-        protected void setPrecision(int xPrecision, int yPrecision, int zPrecision) {
+        public void setPrecision(int xPrecision, int yPrecision, int zPrecision) {
             this.xPrecision = xPrecision;
             this.yPrecision = yPrecision;
             this.zPrecision = zPrecision;
         }
 
         //Interface to set partial updates vs. full updates of the data sets
-        protected void setPartialUpdate(boolean pu) {
+        public void setPartialUpdate(boolean pu) {
             this.partialUpdate = pu;
             if (gv != null)
                 gv.graphSetup.incrementalX = pu;
         }
 
-        protected void setCalibrationMode(SpectroscopyCalibrationManager.CalibrationMode calibrationMode){
+        public void setCalibrationMode(SpectroscopyCalibrationManager.CalibrationMode calibrationMode){
             this.calibrationMode = calibrationMode;
         }
 
@@ -2437,7 +2437,7 @@ public class ExpView implements Serializable{
         final String warningText;
 
         //Quite usual constructor...
-        depthGuiElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
+        public depthGuiElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
             super(label, visibility, valueOutput, inputs, res);
             this.self = this;
 
@@ -2450,7 +2450,7 @@ public class ExpView implements Serializable{
         }
 
         //Interface to change the height of the graph
-        protected void setAspectRatio(double aspectRatio) {
+        public void setAspectRatio(double aspectRatio) {
             this.aspectRatio = aspectRatio;
         }
 
@@ -2742,7 +2742,7 @@ public class ExpView implements Serializable{
         }
     }
 
-    enum ImageFilter {
+    public enum ImageFilter {
         none, invert
     }
 
@@ -2756,7 +2756,7 @@ public class ExpView implements Serializable{
         private ImageFilter lightFilter = ImageFilter.none;
 
         //Label is not used
-        imageElement(String valueOutput, String visibility, Vector<String> inputs, Resources res, String src) {
+        public imageElement(String valueOutput, String visibility, Vector<String> inputs, Resources res, String src) {
             super("", visibility, valueOutput, inputs, res);
             this.src = src;
         }
@@ -2920,7 +2920,7 @@ public class ExpView implements Serializable{
         };
 
 
-        protected cameraElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
+        public cameraElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
             super(label, visibility, valueOutput, inputs, res);
             warningText = res.getString(R.string.remoteCameraPreviewWarning).replace("'", "\\'");
         }
@@ -3038,7 +3038,7 @@ public class ExpView implements Serializable{
         }
 
         @Override
-        protected void onViewSelected(boolean parentViewIsVisible) {
+        public void onViewSelected(boolean parentViewIsVisible) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
                 return;
             if (cameraPreviewFragment != null)
@@ -3070,7 +3070,7 @@ public class ExpView implements Serializable{
 
         SwitchMaterial switchView;
 
-        protected toggleElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
+        public toggleElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
             super(label, visibility, valueOutput, inputs, res);
         }
 
@@ -3225,11 +3225,11 @@ public class ExpView implements Serializable{
         private boolean triggered = false;
         private int currentIndex = 0;
 
-        protected class Mapping {
-            String value;
-            String str;
+        public class Mapping {
+            public String value;
+            public String str;
 
-            protected Mapping(String str) {
+            public Mapping(String str) {
                 this.str = str;
             }
 
@@ -3237,7 +3237,7 @@ public class ExpView implements Serializable{
 
         protected Vector<dropDownElement.Mapping> mappings = new Vector<>();
 
-        protected void addMapping(dropDownElement.Mapping mapping) {
+        public void addMapping(dropDownElement.Mapping mapping) {
             this.mappings.add(mapping);
         }
 
@@ -3245,11 +3245,11 @@ public class ExpView implements Serializable{
             this.defaultValue = defaultValue;
         }
 
-        protected void setColor(RGB c) {
+        public void setColor(RGB c) {
             this.color = c;
         }
 
-        protected dropDownElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
+        public dropDownElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
             super(label, visibility, valueOutput, inputs, res);
         }
 
@@ -3472,7 +3472,7 @@ public class ExpView implements Serializable{
         Slider slider;
         RangeSlider rangeSlider;
 
-        protected sliderElement(String label, String visibility, Vector<String> valueOutput, Vector<String> inputs, Resources res) {
+        public sliderElement(String label, String visibility, Vector<String> valueOutput, Vector<String> inputs, Resources res) {
             super(label, visibility, valueOutput, inputs, res);
         }
 

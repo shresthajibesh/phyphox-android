@@ -8,10 +8,12 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.rwth_aachen.phyphox.DataBuffer;
 import de.rwth_aachen.phyphox.DataInput;
 import de.rwth_aachen.phyphox.DataOutput;
 import de.rwth_aachen.phyphox.ExpView;
@@ -19,6 +21,8 @@ import de.rwth_aachen.phyphox.GraphView;
 import de.rwth_aachen.phyphox.Helper.RGB;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.R;
+import de.rwth_aachen.phyphox.SpectroscopyCalibrationManager;
+import de.rwth_aachen.phyphox.camera.model.ShowCameraControls;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
@@ -315,16 +319,16 @@ public class viewBlockParser extends XmlBlockParser {
                         if (at == null)
                             continue;
                         if (!at.name.equals("input") && !at.name.equals("output") ) {
-                            throw new phyphoxFileException("Unknown tag "+at.name+" found by ioBlockParser.", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Unknown tag "+at.name+" found by ioBlockParser.", xpp.getLineNumber());
                         }
                         if (at.attributes.containsKey("style")) {
                             try {
                                 GraphView.Style style = GraphView.styleFromStr(at.attributes.get("style"));
                                 if (style == GraphView.Style.unknown)
-                                    throw new phyphoxFileException("Unknown value for style of input tag.", xpp.getLineNumber());
+                                    throw new PhyphoxFileException("Unknown value for style of input tag.", xpp.getLineNumber());
                                 ge.setStyle(style, i/3);
                             } catch (Exception e) {
-                                throw new phyphoxFileException("Could not parse style of input tag.", xpp.getLineNumber());
+                                throw new PhyphoxFileException("Could not parse style of input tag.", xpp.getLineNumber());
                             }
                         }
                         if (at.attributes.containsKey("color")) {
@@ -335,14 +339,14 @@ public class viewBlockParser extends XmlBlockParser {
                             try {
                                 ge.setLineWidth(Double.valueOf(at.attributes.get("linewidth")), i/3);
                             } catch (Exception e) {
-                                throw new phyphoxFileException("Could not parse linewidth of input tag.", xpp.getLineNumber());
+                                throw new PhyphoxFileException("Could not parse linewidth of input tag.", xpp.getLineNumber());
                             }
                         }
                         if (at.attributes.containsKey("mapwidth")) {
                             try {
                                 ge.setMapWidth(Integer.valueOf(at.attributes.get("mapwidth")), i/3);
                             } catch (Exception e) {
-                                throw new phyphoxFileException("Could not parse mapWidth of input tag.", xpp.getLineNumber());
+                                throw new PhyphoxFileException("Could not parse mapWidth of input tag.", xpp.getLineNumber());
                             }
                         }
                     }
@@ -406,21 +410,21 @@ public class viewBlockParser extends XmlBlockParser {
                                 try {
                                     map.min = Double.valueOf(at.attributes.get("min"));
                                 } catch (Exception e) {
-                                    throw new phyphoxFileException("Could not parse min of map tag.", xpp.getLineNumber());
+                                    throw new PhyphoxFileException("Could not parse min of map tag.", xpp.getLineNumber());
                                 }
                             }
                             if (at.attributes.containsKey("max")) {
                                 try {
                                     map.max = Double.valueOf(at.attributes.get("max"));
                                 } catch (Exception e) {
-                                    throw new phyphoxFileException("Could not parse max of map tag.", xpp.getLineNumber());
+                                    throw new PhyphoxFileException("Could not parse max of map tag.", xpp.getLineNumber());
                                 }
                             }
                             be.addMapping(map);
                             continue;
                         }
                         if (!at.name.equals("trigger")) {
-                            throw new phyphoxFileException("Unknown tag " + at.name + " found by ioBlockParser.", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Unknown tag " + at.name + " found by ioBlockParser.", xpp.getLineNumber());
                         }
 
                         triggers.add(at.content);
@@ -430,7 +434,7 @@ public class viewBlockParser extends XmlBlockParser {
                     if(dynamicBuffer != null){
                         DataBuffer buffer = experiment.getBuffer(dynamicBuffer);
                         if(buffer == null){
-                            throw new phyphoxFileException("Could not parse buffer with name " + dynamicBuffer, xpp.getLineNumber());
+                            throw new PhyphoxFileException("Could not parse buffer with name " + dynamicBuffer, xpp.getLineNumber());
                         }
                         be.setDynamicBuffer(buffer);
                     }
@@ -450,7 +454,7 @@ public class viewBlockParser extends XmlBlockParser {
                 case "image": { // Shows an image
                     String src = getStringAttribute("src");
                     if (src == null || src.isEmpty())
-                        throw new phyphoxFileException("Image element requires src attribute.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Image element requires src attribute.", xpp.getLineNumber());
 
                     ExpView.imageElement img = newView.new imageElement(null, visibility,null, parent.getResources(), src); //No inputs (for now?)
 
@@ -465,14 +469,14 @@ public class viewBlockParser extends XmlBlockParser {
                         try {
                             darkFilter = ExpView.ImageFilter.valueOf(darkFilterStr);
                         } catch (Exception e) {
-                            throw new phyphoxFileException("Unknown image filter: " + darkFilterStr, xpp.getLineNumber());
+                            throw new PhyphoxFileException("Unknown image filter: " + darkFilterStr, xpp.getLineNumber());
                         }
                     }
                     if (lightFilterStr != null && !lightFilterStr.isEmpty()) {
                         try {
                             lightFilter = ExpView.ImageFilter.valueOf(lightFilterStr);
                         } catch (Exception e) {
-                            throw new phyphoxFileException("Unknown image filter: " + lightFilterStr, xpp.getLineNumber());
+                            throw new PhyphoxFileException("Unknown image filter: " + lightFilterStr, xpp.getLineNumber());
                         }
                     }
 
@@ -506,7 +510,7 @@ public class viewBlockParser extends XmlBlockParser {
                             break;
                         }
                         default: {
-                            throw new phyphoxFileException("Unknown show controls name: " + showControls, xpp.getLineNumber());
+                            throw new PhyphoxFileException("Unknown show controls name: " + showControls, xpp.getLineNumber());
                         }
                     }
 
@@ -556,14 +560,14 @@ public class viewBlockParser extends XmlBlockParser {
                             continue;
                         }
                         if (!at.name.equals("map")) {
-                            throw new phyphoxFileException("Unknown tag "+at.name+" found by ioBlockParser.", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Unknown tag "+at.name+" found by ioBlockParser.", xpp.getLineNumber());
                         }
                         ExpView.dropDownElement.Mapping map = dropDownElement.new Mapping(translate(at.content, parent));
                         if(at.attributes.containsKey("value")){
                             try {
                                 map.value = at.attributes.get("value");
                             } catch (Exception e){
-                                throw new phyphoxFileException("Could not parse value tag.", xpp.getLineNumber());
+                                throw new PhyphoxFileException("Could not parse value tag.", xpp.getLineNumber());
                             }
                         }
                         dropDownElement.addMapping(map);
@@ -618,7 +622,7 @@ public class viewBlockParser extends XmlBlockParser {
                     break;
                 }
                 default: //Unknown tag...
-                    throw new phyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
+                    throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
             }
         }
 

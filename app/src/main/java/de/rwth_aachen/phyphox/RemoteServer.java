@@ -318,7 +318,7 @@ public class RemoteServer {
     }
 
     //The constructor takes the experiment to control and the activity of which we need to show/control the status
-    RemoteServer(PhyphoxExperiment experiment, Experiment callActivity, String sessionID) {
+    public RemoteServer(PhyphoxExperiment experiment, Experiment callActivity, String sessionID) {
         this.experiment = experiment;
         this.callActivity = callActivity;
         this.context = callActivity;
@@ -330,7 +330,7 @@ public class RemoteServer {
         this.sessionID = sessionID;
     }
 
-    RemoteServer(PhyphoxExperiment experiment, Experiment callActivity) {
+    public RemoteServer(PhyphoxExperiment experiment, Experiment callActivity) {
         this(experiment, callActivity, String.format("%06x", (System.nanoTime() & 0xffffff)));
     }
 

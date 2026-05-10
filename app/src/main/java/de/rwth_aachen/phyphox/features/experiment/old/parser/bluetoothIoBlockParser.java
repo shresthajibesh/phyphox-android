@@ -1,6 +1,27 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
-private static class bluetoothIoBlockParser extends XmlBlockParser {
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.UUID;
+import java.util.Vector;
+
+import de.rwth_aachen.phyphox.Bluetooth.Bluetooth;
+import de.rwth_aachen.phyphox.Bluetooth.ConversionsConfig;
+import de.rwth_aachen.phyphox.Bluetooth.ConversionsInput;
+import de.rwth_aachen.phyphox.Bluetooth.ConversionsOutput;
+import de.rwth_aachen.phyphox.DataBuffer;
+import de.rwth_aachen.phyphox.DataInput;
+import de.rwth_aachen.phyphox.DataOutput;
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+
+public class bluetoothIoBlockParser extends XmlBlockParser {
         protected static Class conversionsInput = (new ConversionsInput()).getClass();
         protected static Class conversionsOutput = (new ConversionsOutput()).getClass();
         protected static Class conversionsConfig = (new ConversionsConfig()).getClass();
@@ -18,17 +39,17 @@ private static class bluetoothIoBlockParser extends XmlBlockParser {
         }
 
         @Override
-        protected void processStartTag(String tag) throws IOException, XmlPullParserException, phyphoxFileException {
+        protected void processStartTag(String tag) throws IOException, XmlPullParserException, PhyphoxFileException {
             // get and check "char" attribute
             String charUuid = getStringAttribute("char");
             if (charUuid == null) {
-                throw new phyphoxFileException("Tag needs a char attribute.", xpp.getLineNumber());
+                throw new PhyphoxFileException("Tag needs a char attribute.", xpp.getLineNumber());
             }
             UUID uuid;
             try {
                 uuid = UUID.fromString(charUuid);
             } catch (IllegalArgumentException e) {
-                throw new phyphoxFileException("invalid UUID.", xpp.getLineNumber());
+                throw new PhyphoxFileException("invalid UUID.", xpp.getLineNumber());
             }
 
             // get "conversion" attribute
@@ -41,12 +62,12 @@ private static class bluetoothIoBlockParser extends XmlBlockParser {
                 case "input": {
                     // check if "input" is allowed here
                     if (inputList == null) {
-                        throw new phyphoxFileException("No output expected.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("No output expected.", xpp.getLineNumber());
                     }
 
                     // check conversion attribute
                     if (conversionFunctionName == null) {
-                        throw new phyphoxFileException("Tag needs a conversion attribute.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Tag needs a conversion attribute.", xpp.getLineNumber());
                     }
                     try {
                         try {
@@ -64,7 +85,7 @@ private static class bluetoothIoBlockParser extends XmlBlockParser {
                             outputConversionFunction = new ConversionsOutput.SimpleOutputConversion(conversionMethod);
                         }
                     } catch (NoSuchMethodException e) {
-                        throw new phyphoxFileException("invalid conversion function: " + conversionFunctionName, xpp.getLineNumber());
+                        throw new PhyphoxFileException("invalid conversion function: " + conversionFunctionName, xpp.getLineNumber());
                     }
 
                     short offset = (short)getIntAttribute("offset", 0);
@@ -75,7 +96,7 @@ private static class bluetoothIoBlockParser extends XmlBlockParser {
                     String bufferName = getText();
                     DataBuffer buffer = experiment.getBuffer(bufferName);
                     if (buffer == null) {
-                        throw new phyphoxFileException("Buffer \"" + bufferName + "\" not defined.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Buffer \"" + bufferName + "\" not defined.", xpp.getLineNumber());
                     }
 
                     inputList.add(new DataInput(buffer, keep));
@@ -89,7 +110,7 @@ private static class bluetoothIoBlockParser extends XmlBlockParser {
                 case "output": {
                     // check if "output" is allowed here
                     if (outputList == null) {
-                        throw new phyphoxFileException("No output expected.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("No output expected.", xpp.getLineNumber());
                     }
 
                     // get and check "extra" attribute
@@ -99,19 +120,19 @@ private static class bluetoothIoBlockParser extends XmlBlockParser {
                         if (extra.equals("time")) {
                             extraTime = true;
                             if (characteristicsWithExtraTime.contains(uuid)) {
-                                throw new phyphoxFileException("extra=time can be used only once for a characteristic.");
+                                throw new PhyphoxFileException("extra=time can be used only once for a characteristic.");
                             } else {
                                 characteristicsWithExtraTime.add(uuid);
                             }
                         } else {
-                            throw new phyphoxFileException("unknown value for extra attribute.", xpp.getLineNumber());
+                            throw new PhyphoxFileException("unknown value for extra attribute.", xpp.getLineNumber());
                         }
                     }
 
                     // check conversion attribute
                     if (!extraTime) {
                        if (conversionFunctionName == null) {
-                           throw new phyphoxFileException("Tag needs a conversion attribute.", xpp.getLineNumber());
+                           throw new PhyphoxFileException("Tag needs a conversion attribute.", xpp.getLineNumber());
                        }
                         try {
                             try {
@@ -124,7 +145,7 @@ private static class bluetoothIoBlockParser extends XmlBlockParser {
                                 inputConversionFunction = new ConversionsInput.SimpleInputConversion(conversionMethod, xpp);
                             }
                         } catch (NoSuchMethodException e) {
-                            throw new phyphoxFileException("invalid conversion function: " + conversionFunctionName, xpp.getLineNumber());
+                            throw new PhyphoxFileException("invalid conversion function: " + conversionFunctionName, xpp.getLineNumber());
                         }
                     }
 
@@ -132,7 +153,7 @@ private static class bluetoothIoBlockParser extends XmlBlockParser {
                     String bufferName = getText();
                     DataBuffer buffer = experiment.getBuffer(bufferName);
                     if (buffer == null) {
-                        throw new phyphoxFileException("Buffer \"" + bufferName + "\" not defined.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Buffer \"" + bufferName + "\" not defined.", xpp.getLineNumber());
                     }
 
                     outputList.add(new DataOutput(buffer, false));
@@ -145,7 +166,7 @@ private static class bluetoothIoBlockParser extends XmlBlockParser {
                 case "config": {
                     // check if conversion attribute exists
                     if (conversionFunctionName == null) {
-                        throw new phyphoxFileException("Tag needs a conversion attribute.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Tag needs a conversion attribute.", xpp.getLineNumber());
                     }
                     try {
                         try {
@@ -158,21 +179,21 @@ private static class bluetoothIoBlockParser extends XmlBlockParser {
                             configConversionFunction = new ConversionsConfig.SimpleConfigConversion(conversionMethod);
                         }
                     } catch (NoSuchMethodException e) {
-                        throw new phyphoxFileException("invalid conversion function: " + conversionFunctionName, xpp.getLineNumber());
+                        throw new PhyphoxFileException("invalid conversion function: " + conversionFunctionName, xpp.getLineNumber());
                     }
                     try {
                         // add data to configs
                         String text = getText();
                         characteristics.add(new Bluetooth.ConfigData(uuid, text, configConversionFunction));
                     } catch (NumberFormatException e) {
-                        throw new phyphoxFileException("Configuration data has to be a valid double value.", xpp.getLineNumber());
-                    } catch (phyphoxFileException e) {
-                        throw new phyphoxFileException(e.getMessage(), xpp.getLineNumber()); // throw it again but with LineNumber
+                        throw new PhyphoxFileException("Configuration data has to be a valid double value.", xpp.getLineNumber());
+                    } catch (PhyphoxFileException e) {
+                        throw new PhyphoxFileException(e.getMessage(), xpp.getLineNumber()); // throw it again but with LineNumber
                     }
                     break;
                 }
                 default: {
-                    throw new phyphoxFileException("Unknown tag \""+tag+"\"", xpp.getLineNumber());
+                    throw new PhyphoxFileException("Unknown tag \""+tag+"\"", xpp.getLineNumber());
                 }
             }
         }

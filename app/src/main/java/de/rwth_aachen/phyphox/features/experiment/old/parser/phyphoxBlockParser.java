@@ -1,13 +1,22 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
-private static class phyphoxBlockParser extends XmlBlockParser {
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
-        phyphoxBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
+import java.io.IOException;
+
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+
+public class phyphoxBlockParser extends XmlBlockParser {
+
+        public phyphoxBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
         @Override
-        protected void processStartTag(String tag) throws IOException, XmlPullParserException, phyphoxFileException {
+        protected void processStartTag(String tag) throws IOException, XmlPullParserException, PhyphoxFileException {
             switch (tag.toLowerCase()) {
                 case "title": //The experiment's title (might be replaced by a later translation block)
                     experiment.baseTitle = getText();
@@ -63,7 +72,7 @@ private static class phyphoxBlockParser extends XmlBlockParser {
                         if (experiment.getBuffer(dynamicSleep) != null)
                             experiment.analysisDynamicSleep = experiment.getBuffer(dynamicSleep);
                         else
-                            throw new phyphoxFileException("Dynamic sleep buffer " + dynamicSleep + " has not been defined as a buffer.", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Dynamic sleep buffer " + dynamicSleep + " has not been defined as a buffer.", xpp.getLineNumber());
                     }
                     experiment.analysisOnUserInput = getBooleanAttribute("onUserInput", false); //Only execute when the user changed something?
 
@@ -74,13 +83,13 @@ private static class phyphoxBlockParser extends XmlBlockParser {
                         if (experiment.getBuffer(requireFill) != null)
                             experiment.requireFill = experiment.getBuffer(requireFill);
                         else
-                            throw new phyphoxFileException("Require fill buffer " + requireFill + " has not been defined as a buffer.", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Require fill buffer " + requireFill + " has not been defined as a buffer.", xpp.getLineNumber());
                     }
                     if (requireFillDynamic != null) {
                         if (experiment.getBuffer(requireFillDynamic) != null)
                             experiment.requireFillDynamic = experiment.getBuffer(requireFillDynamic);
                         else
-                            throw new phyphoxFileException("Require fill buffer " + requireFillDynamic + " has not been defined as a buffer.", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Require fill buffer " + requireFillDynamic + " has not been defined as a buffer.", xpp.getLineNumber());
                     }
 
                     experiment.timedRun = getBooleanAttribute("timedRun", false);
@@ -95,7 +104,7 @@ private static class phyphoxBlockParser extends XmlBlockParser {
                     (new exportBlockParser(xpp, experiment, parent)).process();
                     break;
                 default: //Unknown tag,,,
-                    throw new phyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
+                    throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
             }
         }
     }

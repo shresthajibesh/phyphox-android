@@ -1,13 +1,24 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
-private static class translationBlockParser extends XmlBlockParser {
+import static de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile.translation;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+
+public class translationBlockParser extends XmlBlockParser {
 
         translationBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
         @Override
-        protected void processStartTag(String tag) throws XmlPullParserException, phyphoxFileException, IOException {
+        protected void processStartTag(String tag) throws XmlPullParserException, PhyphoxFileException, IOException {
             switch (tag.toLowerCase()) {
                 case "title": //A title in our language? Great, take it!
                     experiment.title = getText();
@@ -30,7 +41,7 @@ private static class translationBlockParser extends XmlBlockParser {
                     translation.put(getStringAttribute("original"), getText()); //Store it in our translation mapping
                     break;
                 default: //Unknown tag
-                    throw new phyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
+                    throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
             }
         }
 

@@ -1,5 +1,23 @@
 package de.rwth_aachen.phyphox.features.experiment.old.async;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.util.UUID;
+
+import de.rwth_aachen.phyphox.Helper.Helper;
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.model.PhyphoxStream;
+
 //This asyncTask just copies the resource provided by an intent to the private data storage
 //It calls onCopyXMLCompleted of the activity given in the constructor when it's done.
 public  class CopyXMLTask extends AsyncTask<String, Void, String> {
@@ -7,7 +25,7 @@ public  class CopyXMLTask extends AsyncTask<String, Void, String> {
         private WeakReference<Experiment> parent; //The calling Activity
 
         //The constructor takes the intent to copy from and the parent activity to call back when finished.
-        CopyXMLTask(Intent intent, Experiment parent) {
+        public CopyXMLTask(Intent intent, Experiment parent) {
             this.intent = intent;
             this.parent = new WeakReference<Experiment>(parent);
         }
@@ -20,8 +38,8 @@ public  class CopyXMLTask extends AsyncTask<String, Void, String> {
                 input = new ByteArrayInputStream(parent.get().experiment.source);
             } else {
                 //If not, open the remote source, but usually this should not happen...
-                PhyphoxFile.PhyphoxStream ps = PhyphoxFile.openXMLInputStream(intent, parent.get());
-                input = ps.inputStream;
+                PhyphoxStream ps = PhyphoxFile.openXMLInputStream(intent, parent.get());
+                input = ps.getInputStream();
             }
             if (input == null)
                 return "Error loading the original XML file again. This should not have happend."; //Abort and relay the rror message, if this failed

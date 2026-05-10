@@ -1,13 +1,23 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
-private static class viewsBlockParser extends XmlBlockParser {
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+
+import de.rwth_aachen.phyphox.ExpView;
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+
+public class viewsBlockParser extends XmlBlockParser {
 
         viewsBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
         @Override
-        protected void processStartTag(String tag)  throws IOException, XmlPullParserException, phyphoxFileException {
+        protected void processStartTag(String tag)  throws IOException, XmlPullParserException, PhyphoxFileException {
             switch (tag.toLowerCase()) {
                 case "view": //A view defines an arangement of elements displayed to the user
                     ExpView newView = new ExpView(); //Create a new view
@@ -17,11 +27,11 @@ private static class viewsBlockParser extends XmlBlockParser {
                         experiment.experimentViews.add(newView);
                     else {
                         //No name or no views. Complain!
-                        throw new phyphoxFileException("Invalid view.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Invalid view.", xpp.getLineNumber());
                     }
                     break;
                 default: //Unknown tag
-                    throw new phyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
+                    throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
             }
         }
 

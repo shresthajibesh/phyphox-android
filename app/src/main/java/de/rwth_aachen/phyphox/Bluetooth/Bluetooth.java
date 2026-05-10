@@ -26,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.ContextThemeWrapper;
 
@@ -45,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.ExperimentTimeReference;
 import de.rwth_aachen.phyphox.R;
-import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
 
 /**
  * The Bluetooth class encapsulates a generic Bluetooth connection and deals with the following tasks:
@@ -57,7 +56,6 @@ import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
  * <li>closing the connection.</li>
  * </ul>
  */
-@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class Bluetooth implements Serializable {
 
     public final static UUID baseUUID = UUID.fromString("00000000-0000-1000-8000-00805f9b34fb");
@@ -1247,14 +1245,14 @@ public class Bluetooth implements Serializable {
          * @param uuid               UUID of the characteristic
          * @param data               data that will be converted to the value that should be written
          * @param conversionFunction ConfigConversion instance that will be used to convert the value of the characteristic
-         * @throws PhyphoxFile.phyphoxFileException if there is an error while converting the data
+         * @throws PhyphoxFileException if there is an error while converting the data
          */
-        public ConfigData(UUID uuid, String data, ConversionsConfig.ConfigConversion conversionFunction) throws PhyphoxFile.phyphoxFileException {
+        public ConfigData(UUID uuid, String data, ConversionsConfig.ConfigConversion conversionFunction) throws PhyphoxFileException {
             this.uuid = uuid;
             try {
                 this.value = conversionFunction.convert(data);
             } catch (Exception e) { // catch any exception that occurs in the conversion function
-                throw new PhyphoxFile.phyphoxFileException("An error occurred on the conversion function" + " \"" + conversionFunction.getClass().getName() + "\". ");
+                throw new PhyphoxFileException("An error occurred on the conversion function" + " \"" + conversionFunction.getClass().getName() + "\". ");
             }
         }
 

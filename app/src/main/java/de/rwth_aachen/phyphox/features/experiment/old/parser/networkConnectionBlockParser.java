@@ -1,6 +1,20 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
-private static class networkConnectionBlockParser extends XmlBlockParser {
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import de.rwth_aachen.phyphox.DataBuffer;
+import de.rwth_aachen.phyphox.Metadata;
+import de.rwth_aachen.phyphox.NetworkConnection.NetworkConnection;
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+
+public class networkConnectionBlockParser extends XmlBlockParser {
         Map<String, NetworkConnection.NetworkSendableData> send;
         Map<String, NetworkConnection.NetworkReceivableData> receive;
 
@@ -11,14 +25,14 @@ private static class networkConnectionBlockParser extends XmlBlockParser {
         }
 
         @Override
-        protected void processStartTag(String tag) throws XmlPullParserException, phyphoxFileException, IOException {
+        protected void processStartTag(String tag) throws XmlPullParserException, PhyphoxFileException, IOException {
             switch (tag.toLowerCase()) {
                 case "send": {
                     NetworkConnection.NetworkSendableData sendable;
 
                     String id = getStringAttribute("id");
                     if (id == null)
-                        throw new phyphoxFileException("Missing id in send element.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Missing id in send element.", xpp.getLineNumber());
 
                     String datatype = getStringAttribute("datatype");
 
@@ -29,7 +43,7 @@ private static class networkConnectionBlockParser extends XmlBlockParser {
                         String bufferName = getText();
                         DataBuffer buffer = experiment.getBuffer(bufferName);
                         if (buffer == null)
-                            throw new phyphoxFileException("Buffer \"" + bufferName + "\" not defined.", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Buffer \"" + bufferName + "\" not defined.", xpp.getLineNumber());
                         sendable = new NetworkConnection.NetworkSendableData(buffer, keep);
                         if (datatype != null) {
                             sendable.additionalAttributes = new HashMap<>();
@@ -40,12 +54,12 @@ private static class networkConnectionBlockParser extends XmlBlockParser {
                         try {
                             sendable = new NetworkConnection.NetworkSendableData(new Metadata(metaName, parent));
                         } catch (IllegalArgumentException e) {
-                            throw new phyphoxFileException("Unknown meta data \"" + metaName + "\".", xpp.getLineNumber());
+                            throw new PhyphoxFileException("Unknown meta data \"" + metaName + "\".", xpp.getLineNumber());
                         }
                     } else if (type.equals("time")) {
                         sendable = new NetworkConnection.NetworkSendableData(experiment.experimentTimeReference);
                     } else {
-                        throw new phyphoxFileException("Unknown type \"" + type + "\".", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Unknown type \"" + type + "\".", xpp.getLineNumber());
                     }
                     send.put(id, sendable);
                     break;
@@ -55,7 +69,7 @@ private static class networkConnectionBlockParser extends XmlBlockParser {
 
                     String id = getStringAttribute("id");
                     if (id == null)
-                        throw new phyphoxFileException("Missing id in receive element.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Missing id in receive element.", xpp.getLineNumber());
 
                     boolean clear = getBooleanAttribute("clear", false); //Deprecated
                     boolean append = getBooleanAttribute("append", !clear); //New attribute append = !clear,
@@ -63,14 +77,14 @@ private static class networkConnectionBlockParser extends XmlBlockParser {
                     String bufferName = getText();
                     DataBuffer buffer = experiment.getBuffer(bufferName);
                     if (buffer == null)
-                        throw new phyphoxFileException("Buffer \"" + bufferName + "\" not defined.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Buffer \"" + bufferName + "\" not defined.", xpp.getLineNumber());
                     receivable = new NetworkConnection.NetworkReceivableData(buffer, append);
 
                     receive.put(id, receivable);
                     break;
                 }
                 default: //Unknown tag
-                    throw new phyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
+                    throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
             }
         }
 

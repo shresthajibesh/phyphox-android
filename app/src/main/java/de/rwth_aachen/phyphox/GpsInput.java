@@ -43,7 +43,7 @@ public class GpsInput implements Serializable {
     public boolean forceGNSS = false;
 
     //The constructor
-    protected GpsInput(Vector<DataOutput> buffers, Lock lock, ExperimentTimeReference experimentTimeReference) {
+    public GpsInput(Vector<DataOutput> buffers, Lock lock, ExperimentTimeReference experimentTimeReference) {
         this.dataLock = lock;
         this.experimentTimeReference = experimentTimeReference;
 

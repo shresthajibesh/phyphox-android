@@ -1,13 +1,32 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
-private static class networkBlockParser extends XmlBlockParser {
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import de.rwth_aachen.phyphox.NetworkConnection.NetworkConnection;
+import de.rwth_aachen.phyphox.NetworkConnection.NetworkConversion;
+import de.rwth_aachen.phyphox.NetworkConnection.NetworkDiscovery;
+import de.rwth_aachen.phyphox.NetworkConnection.NetworkService;
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+import de.rwth_aachen.phyphox.NetworkConnection.Mqtt.MqttCsv;
+import de.rwth_aachen.phyphox.NetworkConnection.Mqtt.MqttJson;
+import de.rwth_aachen.phyphox.NetworkConnection.Mqtt.MqttTlsCsv;
+import de.rwth_aachen.phyphox.NetworkConnection.Mqtt.MqttTlsJson;
+
+public class networkBlockParser extends XmlBlockParser {
 
         networkBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
         @Override
-        protected void processStartTag(String tag)  throws IOException, XmlPullParserException, phyphoxFileException {
+        protected void processStartTag(String tag)  throws IOException, XmlPullParserException, PhyphoxFileException {
             switch (tag.toLowerCase()) {
                 case "connection":
                     String id = getStringAttribute("id");
@@ -25,7 +44,7 @@ private static class networkBlockParser extends XmlBlockParser {
                                 discovery = new NetworkDiscovery.Http(discoveryAddress);
                                 break;
                             default:
-                                throw new phyphoxFileException("Unknown discovery "+discoveryStr, xpp.getLineNumber());
+                                throw new PhyphoxFileException("Unknown discovery "+discoveryStr, xpp.getLineNumber());
                         }
                     }
 
@@ -53,7 +72,7 @@ private static class networkBlockParser extends XmlBlockParser {
                                     if (receiveTopicStr == null)
                                         receiveTopicStr = "";
                                     if (sendTopicStr == null || sendTopicStr.isEmpty())
-                                        throw new phyphoxFileException("sendTopic must be set for the mqtt/json service. Use mqtt/csv if you do not intent to send anything.", xpp.getLineNumber());
+                                        throw new PhyphoxFileException("sendTopic must be set for the mqtt/json service. Use mqtt/csv if you do not intent to send anything.", xpp.getLineNumber());
                                     service = new MqttJson(receiveTopicStr, sendTopicStr, parent.getApplicationContext(),persistence);
                                 }
                                 break;
@@ -67,11 +86,11 @@ private static class networkBlockParser extends XmlBlockParser {
                                 if (receiveTopicStr == null)
                                     receiveTopicStr = "";
                                 if (sendTopicStr == null || sendTopicStr.isEmpty())
-                                    throw new phyphoxFileException("sendTopic must be set for the mqtts/json service. Use mqtt/csv if you do not intent to send anything.", xpp.getLineNumber());
+                                    throw new PhyphoxFileException("sendTopic must be set for the mqtts/json service. Use mqtt/csv if you do not intent to send anything.", xpp.getLineNumber());
                                 if (password == null || password.isEmpty())
-                                    throw new phyphoxFileException("password must be set for the mqtts/json service.", xpp.getLineNumber());
+                                    throw new PhyphoxFileException("password must be set for the mqtts/json service.", xpp.getLineNumber());
                                 if (username == null || username.isEmpty())
-                                    throw new phyphoxFileException("username must be set for the mqtts/json service.", xpp.getLineNumber());
+                                    throw new PhyphoxFileException("username must be set for the mqtts/json service.", xpp.getLineNumber());
                                 service = new MqttTlsJson(receiveTopicStr,sendTopicStr,username,password,parent.getApplicationContext(),persistence);
                             }
                             break;
@@ -83,14 +102,14 @@ private static class networkBlockParser extends XmlBlockParser {
                                 if (receiveTopicStr == null)
                                     receiveTopicStr = "";
                                 if (password == null || password.isEmpty())
-                                    throw new phyphoxFileException("password must be set for the mqtts/csv service.", xpp.getLineNumber());
+                                    throw new PhyphoxFileException("password must be set for the mqtts/csv service.", xpp.getLineNumber());
                                 if (username == null || username.isEmpty())
-                                    throw new phyphoxFileException("username must be set for the mqtts/csv service.", xpp.getLineNumber());
+                                    throw new PhyphoxFileException("username must be set for the mqtts/csv service.", xpp.getLineNumber());
                                 service = new MqttTlsCsv(receiveTopicStr,username,password,parent.getApplicationContext());
                             }
                             break;
                             default:
-                                throw new phyphoxFileException("Unknown service "+serviceStr, xpp.getLineNumber());
+                                throw new PhyphoxFileException("Unknown service "+serviceStr, xpp.getLineNumber());
                         }
                     }
 
@@ -108,7 +127,7 @@ private static class networkBlockParser extends XmlBlockParser {
                                 conversion = new NetworkConversion.Json();
                                 break;
                             default:
-                                throw new phyphoxFileException("Unknown conversion "+conversionStr, xpp.getLineNumber());
+                                throw new PhyphoxFileException("Unknown conversion "+conversionStr, xpp.getLineNumber());
                         }
                     } else
                         conversion = new NetworkConversion.None();
@@ -123,7 +142,7 @@ private static class networkBlockParser extends XmlBlockParser {
 
                     break;
                 default: //Unknown tag...
-                    throw new phyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
+                    throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
             }
         }
 

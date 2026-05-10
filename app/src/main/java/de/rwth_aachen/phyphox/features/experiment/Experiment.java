@@ -113,6 +113,8 @@ import de.rwth_aachen.phyphox.Helper.DataExportUtility;
 import de.rwth_aachen.phyphox.Helper.WindowInsetHelper;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
 import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.async.CopyXMLTask;
+import de.rwth_aachen.phyphox.features.experiment.old.async.LoadXMLAsyncTask;
 import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.RemoteServer;
 import de.rwth_aachen.phyphox.SensorInput;
@@ -152,7 +154,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
     final Handler updateViewsHandler = new Handler();
 
     //Status variables
-    boolean measuring = false; //Measurement running?
+    public boolean measuring = false; //Measurement running?
     boolean loadCompleted = false; //Set to true when an experiment has been loaded successfully
     boolean shutdown = false; //The activity should be stopped. Used to escape the measurement loop.
     boolean beforeStart = true; //Experiment has not yet been started even once
@@ -174,7 +176,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
     private String sessionID = "";
 
     //Timed run status
-    boolean timedRun = false; //Timed run enabled?
+    public boolean timedRun = false; //Timed run enabled?
     double timedRunStartDelay = 3.; //Start delay for timed runs
     double timedRunStopDelay = 10.; //Stop delay for timed runs
     boolean timedRunBeepCountdown = false;
@@ -182,10 +184,10 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
     boolean timedRunBeepRunning = false;
     boolean timedRunBeepStop = false;
     CountDownTimer cdTimer = null; //This holds the timer used for timed runs. If it is not null, a timed run is running and at the end of the countdown the measurement state will change
-    long millisUntilFinished = 0; //This variable is used to cache the remaining countdown, so it is available outside the onTick-callback of the timer
+    public long millisUntilFinished = 0; //This variable is used to cache the remaining countdown, so it is available outside the onTick-callback of the timer
 
     //The experiment
-    PhyphoxExperiment experiment; //The experiment (definition and functionality) after it has been loaded.
+    public PhyphoxExperiment experiment; //The experiment (definition and functionality) after it has been loaded.
     TabLayout tabLayout;
     ViewPager pager;
     ExpViewPagerAdapter adapter;
@@ -296,7 +298,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
             //Start loading the experiment in a second thread (mostly for network loading, but it won't hurt in any case...)
             //So display a ProgressDialog and instantiate and execute loadXMLAsyncTask (see phyphoxFile class)
             progress = ProgressDialog.show(this, res.getString(R.string.loadingTitle), res.getString(R.string.loadingText), true);
-            (new PhyphoxFile.loadXMLAsyncTask(intent, this)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            (new LoadXMLAsyncTask(intent, this)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
         WindowInsetHelper.setInsets(findViewById(R.id.customActionBar), WindowInsetHelper.ApplyTo.PADDING, WindowInsetHelper.ApplyTo.PADDING, WindowInsetHelper.ApplyTo.PADDING, WindowInsetHelper.ApplyTo.IGNORE);
@@ -456,7 +458,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
                     .setPositiveButton(R.string.save_locally_button, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             progress = ProgressDialog.show(Experiment.this, res.getString(R.string.loadingTitle), res.getString(R.string.loadingText), true);
-                            new PhyphoxFile.CopyXMLTask(intent, Experiment.this).execute();
+                            new CopyXMLTask(intent, Experiment.this).execute();
                             saveLocallyDismissed = true;
                             experiment.isLocal = true;
                             showInitialDialogs();
@@ -1285,7 +1287,7 @@ public class Experiment extends AppCompatActivity implements View.OnClickListene
         //Save locally button (copy to collection). Instantiate and start the copying thread.
         if (id == R.id.action_saveLocally) {
             progress = ProgressDialog.show(this, res.getString(R.string.loadingTitle), res.getString(R.string.loadingText), true);
-            new PhyphoxFile.CopyXMLTask(intent, this).execute();
+            new CopyXMLTask(intent, this).execute();
         }
 
         return super.onOptionsItemSelected(item);

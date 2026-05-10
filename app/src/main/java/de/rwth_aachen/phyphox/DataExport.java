@@ -87,7 +87,7 @@ public class DataExport implements Serializable {
         Double[][] data;
 
         //constructor with name for this set
-        ExportSet(String name) {
+        public ExportSet(String name) {
             this.name = name;
         }
 

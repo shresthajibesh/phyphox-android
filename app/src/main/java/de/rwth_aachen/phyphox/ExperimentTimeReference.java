@@ -24,7 +24,7 @@ public class ExperimentTimeReference implements Serializable {
         public long eventTime;
         public long systemTime;
 
-        TimeMapping(TimeMappingEvent event, Double experimentTime, long eventTime, long systemTime) {
+        public TimeMapping(TimeMappingEvent event, Double experimentTime, long eventTime, long systemTime) {
             this.event = event;
             this.experimentTime = experimentTime;
             this.eventTime = eventTime;

@@ -1,18 +1,30 @@
 package de.rwth_aachen.phyphox.features.experiment.old.parser;
 
-private static class dataContainersBlockParser extends XmlBlockParser {
+import static de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile.isValidIdentifier;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+
+import de.rwth_aachen.phyphox.DataBuffer;
+import de.rwth_aachen.phyphox.PhyphoxExperiment;
+import de.rwth_aachen.phyphox.features.experiment.Experiment;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.error.PhyphoxFileException;
+
+public class dataContainersBlockParser extends XmlBlockParser {
 
         dataContainersBlockParser(XmlPullParser xpp, PhyphoxExperiment experiment, Experiment parent) {
             super(xpp, experiment, parent);
         }
 
         @Override
-        protected void processStartTag(String tag)  throws IOException, XmlPullParserException, phyphoxFileException {
+        protected void processStartTag(String tag)  throws IOException, XmlPullParserException, PhyphoxFileException {
             switch (tag.toLowerCase()) {
                 case "container": //A view defines an arangement of elements displayed to the user
                     String type = getStringAttribute("type");
                     if (type != null && !type.equals("buffer")) //There currently is only one buffer type. This tag is for future additions.
-                        throw new phyphoxFileException("Unknown container type \"" + type + "\".", xpp.getLineNumber());
+                        throw new PhyphoxFileException("Unknown container type \"" + type + "\".", xpp.getLineNumber());
 
                     int size = getIntAttribute("size",1);
                     String strInit = getStringAttribute("init");
@@ -20,7 +32,7 @@ private static class dataContainersBlockParser extends XmlBlockParser {
 
                     String name = getText();
                     if (!isValidIdentifier(name))
-                        throw new phyphoxFileException("\"" + name + "\" is not a valid name for a data-container.", xpp.getLineNumber());
+                        throw new PhyphoxFileException("\"" + name + "\" is not a valid name for a data-container.", xpp.getLineNumber());
 
                     DataBuffer newBuffer = experiment.createBuffer(name, size, experiment.experimentTimeReference);
                     newBuffer.setStatic(isStatic);
@@ -39,7 +51,7 @@ private static class dataContainersBlockParser extends XmlBlockParser {
                     }
                     break;
                 default: //Unknown tag
-                    throw new phyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
+                    throw new PhyphoxFileException("Unknown tag "+tag, xpp.getLineNumber());
             }
         }
 
