@@ -151,7 +151,7 @@ public class inputBlockParser extends XmlBlockParser {
                     //Devices have a minimum buffer size. We might need to increase our buffer...
                     if (Build.MANUFACTURER.toLowerCase().contains("xiaomi"))
                         experiment.forceAudioRecordingCompatibilityFormat = true; //Several Xiaomi devices have issues supporting ENCODING_PCM_FLOAT, Falling back to 16bit ints is not that much of a disadvantage, so let's be safe and force them all to the legacy format
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !experiment.forceAudioRecordingCompatibilityFormat)
+                    if (!experiment.forceAudioRecordingCompatibilityFormat)
                         experiment.minBufferSize = AudioRecord.getMinBufferSize(experiment.micRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_FLOAT)/2;
                     else
                         experiment.minBufferSize = AudioRecord.getMinBufferSize(experiment.micRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)/2;
@@ -166,210 +166,202 @@ public class inputBlockParser extends XmlBlockParser {
                     break;
                 }
                 case "depth": {
-                    if(!parent.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+                    if(!parent.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)){
                         throw new PhyphoxFileException("This device doesn't have the camera.");
                     }
 
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                        throw new PhyphoxFileException("Depth input is only supported from API level 23 upwards (Android 6)");
-                    } else {
-                        //Check for camera permission
-                        if (ContextCompat.checkSelfPermission(parent, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            //No permission? Request it (Android 6+, only)
-                            ActivityCompat.requestPermissions(parent, new String[]{Manifest.permission.CAMERA}, 0);
-                            throw new PhyphoxFileException("Need permission to access the camera."); //We will throw an error here, but when the user grants the permission, the activity will be restarted from the permission callback
+                    //Check for camera permission
+                    if (ContextCompat.checkSelfPermission(parent, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        //No permission? Request it (Android 6+, only)
+                        ActivityCompat.requestPermissions(parent, new String[]{Manifest.permission.CAMERA}, 0);
+                        throw new PhyphoxFileException("Need permission to access the camera."); //We will throw an error here, but when the user grants the permission, the activity will be restarted from the permission callback
+                    }
+
+                    String modeStr = getStringAttribute("mode");
+                    if (modeStr == null)
+                        modeStr = "closest";
+                    else
+                        modeStr = modeStr.toLowerCase();
+
+                    DepthInput.DepthExtractionMode mode;
+                    switch (modeStr) {
+                        case "closest": {
+                            mode = DepthInput.DepthExtractionMode.closest;
+                            break;
                         }
-
-                        String modeStr = getStringAttribute("mode");
-                        if (modeStr == null)
-                            modeStr = "closest";
-                        else
-                            modeStr = modeStr.toLowerCase();
-
-                        DepthInput.DepthExtractionMode mode;
-                        switch (modeStr) {
-                            case "closest": {
-                                mode = DepthInput.DepthExtractionMode.closest;
-                                break;
-                            }
-                            case "weighted": {
-                                mode = DepthInput.DepthExtractionMode.weighted;
-                                break;
-                            }
-                            case "average": {
-                                mode = DepthInput.DepthExtractionMode.average;
-                                break;
-                            }
-                            default: {
-                                throw new PhyphoxFileException("Unknown depth extraction mode: " + modeStr, xpp.getLineNumber());
-                            }
+                        case "weighted": {
+                            mode = DepthInput.DepthExtractionMode.weighted;
+                            break;
                         }
-
-                        double x1user = getDoubleAttribute("x1", 0.4);
-                        double x2user = getDoubleAttribute("x2", 0.6);
-                        double y1user = getDoubleAttribute("y1", 0.4);
-                        double y2user = getDoubleAttribute("y2", 0.6);
-
-                        //Careful: We will translate the user coordinate system to the camera coordinate system: x -> -y, y -> -x
-                        double x1 = 1.0 - y1user;
-                        double x2 = 1.0 - y2user;
-                        double y1 = 1.0 - x1user;
-                        double y2 = 1.0 - x2user;
-
-                        //Allowed input/output configuration
-                        ioBlockParser.ioMapping[] outputMapping = {
-                                new ioBlockParser.ioMapping() {{
-                                    name = "z";
-                                    asRequired = false;
-                                    minCount = 1;
-                                    maxCount = 1;
-                                    valueAllowed = false;
-                                }},
-                                new ioBlockParser.ioMapping() {{
-                                    name = "t";
-                                    asRequired = true;
-                                    minCount = 0;
-                                    maxCount = 1;
-                                    valueAllowed = false;
-                                }}
-                        };
-                        Vector<DataOutput> outputs = new Vector<>();
-                        (new ioBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, "component")).process(); //Load inputs and outputs
-
-                        CameraManager cameraManager = (CameraManager) parent.getSystemService(Context.CAMERA_SERVICE);
-                        CameraHelper.updateCameraList(cameraManager);
-                        experiment.depthInput = new DepthInput(mode, (float) x1, (float) x2, (float) y1, (float) y2, outputs, experiment.dataLock, experiment.experimentTimeReference, cameraManager);
-
-                        if (!DepthInput.isAvailable()) {
-                            throw new PhyphoxFileException(parent.getResources().getString(R.string.sensorNotAvailableWarningText1) + " " + parent.getResources().getString(R.string.sensorDepth) + " " + parent.getResources().getString(R.string.sensorNotAvailableWarningText2));
+                        case "average": {
+                            mode = DepthInput.DepthExtractionMode.average;
+                            break;
                         }
+                        default: {
+                            throw new PhyphoxFileException("Unknown depth extraction mode: " + modeStr, xpp.getLineNumber());
+                        }
+                    }
+
+                    double x1user = getDoubleAttribute("x1", 0.4);
+                    double x2user = getDoubleAttribute("x2", 0.6);
+                    double y1user = getDoubleAttribute("y1", 0.4);
+                    double y2user = getDoubleAttribute("y2", 0.6);
+
+                    //Careful: We will translate the user coordinate system to the camera coordinate system: x -> -y, y -> -x
+                    double x1 = 1.0 - y1user;
+                    double x2 = 1.0 - y2user;
+                    double y1 = 1.0 - x1user;
+                    double y2 = 1.0 - x2user;
+
+                    //Allowed input/output configuration
+                    ioBlockParser.ioMapping[] outputMapping = {
+                            new ioBlockParser.ioMapping() {{
+                                name = "z";
+                                asRequired = false;
+                                minCount = 1;
+                                maxCount = 1;
+                                valueAllowed = false;
+                            }},
+                            new ioBlockParser.ioMapping() {{
+                                name = "t";
+                                asRequired = true;
+                                minCount = 0;
+                                maxCount = 1;
+                                valueAllowed = false;
+                            }}
+                    };
+                    Vector<DataOutput> outputs = new Vector<>();
+                    (new ioBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, "component")).process(); //Load inputs and outputs
+
+                    CameraManager cameraManager = (CameraManager) parent.getSystemService(Context.CAMERA_SERVICE);
+                    CameraHelper.updateCameraList(cameraManager);
+                    experiment.depthInput = new DepthInput(mode, (float) x1, (float) x2, (float) y1, (float) y2, outputs, experiment.dataLock, experiment.experimentTimeReference, cameraManager);
+
+                    if (!DepthInput.isAvailable()) {
+                        throw new PhyphoxFileException(parent.getResources().getString(R.string.sensorNotAvailableWarningText1) + " " + parent.getResources().getString(R.string.sensorDepth) + " " + parent.getResources().getString(R.string.sensorNotAvailableWarningText2));
                     }
 
                     break;
                 }
                 case "camera": {
-                    if(!parent.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+                    if(!parent.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)){
                         throw new PhyphoxFileException("This device doesn't have the camera.");
                     }
 
-                    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-                        throw new PhyphoxFileException("Camera is only supported from API level 21 upwards (Android 5)");
-                    else {
-                        //Check for camera permission
-                        if (ContextCompat.checkSelfPermission(parent, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            //No permission? Request it (Android 6+, only)
-                            ActivityCompat.requestPermissions(parent, new String[]{Manifest.permission.CAMERA}, 0);
-                            throw new PhyphoxFileException("Need permission to access the camera."); //We will throw an error here, but when the user grants the permission, the activity will be restarted from the permission callback
-                        }
-
-                        boolean autoExposure = getBooleanAttribute("auto_exposure", true);
-
-                        String aeStrategyStr = getStringAttribute("aeStrategy");
-                        if (aeStrategyStr == null) {
-                            aeStrategyStr = "mean";
-                        }
-
-                        CameraInput.AEStrategy aeStrategy;
-                        switch (aeStrategyStr) {
-                            case "mean": {
-                                aeStrategy = CameraInput.AEStrategy.mean;
-                                break;
-                            }
-                            case "avoidOverexposure": {
-                                aeStrategy = CameraInput.AEStrategy.avoidOverexposure;
-                                break;
-                            }
-                            case "avoidUnderexposure": {
-                                aeStrategy = CameraInput.AEStrategy.avoidUnderxposure;
-                                break;
-                            }
-                            case "prioritizeFramerate": {
-                                aeStrategy = CameraInput.AEStrategy.prioritizeFramerate;
-                                break;
-                            }
-                            default: {
-                                throw new PhyphoxFileException("Unknown aeStrategy: " + aeStrategyStr, xpp.getLineNumber());
-                            }
-                        }
-
-                        String featureStr = getStringAttribute("feature");
-                        if(featureStr == null)
-                            featureStr = "photometric";
-                        else featureStr = featureStr.toLowerCase();
-
-                        CameraInput.PhyphoxCameraFeature feature;
-                        switch (featureStr){
-                            case "photometric": {
-                                feature = CameraInput.PhyphoxCameraFeature.Photometric;
-                                break;
-                            }
-                            case "spectroscopy": {
-                                feature = CameraInput.PhyphoxCameraFeature.Spectroscopy;
-                                break;
-                            }
-                            default: {
-                                throw new PhyphoxFileException("Unknown feature name: " + featureStr, xpp.getLineNumber());
-                            }
-                        }
-
-                        String lockedSetting = getStringAttribute("locked");
-                        if (lockedSetting == null)
-                            lockedSetting = "";
-
-                        double x1user = getDoubleAttribute("x1", 0.4);
-                        double x2user = getDoubleAttribute("x2", 0.6);
-                        double y1user = getDoubleAttribute("y1", 0.4);
-                        double y2user = getDoubleAttribute("y2", 0.6);
-
-                        //Careful: We will translate the user coordinate system to the camera coordinate system: x -> -y, y -> -x
-                        double x1 = 1.0 - y1user;
-                        double x2 = 1.0 - y2user;
-                        double y1 = 1.0 - x1user;
-                        double y2 = 1.0 - x2user;
-
-                        double thresholdAnalyzerThreshold = getDoubleAttribute("threshold", 0.5);
-
-                        //Allowed input/output configuration
-                        ioBlockParser.ioMapping[] outputMapping = {
-                                new ioBlockParser.ioMapping() {{name = "t"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                                new ioBlockParser.ioMapping() {{name = "luma"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                                new ioBlockParser.ioMapping() {{name = "luminance"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                                new ioBlockParser.ioMapping() {{name = "hue"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                                new ioBlockParser.ioMapping() {{name = "saturation"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                                new ioBlockParser.ioMapping() {{name = "value"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                                new ioBlockParser.ioMapping() {{name = "threshold"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                                new ioBlockParser.ioMapping() {{name = "shutterSpeed"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                                new ioBlockParser.ioMapping() {{name = "iso"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                                new ioBlockParser.ioMapping() {{name = "aperture"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                                new ioBlockParser.ioMapping() {{name = "pixelPosition"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
-                        };
-
-                        //String availableCameraSettings = getStringAttribute("setting");
-                        //ArrayList<ExposureSettingMode> availableSettings = CameraHelper.convertInputSettingToSettingMode(availableCameraSettings);
-
-                        Vector<DataOutput> outputs = new Vector<>();
-                        (new ioBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, "component")).process(); //Load inputs and outputs
-
-                        experiment.cameraInput= new CameraInput(
-                                (float) x1,
-                                (float) x2,
-                                (float) y1,
-                                (float) y2,
-                                outputs,
-                                experiment.dataLock,
-                                experiment.experimentTimeReference,
-                                feature,
-                                autoExposure,
-                                lockedSetting.isEmpty() ? null : lockedSetting,
-                                aeStrategy,
-                                thresholdAnalyzerThreshold);
-
-                        break;
-
+                    //Check for camera permission
+                    if (ContextCompat.checkSelfPermission(parent, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        //No permission? Request it (Android 6+, only)
+                        ActivityCompat.requestPermissions(parent, new String[]{Manifest.permission.CAMERA}, 0);
+                        throw new PhyphoxFileException("Need permission to access the camera."); //We will throw an error here, but when the user grants the permission, the activity will be restarted from the permission callback
                     }
+
+                    boolean autoExposure = getBooleanAttribute("auto_exposure", true);
+
+                    String aeStrategyStr = getStringAttribute("aeStrategy");
+                    if (aeStrategyStr == null) {
+                        aeStrategyStr = "mean";
+                    }
+
+                    CameraInput.AEStrategy aeStrategy;
+                    switch (aeStrategyStr) {
+                        case "mean": {
+                            aeStrategy = CameraInput.AEStrategy.mean;
+                            break;
+                        }
+                        case "avoidOverexposure": {
+                            aeStrategy = CameraInput.AEStrategy.avoidOverexposure;
+                            break;
+                        }
+                        case "avoidUnderexposure": {
+                            aeStrategy = CameraInput.AEStrategy.avoidUnderxposure;
+                            break;
+                        }
+                        case "prioritizeFramerate": {
+                            aeStrategy = CameraInput.AEStrategy.prioritizeFramerate;
+                            break;
+                        }
+                        default: {
+                            throw new PhyphoxFileException("Unknown aeStrategy: " + aeStrategyStr, xpp.getLineNumber());
+                        }
+                    }
+
+                    String featureStr = getStringAttribute("feature");
+                    if(featureStr == null)
+                        featureStr = "photometric";
+                    else featureStr = featureStr.toLowerCase();
+
+                    CameraInput.PhyphoxCameraFeature feature;
+                    switch (featureStr){
+                        case "photometric": {
+                            feature = CameraInput.PhyphoxCameraFeature.Photometric;
+                            break;
+                        }
+                        case "spectroscopy": {
+                            feature = CameraInput.PhyphoxCameraFeature.Spectroscopy;
+                            break;
+                        }
+                        default: {
+                            throw new PhyphoxFileException("Unknown feature name: " + featureStr, xpp.getLineNumber());
+                        }
+                    }
+
+                    String lockedSetting = getStringAttribute("locked");
+                    if (lockedSetting == null)
+                        lockedSetting = "";
+
+                    double x1user = getDoubleAttribute("x1", 0.4);
+                    double x2user = getDoubleAttribute("x2", 0.6);
+                    double y1user = getDoubleAttribute("y1", 0.4);
+                    double y2user = getDoubleAttribute("y2", 0.6);
+
+                    //Careful: We will translate the user coordinate system to the camera coordinate system: x -> -y, y -> -x
+                    double x1 = 1.0 - y1user;
+                    double x2 = 1.0 - y2user;
+                    double y1 = 1.0 - x1user;
+                    double y2 = 1.0 - x2user;
+
+                    double thresholdAnalyzerThreshold = getDoubleAttribute("threshold", 0.5);
+
+                    //Allowed input/output configuration
+                    ioBlockParser.ioMapping[] outputMapping = {
+                            new ioBlockParser.ioMapping() {{name = "t"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                            new ioBlockParser.ioMapping() {{name = "luma"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                            new ioBlockParser.ioMapping() {{name = "luminance"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                            new ioBlockParser.ioMapping() {{name = "hue"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                            new ioBlockParser.ioMapping() {{name = "saturation"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                            new ioBlockParser.ioMapping() {{name = "value"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                            new ioBlockParser.ioMapping() {{name = "threshold"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                            new ioBlockParser.ioMapping() {{name = "shutterSpeed"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                            new ioBlockParser.ioMapping() {{name = "iso"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                            new ioBlockParser.ioMapping() {{name = "aperture"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                            new ioBlockParser.ioMapping() {{name = "pixelPosition"; asRequired = true; minCount = 0; maxCount = 1; valueAllowed = false;}},
+                    };
+
+                    //String availableCameraSettings = getStringAttribute("setting");
+                    //ArrayList<ExposureSettingMode> availableSettings = CameraHelper.convertInputSettingToSettingMode(availableCameraSettings);
+
+                    Vector<DataOutput> outputs = new Vector<>();
+                    (new ioBlockParser(xpp, experiment, parent, null, outputs, null, outputMapping, "component")).process(); //Load inputs and outputs
+
+                    experiment.cameraInput= new CameraInput(
+                            (float) x1,
+                            (float) x2,
+                            (float) y1,
+                            (float) y2,
+                            outputs,
+                            experiment.dataLock,
+                            experiment.experimentTimeReference,
+                            feature,
+                            autoExposure,
+                            lockedSetting.isEmpty() ? null : lockedSetting,
+                            aeStrategy,
+                            thresholdAnalyzerThreshold);
+
+                    break;
+
                 }
                 case "bluetooth": { //A bluetooth input
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || !Bluetooth.isSupported(parent)) {
+                        if (!Bluetooth.isSupported(parent)) {
                             throw new PhyphoxFileException(parent.getResources().getString(R.string.bt_android_version));
                         } else {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (ContextCompat.checkSelfPermission(parent, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(parent, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED)) {
