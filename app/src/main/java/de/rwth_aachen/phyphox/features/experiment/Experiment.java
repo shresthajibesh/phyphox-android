@@ -112,7 +112,7 @@ import de.rwth_aachen.phyphox.ExperimentTimeReference;
 import de.rwth_aachen.phyphox.Helper.DataExportUtility;
 import de.rwth_aachen.phyphox.Helper.WindowInsetHelper;
 import de.rwth_aachen.phyphox.PhyphoxExperiment;
-import de.rwth_aachen.phyphox.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
 import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.RemoteServer;
 import de.rwth_aachen.phyphox.SensorInput;

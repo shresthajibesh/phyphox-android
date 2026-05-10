@@ -13,7 +13,8 @@ import java.util.UUID;
 
 import de.rwth_aachen.phyphox.features.experiment.Experiment;
 import de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity;
-import de.rwth_aachen.phyphox.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.parser.model.PhyphoxStream;
 
 //This asyncTask stores the content of a data in a temporary file
 //When it's done, it opens it as a single phyphox file
@@ -30,9 +31,9 @@ public class CopyIntentHandler extends AsyncTask<String, Void, String> {
 
     //Copying is done on a second thread...
     protected String doInBackground(String... params) {
-        PhyphoxFile.PhyphoxStream phyphoxStream = PhyphoxFile.openXMLInputStream(intent, parent.get());
-        if (!phyphoxStream.errorMessage.isEmpty()) {
-            return phyphoxStream.errorMessage;
+        PhyphoxStream phyphoxStream = PhyphoxFile.openXMLInputStream(intent, parent.get());
+        if (!phyphoxStream.getErrorMessage().isEmpty()) {
+            return phyphoxStream.getErrorMessage();
         }
 
         //Copy the input stream to a random file name
@@ -55,10 +56,10 @@ public class CopyIntentHandler extends AsyncTask<String, Void, String> {
                 FileOutputStream output = new FileOutputStream(file);
                 byte[] buffer = new byte[1024];
                 int count;
-                while ((count = phyphoxStream.inputStream.read(buffer)) != -1)
+                while ((count = phyphoxStream.getInputStream().read(buffer)) != -1)
                     output.write(buffer, 0, count);
                 output.close();
-                phyphoxStream.inputStream.close();
+                phyphoxStream.getInputStream().close();
             } catch (Exception e) {
                 file = null;
                 return "Error during file transfer: " + e.getMessage();

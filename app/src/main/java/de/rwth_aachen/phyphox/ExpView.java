@@ -374,19 +374,19 @@ public class ExpView implements Serializable{
         private String positiveUnit, negativeUnit;
         private GpsInput.ValueFormat valueFormat;
 
-        protected class Mapping {
-            Double min = Double.NEGATIVE_INFINITY;
-            Double max = Double.POSITIVE_INFINITY;
+        public class Mapping {
+            public Double min = Double.NEGATIVE_INFINITY;
+            public Double max = Double.POSITIVE_INFINITY;
             String str;
 
-            protected Mapping(String str) {
+            public Mapping(String str) {
                 this.str = str;
             }
         }
 
         protected Vector<Mapping> mappings = new Vector<>();
 
-        protected void addMapping(Mapping mapping) {
+        public void addMapping(Mapping mapping) {
             this.mappings.add(mapping);
         }
 
@@ -445,22 +445,22 @@ public class ExpView implements Serializable{
         }
 
         //Interface to set scientific notation
-        protected void setScientificNotation(boolean sn) {
+        public void setScientificNotation(boolean sn) {
             this.scientificNotation = sn;
             updateFormatter();
         }
 
         //Interface to set precision
-        protected void setPrecision(int p) {
+        public void setPrecision(int p) {
             this.precision = p;
             updateFormatter();
         }
 
-        protected void setSize(double size) {
+        public void setSize(double size) {
             this.size = size;
         }
 
-        protected void setColor(RGB c) {
+        public void setColor(RGB c) {
             this.color = c;
         }
 
@@ -488,12 +488,12 @@ public class ExpView implements Serializable{
         }
 
         //Interface to set conversion factor. The element will show inputValue times this factor
-        protected void setFactor(double factor) {
+        public void setFactor(double factor) {
             this.factor = factor;
         }
 
         //Interface to set the unit string
-        protected void setUnit(String unit) {
+        public void setUnit(String unit) {
             //If there is a unit we will save the space in this string as well...
             if (unit == null || unit.equals(""))
                 this.unit = "";
@@ -782,12 +782,12 @@ public class ExpView implements Serializable{
         private float size = 1.0f;
 
         //Constructor takes the same arguments as the expViewElement constructor
-        infoElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
+        public infoElement(String label, String visibility, String valueOutput, Vector<String> inputs, Resources res) {
             super(label, visibility, valueOutput, inputs, res);
             this.color = new RGB(res.getColor(R.color.phyphox_white_100));
         }
 
-        protected void setColor(RGB c) {
+        public void setColor(RGB c) {
             this.color = c;
         }
 
@@ -884,7 +884,7 @@ public class ExpView implements Serializable{
         private float height = 0.1f;
 
         //Label is not used
-        separatorElement(String valueOutput, String visibility, Vector<String> inputs, Resources res) {
+        public separatorElement(String valueOutput, String visibility, Vector<String> inputs, Resources res) {
             super("", visibility, valueOutput, inputs, res);
         }
 

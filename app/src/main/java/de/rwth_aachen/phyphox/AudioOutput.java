@@ -27,7 +27,7 @@ public class AudioOutput {
         SINE, SQUARE, SAWTOOTH
     }
 
-    AudioOutput(boolean loop, int rate, boolean normalize) {
+    public AudioOutput(boolean loop, int rate, boolean normalize) {
         this.loop = loop;
         this.rate = rate;
         this.normalize = normalize;
@@ -198,7 +198,7 @@ public class AudioOutput {
 
     public class AudioOutputPluginDirect extends AudioOutputPlugin {
         DataInput input;
-        AudioOutputPluginDirect(DataInput input) {
+        public AudioOutputPluginDirect(DataInput input) {
             this.input = input;
         }
 
@@ -239,7 +239,7 @@ public class AudioOutput {
         private double phase = 0.f;
         private AudioOutput.Waveform waveform;
 
-        AudioOutputPluginTone(AudioOutput.Waveform waveform){
+        public AudioOutputPluginTone(AudioOutput.Waveform waveform){
             this.waveform = waveform;
         }
 

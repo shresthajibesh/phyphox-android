@@ -22,7 +22,7 @@ public class DataInput implements Serializable {
     }
 
     //Constructor if this should contain a buffer
-    protected DataInput(DataBuffer buffer, boolean keep) {
+    public DataInput(DataBuffer buffer, boolean keep) {
         this.keep = keep;
         isBuffer = true;
         this.isEmpty = false;
@@ -30,7 +30,7 @@ public class DataInput implements Serializable {
     }
 
     //Constructor if this should contain a constant value
-    protected DataInput(double value) {
+    public DataInput(double value) {
         isBuffer = false;
         this.isEmpty = false;
         this.value = value;

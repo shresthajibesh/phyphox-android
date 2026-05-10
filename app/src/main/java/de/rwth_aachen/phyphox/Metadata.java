@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import de.rwth_aachen.phyphox.camera.helper.CameraHelper;
 import de.rwth_aachen.phyphox.camera.depth.DepthInput;
+import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
 
 import static android.content.Context.SENSOR_SERVICE;
 import static de.rwth_aachen.phyphox.ExperimentList.model.Const.PREFS_NAME;

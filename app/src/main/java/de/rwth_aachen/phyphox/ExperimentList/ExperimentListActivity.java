@@ -96,7 +96,7 @@ import de.rwth_aachen.phyphox.ExperimentList.handler.SimpleExperimentCreator;
 import de.rwth_aachen.phyphox.Helper.Helper;
 import de.rwth_aachen.phyphox.Helper.ReportingScrollView;
 import de.rwth_aachen.phyphox.Helper.WindowInsetHelper;
-import de.rwth_aachen.phyphox.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
 import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.SensorInput;
 import de.rwth_aachen.phyphox.SettingsActivity.SettingsActivity;

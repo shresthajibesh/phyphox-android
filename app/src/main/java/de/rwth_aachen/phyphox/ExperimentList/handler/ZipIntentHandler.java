@@ -14,7 +14,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import de.rwth_aachen.phyphox.ExperimentList.ExperimentListActivity;
-import de.rwth_aachen.phyphox.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
 
 //This asyncTask extracts a zip file to a temporary directory
 //When it's done, it either opens a single phyphox file or asks the user how to handle multiple phyphox files

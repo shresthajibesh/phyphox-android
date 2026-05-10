@@ -23,7 +23,7 @@ import java.util.concurrent.locks.Lock;
 import de.rwth_aachen.phyphox.ExperimentTimeReference;
 import de.rwth_aachen.phyphox.R;
 import de.rwth_aachen.phyphox.DataOutput;
-import de.rwth_aachen.phyphox.PhyphoxFile;
+import de.rwth_aachen.phyphox.features.experiment.old.PhyphoxFile;
 
 
 /**
